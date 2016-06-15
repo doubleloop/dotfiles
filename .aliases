@@ -1,0 +1,9 @@
+alias top='htop'
+alias wdmesg='watch --color "dmesg --color=always | tail -20"'
+
+alias tc='doublecmd -T -L `pwd` > /dev/null 2>&1'
+alias tcr='doublecmd -T -R `pwd`> /dev/null 2>&1'
+alias trojka='mplayer mms://stream.polskieradio.pl/program3'
+alias sshconf='$EDITOR ~/.ssh/config'
+zssh() ssh "$@" -t zsh
+alias o="xdg-open"
