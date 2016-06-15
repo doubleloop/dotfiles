@@ -1,0 +1,20 @@
+[user]
+	name = Jakub Łuczyński
+	email = jakub.luczynski@codilime.com
+[help]
+	autocorrect = 1
+[color]
+	ui = true
+[core]
+	autocrlf = input
+	filemode = false
+	editor = vim
+[mergetool]
+	keepBackup = false
+[diff]
+	renames = copies
+	guitool = meld
+[merge]
+	conflictstyle = diff3
+[push]
+	default = simple
