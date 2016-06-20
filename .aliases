@@ -1,5 +1,10 @@
 alias top='htop'
 alias trojka='mplayer mms://stream.polskieradio.pl/program3'
 alias sshconf='$EDITOR ~/.ssh/config'
-zssh() ssh "$@" -t zsh
+function zssh {
+    ssh "$@" -t zsh
+}
 alias o="xdg-open"
+alias vimrc='$EDITOR ~/.vimrc'
+alias vim=nvim
+alias vi=vim
