@@ -43,6 +43,7 @@ HIST_STAMPS="yyyy-mm-dd"
 
 # virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
+export KEYTIMEOUT=1
 
 GIT_PROMPT_EXECUTABLE="haskell"
 
@@ -63,13 +64,13 @@ plugins=(
     gitfast gitignore zsh-git-prompt
     debian
     pip python virtualenv virtualenvwrapper
-    atom sublime 
+    atom sublime
     cabal stack
     gradle
     valut
     zsh-navigation-tools
     zsh-autosuggestions
-    zsh-syntax-highlighting 
+    zsh-syntax-highlighting
 )
 
 path=(
@@ -103,6 +104,7 @@ zstyle ':bracketed-paste-magic' active-widgets '.self-*'
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 export EDITOR='vim'
@@ -137,7 +139,7 @@ export LESS='-MRiS#8j.5'
 #             |`----- parse color codes
 #             `------ show more information in prompt
 
-#https://github.com/zsh-users/zsh-autosuggestions/issues/118
+# https://github.com/zsh-users/zsh-autosuggestions/issues/118
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=( expand-or-complete )
 
 # disable pasted text highlighting
@@ -151,3 +153,20 @@ znt_list_instant_select=1
 
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
+
+# Vim mode is ok but restore some common shortcuts
+bindkey '^a' beginning-of-line
+bindkey '^b' beginning-of-line # nice when in tmux
+bindkey '^k' kill-line
+bindkey '^y' yank
+bindkey '^e' end-of-line
+
+# autosuggestions
+bindkey '^l' autosuggest-accept
+
+
+bindkey '^f' fzf-file-widget
+unalias ag
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
