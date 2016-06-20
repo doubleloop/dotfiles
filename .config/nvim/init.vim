@@ -17,14 +17,14 @@ set clipboard=unnamedplus
 
 " Line numbers
 set number
-set relativenumber 
+set relativenumber
 set textwidth=79
 set nowrap
 set nofoldenable
 " set foldlevel=1
 
 set colorcolumn=80
-" highlight ColorColumn ctermbg=233 
+" highlight ColorColumn ctermbg=233
 
 set noshowmode      " Don't show current mode (vim airline).
 set showtabline=0   " do not disply tab on the top os the screen
@@ -179,6 +179,7 @@ Plug 'shougo/unite.vim'
 Plug 'elzr/vim-json'
 Plug 'stephpy/vim-yaml'
 Plug 'tmhedberg/SimpylFold'
+Plug 'ntpeters/vim-better-whitespace'
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -190,7 +191,7 @@ Plug 'jonathanfilip/vim-lucius'
 Plug 'pyte'
 Plug 'tomasr/molokai'
 Plug 'peaksea'
-Plug 'godlygeek/csapprox'       " Make gvim-only colorschemes work 
+Plug 'godlygeek/csapprox'       " Make gvim-only colorschemes work
                                 " transparently in terminal vim
 
 Plug 'vim-scripts/a.vim'      " switch to/from heade file
@@ -237,13 +238,13 @@ let g:sudo_no_gui=1
 
 let g:neomake_verbose=0
 
-" run automake 
+" run automake
 autocmd! BufWritePost,BufEnter * Neomake
 
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
 " Autosave
-let g:auto_save = 1 
+let g:auto_save = 1
 let g:auto_save_in_insert_mode = 0
 let g:auto_save_silent = 1
 
@@ -279,8 +280,10 @@ if has("nvim")
 endif
 
 let g:ag_highlight=1
-nmap <leader>a :Ag 
+nmap <leader>a :Ag
 xmap <leader>a "ay:Ag '<C-R>a'
+
+autocmd BufWritePre * StripWhitespace
 
 " let g:solarized_termcolors=256
 " let g:solarized_termcolors=16
