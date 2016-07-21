@@ -8,7 +8,6 @@
 [core]
 	autocrlf = input
 	filemode = false
-	editor = vim
 [mergetool]
 	keepBackup = false
 [diff]
