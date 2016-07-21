@@ -14,7 +14,7 @@ ZSH_THEME="doubleloop"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+export UPDATE_ZSH_DAYS=13
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -26,12 +26,12 @@ DISABLE_AUTO_TITLE="true"
 ENABLE_CORRECTION="false"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -45,11 +45,10 @@ HIST_STAMPS="yyyy-mm-dd"
 export WORKON_HOME=$HOME/.virtualenvs
 export KEYTIMEOUT=1
 
+# Git prompt compiled in haskell is 4 times faster than standard python one
 GIT_PROMPT_EXECUTABLE="haskell"
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
+# Plugins
 # Add wisely, as too many plugins slow down shell startup.
 
 plugins=(
@@ -100,36 +99,16 @@ zstyle ':bracketed-paste-magic' active-widgets '.self-*'
 
 # setopt menu_complete
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+export TMPDIR=/tmp
 
 # Preferred editor for local and remote sessions
-export EDITOR='vim'
+export EDITOR='nvim'
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-
-# TODO: add file exist condition
-. ~/.aliases
-. /etc/profile.d/vte.sh
-
-# bindkey '\e[1;3D' backward-word
-# bindkey '\e[1;3C' forward-word
-# bindkey -M emacs '^[[3;5~' kill-word
-# bindkey '^H' backward-kill-word
-# bindkey '^T' autosuggest-execute-suggestion
+[ -f ~/.aliases ] && . ~/.aliases
+[ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
 
 # default settings for less. You may also want to disable line wrapping with -S
 export LESS='-MRiS#8j.5'
@@ -142,31 +121,56 @@ export LESS='-MRiS#8j.5'
 # https://github.com/zsh-users/zsh-autosuggestions/issues/118
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=( expand-or-complete )
 
+# prevent forward-char from accepting autosuggestions completions
+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=( end-of-line vi-end-of-line vi-add-eol )
+
 # disable pasted text highlighting
 zle_highlight=(none)
+
+# use apt for debian aliases
 apt_pref=apt
 
+# alias-tips settings
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi please help"
 export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=1
-export TMPDIR=/tmp
+
+# make navigation tools history search select command after pressing
+# enter once (not twice wich is default)
 znt_list_instant_select=1
 
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
 
-# Vim mode is ok but restore some common shortcuts
+# vi mode is ok but restore common shortcuts in insert mode
+bindkey '^[[Z' reverse-menu-complete
 bindkey '^a' beginning-of-line
-bindkey '^b' beginning-of-line # nice when in tmux
-bindkey '^k' kill-line
+bindkey '^e' end-of-line
 bindkey '^y' yank
 bindkey '^e' end-of-line
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+
+bindkey '\e[1;3D' backward-word
+bindkey '\e[1;3C' forward-word
+bindkey '^[[3;5~' kill-word
+bindkey '^h' backward-kill-word
+bindkey '^k' kill-whole-line
+bindkey '^t' transpose-chars
+bindkey '^[t' transpose-words
+bindkey '^f' forward-char
+bindkey '^b' backward-char
+bindkey '^[f' forward-word
+bindkey '^[w' forward-word
+bindkey '^[b' backward-word
+bindkey '^u' undo
 
 # autosuggestions
-bindkey '^l' autosuggest-accept
+bindkey '^ ' autosuggest-accept
+bindkey '^l' forward-word
 
-
-bindkey '^f' fzf-file-widget
+# remove conflicting aliases
 unalias ag
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# bindkey '^f' fzf-file-widget
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
