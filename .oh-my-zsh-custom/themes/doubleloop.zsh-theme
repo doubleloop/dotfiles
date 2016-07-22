@@ -1,4 +1,4 @@
-# prompt
+# prompt configuration
 local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})" local current_time="[%{$fg_bold[blue]%}%T%{$reset_color%}]"
 local user_host='%{$terminfo[bold]$fg[green]%}%n@%m%{$reset_color%}'
 local current_dir='%{$terminfo[bold]$fg[yellow]%} %~%{$reset_color%}'
@@ -40,20 +40,28 @@ ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan,bold,underline'
 # ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
 ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=cyan,bold'
 
-# colored man
-# based on zsh plugin
+# colored man, based on zsh plugin
+# http://www.tuxarena.com/2012/04/tutorial-colored-man-pages-how-it-works/
+
+# LESS_TERMCAP_mb: enter blinking mode
+# LESS_TERMCAP_md: enter double-bright mode
+# LESS_TERMCAP_me: turn off all appearance modes (mb, md, so, us)
+# LESS_TERMCAP_se: leave standout mode
+# LESS_TERMCAP_so: enter standout mode
+# LESS_TERMCAP_ue: leave underline mode
+# LESS_TERMCAP_us: enter underline mode
+
 man() {
-   env \
-     LESS_TERMCAP_mb=$(printf "\e[1;36m") \
-     LESS_TERMCAP_md=$(printf "\e[1;36m") \
-     LESS_TERMCAP_me=$(printf "\e[0m") \
-     LESS_TERMCAP_se=$(printf "\e[0m") \
-     LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
-     LESS_TERMCAP_ue=$(printf "\e[0m") \
-     LESS_TERMCAP_us=$(printf "\e[1;32m") \
-     PAGER=/usr/bin/less \
-     _NROFF_U=1 \
-               man "$@"
+    env \
+        LESS_TERMCAP_mb=$(printf '\e[01;31m') \
+        LESS_TERMCAP_md=$(printf '\e[01;38;5;75m') \
+        LESS_TERMCAP_me=$(printf '\e[0m') \
+        LESS_TERMCAP_se=$(printf '\e[0m') \
+        LESS_TERMCAP_so=$(printf '\e[01;33m') \
+        LESS_TERMCAP_ue=$(printf '\e[0m') \
+        LESS_TERMCAP_us=$(printf '\e[04;38;5;200m') \
+        _NROFF_U=1 \
+            man "$@"
 }
 
 #########################################
