@@ -26,7 +26,7 @@ DISABLE_AUTO_TITLE="true"
 ENABLE_CORRECTION="false"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
+# COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -120,6 +120,14 @@ ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=( expand-or-complete )
 # prevent forward-char from accepting autosuggestions completions
 ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=( end-of-line vi-end-of-line vi-add-eol )
 
+# but make forward-char partial accept
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
+    forward-word vi-forward-word vi-forward-word-end
+    vi-forward-blank-word vi-forward-blank-word-end
+    forward-char vi-forward-char
+)
+
+
 # disable pasted text highlighting
 zle_highlight=(none)
 
@@ -137,32 +145,42 @@ znt_list_instant_select=1
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
 
+# ctrl + arrows
+bindkey '^[[1;5D' backward-word
+bindkey '^[[1;5C' forward-word
+
+# alt + arrows
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;3C' forward-word
+
 # vi mode is ok but restore common shortcuts in insert mode
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 bindkey '^y' yank
-bindkey '^e' end-of-line
-bindkey '^[[1;5D' backward-word
-bindkey '^[[1;5C' forward-word
 
-bindkey '\e[1;3D' backward-word
-bindkey '\e[1;3C' forward-word
+# ctrl+del, why it does not work in tmux!!!
 bindkey '^[[3;5~' kill-word
-bindkey '^h' backward-kill-word
+
+# ctrl+backspace, not working with tmux (ctrl+h conflict)
+bindkey '^H' backward-kill-word
+
 bindkey '^k' kill-whole-line
 bindkey '^t' transpose-chars
 bindkey '^[t' transpose-words
 bindkey '^f' forward-char
 bindkey '^b' backward-char
 bindkey '^[f' forward-word
-bindkey '^[w' forward-word
-bindkey '^[b' backward-word
+# alt+w is not convinient and backward-kill-word is with ctrl+backspace)
+# instead use alt+w for backward-word
+bindkey '^w' forward-word
+bindkey '^[w' backward-word
+# just backup if ctrl+backspace ctrl+del does not work
+bindkey '^[b' backward-kill-word
+bindkey '^[d' kill-word
 bindkey '^u' undo
-
 # autosuggestions
 bindkey '^ ' autosuggest-accept
-bindkey '^l' forward-word
 
 # bindkey '^f' fzf-file-widget
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
