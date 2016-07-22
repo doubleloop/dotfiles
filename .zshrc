@@ -49,11 +49,11 @@ export KEYTIMEOUT=1
 GIT_PROMPT_EXECUTABLE="haskell"
 
 # Plugins
-# Add wisely, as too many plugins slow down shell startup.
+# Add wisely, as too many plugins slow down shell startup
 
 plugins=(
     alias-tips
-    common-aliases fasd colorize colored-man extract command-not-found
+    common-aliases fasd colorize extract command-not-found
     vagrant
     docker
     vi-mode
@@ -82,33 +82,29 @@ path=(
 
 source $ZSH/oh-my-zsh.sh
 
-# color completions
+# colored completions
 eval `dircolors`
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
 
-# colors of hilight
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
-ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[function]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan,bold,underline'
-# ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
-ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=cyan,bold'
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
-
-# setopt menu_complete
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+
 export TMPDIR=/tmp
 
 # Preferred editor for local and remote sessions
 export EDITOR='nvim'
 
 [ -f ~/.aliases ] && . ~/.aliases
+
+# Make new terminal sessions use the current directory
 [ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
+
+# http://superuser.com/a/71593/240371
+[ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ] &&
+    export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 
 # default settings for less. You may also want to disable line wrapping with -S
 export LESS='-MRiS#8j.5'
@@ -168,9 +164,8 @@ bindkey '^u' undo
 bindkey '^ ' autosuggest-accept
 bindkey '^l' forward-word
 
-# remove conflicting aliases
-unalias ag
-
 # bindkey '^f' fzf-file-widget
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# http://www.markhneedham.com/blog/2012/09/16/zsh-dont-verify-substituted-history-expansion-a-k-a-disabling-histverify/
+unsetopt histverify
