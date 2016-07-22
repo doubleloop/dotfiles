@@ -169,3 +169,11 @@ bindkey '^l' forward-word
 
 # http://www.markhneedham.com/blog/2012/09/16/zsh-dont-verify-substituted-history-expansion-a-k-a-disabling-histverify/
 unsetopt histverify
+
+# man zshoptions
+unsetopt share_history
+unsetopt inc_append_history
+setopt inc_append_history_time
+
+# http://superuser.com/questions/902241/how-to-make-zsh-not-store-failed-command
+zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
