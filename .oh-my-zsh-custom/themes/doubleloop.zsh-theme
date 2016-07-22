@@ -57,7 +57,7 @@ man() {
         LESS_TERMCAP_md=$(printf '\e[01;38;5;75m') \
         LESS_TERMCAP_me=$(printf '\e[0m') \
         LESS_TERMCAP_se=$(printf '\e[0m') \
-        LESS_TERMCAP_so=$(printf '\e[01;33m') \
+        LESS_TERMCAP_so=$(printf '\e[1;27;7m') \
         LESS_TERMCAP_ue=$(printf '\e[0m') \
         LESS_TERMCAP_us=$(printf '\e[04;38;5;200m') \
         _NROFF_U=1 \
