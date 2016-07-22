@@ -38,6 +38,28 @@ set undodir=~/.vim/undo
 " disable - as word separator
 set iskeyword+=-
 
+" Movement
+map k gk
+map j gj
+map <up> gk
+map <down> gj
+set whichwrap=<,>,[,],b,s
+
+inoremap <BS> <c-g>u<BS>
+inoremap <CR> <c-g>u<CR>
+inoremap <del> <c-g>u<del>
+inoremap <c-w> <c-g>u<c-w>
+inoremap <C-R> <C-G>u<C-R>
+
+" https://github.com/mhinz/vim-galore#saner-command-line-history
+cnoremap <c-n>  <down>
+cnoremap <c-p>  <up>
+
+nnoremap <leader>l :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+
+autocmd InsertLeave,WinEnter * set cursorline
+autocmd InsertEnter,WinLeave * set nocursorline
+
 " search settings
 set hlsearch
 set ignorecase
@@ -46,6 +68,8 @@ nnoremap <silent> <leader><leader> :nohl<cr>
 " http://vim.wikia.com/wiki/highlight_all_search_pattern_matches
 nnoremap <silent> <leader>/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<CR>
 vnoremap <silent> <leader>/ y/<c-r>"<cr>
+
+set foldmethod=syntax
 
 " Highlight all instances of word under cursor, when idle.
 " Useful when studying strange source code.
@@ -77,21 +101,17 @@ set shiftwidth=4    " Indentation amount for < and > commands.
 set shiftround
 set expandtab       " Insert spaces when TAB is pressed.
 
-" todo: how to prevent terminal escape if edge winow/single tab
-tnoremap <A-h> <C-\><C-n><C-w>h
-tnoremap <A-j> <C-\><C-n><C-w>j
-tnoremap <A-k> <C-\><C-n><C-w>k
-tnoremap <A-l> <C-\><C-n><C-w>l
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
-nnoremap <S-h> gT
-nnoremap <S-l> gt
-tnoremap <S-h> <C-\><C-n>gT
-tnoremap <S-l> <C-\><C-n>gt
+" todo: think of sane terminal navigation
+" tnoremap <silent> <C-h> <C-\><C-n><C-w>h
+" tnoremap <silent> <C-j> <C-\><C-n><C-w>j
+" tnoremap <silent> <C-k> <C-\><C-n><C-w>k
+" tnoremap <silent> <C-l> <C-\><C-n><C-w>l
+nnoremap <silent> <S-h> gT
+nnoremap <silent> <S-l> gt
+" tnoremap <silent> <S-h> <C-\><C-n>gT
+" tnoremap <silent> <S-l> <C-\><C-n>gt
 " tnoremap <Esc> <C-\><C-n>
-autocmd BufWinEnter,WinEnter term://* startinsert
+" autocmd BufWinEnter,WinEnter term://* startinsert
 set splitbelow      " Horizontal split below current.
 set splitright      " Vertical split to right of current.
 
@@ -120,13 +140,19 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
+
+function! DoRemote(arg)
+  UpdateRemotePlugins
+endfunction
+
 " Plugins
 call plug#begin('~/.nvim/plugged')
 
 " Sane pane navigation shortcuts
-" Plug 'christoomey/vim-tmux-navigator'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'vim-auto-save'
 
+Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
 " Various text objects
 Plug 'kana/vim-textobj-user'
 
@@ -144,7 +170,7 @@ Plug 'mattn/vim-textobj-url'
 
 Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
-
+Plug 'moll/vim-bbye'
 " git integration
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -153,31 +179,44 @@ Plug 'scrooloose/nerdtree'
 " Plug 'jistr/vim-nerdtree-tabs'
 " Plug 'xuyuanp/nerdtree-git-plugin'
 " Plug 'ryanoasis/vim-devicons'
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
 
-Plug 'tpope/vim-obsession'
+
+" Plug 'tpope/vim-obsession'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-session'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'rking/ag.vim'
 " Plug 'Numkil/ag.nvim'
-Plug 'townk/vim-autoclose'
+" Plug 'townk/vim-autoclose'
+Plug 'jiangmiao/auto-pairs'
+Plug 'kien/rainbow_parentheses.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'simnalamburt/vim-mundo'   " gundo with nvim support
-Plug 'Shougo/deoplete.nvim'     " copletions
+Plug 'Konfekt/FastFold'
+Plug 'kopischke/vim-stay'
 Plug 'neomake/neomake'          " async linter
 Plug 'kshenoy/vim-signature'    " show marks
-" Plug 'bfredl/nvim-ipy'          " ipython frontend, todo: fix
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+" http://ipython.readthedocs.io/en/stable/install/kernel_install.html
+Plug 'bfredl/nvim-ipy'          " ipython frontend, todo: fix
 Plug 'fatih/vim-go'
 Plug 'bruno-/vim-man'
 Plug 'zenbro/mirror.vim'
 Plug 'davidhalter/jedi-vim'
+Plug 'jmcantrell/vim-virtualenv'
 Plug 'tyru/open-browser.vim'
-Plug 'honza/vim-snippets'
 " Plug 'mhinz/vim-grepper'
 Plug 'majutsushi/tagbar'
 Plug 'ervandew/supertab'
 Plug 'shougo/unite.vim'
+
 Plug 'elzr/vim-json'
 Plug 'stephpy/vim-yaml'
+Plug 'roalddevries/yaml.vim'    " yaml folding
 Plug 'tmhedberg/SimpylFold'
 Plug 'ntpeters/vim-better-whitespace'
 
@@ -229,9 +268,20 @@ let NERDTreeHighlightCursorline=1
 
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
+" let g:deoplete#disable_auto_complete = 1
+let g:deoplete#enable_smart_case = 1
+
+let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
 
 " Airline
 let g:airline_powerline_fonts = 1
+" let g:airline#extensions#tabline#enabled = 1
+let g:bufferline_echo = 0
+let g:airline_exclude_preview = 1
 
 " sudoedit conf
 let g:sudo_no_gui=1
@@ -255,9 +305,9 @@ let g:multi_cursor_prev_key='<C-p>'
 let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
 
-let g:pymode_lint_cwindow = 0
-let g:pymode_rope_goto_definition_bind = "<C-]>"
-let g:jedi#goto_command = "<C-]>"
+" let g:pymode_lint_cwindow = 0
+" let g:pymode_rope_goto_definition_bind = "<C-]>"
+" let g:jedi#goto_command = "<C-]>"
 
 if has("nvim")
     " Mapping selecting mappings
@@ -272,7 +322,6 @@ if has("nvim")
     imap <c-x><c-l> <plug>(fzf-complete-line)
 
     nmap <c-p> :FzfFiles<cr>
-    cmap <c-p> FzfCommands<cr>
     cmap <c-h> FzfCommands<cr>
 
     nmap <c-b> :FzfBuffer<cr>
@@ -280,16 +329,33 @@ if has("nvim")
 endif
 
 let g:ag_highlight=1
-nmap <leader>a :Ag
-xmap <leader>a "ay:Ag '<C-R>a'
+nmap <leader>g :Ag
+xmap <leader>g "ay:Ag '<C-R>a'
 
+" atuo strip whitespace on save
 autocmd BufWritePre * StripWhitespace
+
+" vim session settings
+let g:session_autosave='yes'
+let g:session_autoload='yes'
+let g:session_default_overwrite=1
+let g:session_autosave_periodic='1'
+let g:session_autosave_silent=1
+let g:session_default_to_last=1
+let g:session_command_aliases=1
+let g:session_persist_colors=0
+let g:session_persist_font=0
+
+nmap <F8> :TagbarToggle<CR>
 
 " let g:solarized_termcolors=256
 " let g:solarized_termcolors=16
 " colorscheme solarized
 " colorscheme peaksea
 colorscheme molokai
+
+" close current buffer but do not close window
+:nnoremap <Leader>z :Bdelete<CR>
 
 " Git grepper
 " nmap <leader>g :Grepper<cr>
@@ -307,3 +373,8 @@ colorscheme molokai
 " colorscheme lucius      " nice light theme
 " colorscheme pyte
 
+
+au BufNewFile,BufRead *.js, *.html, *.css, *.yml. *.yaml
+    \ set tabstop=2
+    \ set softtabstop=2
+    \ set shiftwidth=2
