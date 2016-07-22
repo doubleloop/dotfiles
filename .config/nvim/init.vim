@@ -106,8 +106,8 @@ set expandtab       " Insert spaces when TAB is pressed.
 " tnoremap <silent> <C-j> <C-\><C-n><C-w>j
 " tnoremap <silent> <C-k> <C-\><C-n><C-w>k
 " tnoremap <silent> <C-l> <C-\><C-n><C-w>l
-nnoremap <silent> <S-h> gT
-nnoremap <silent> <S-l> gt
+nnoremap <silent> <S-j> gT
+nnoremap <silent> <S-k> gt
 " tnoremap <silent> <S-h> <C-\><C-n>gT
 " tnoremap <silent> <S-l> <C-\><C-n>gt
 " tnoremap <Esc> <C-\><C-n>
