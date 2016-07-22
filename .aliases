@@ -11,6 +11,7 @@ alias vim=nvim
 alias vi=vim
 alias gds='git diff --staged'
 alias j='fasd_cd -d -i'
+alias gdb='gdb -q'
 
 # remove conflicting aliases
 unalias ag
