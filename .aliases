@@ -17,3 +17,19 @@ alias lh='fc -ilD 1 | less +G'
 
 # remove conflicting aliases
 unalias ag
+
+# https://github.com/hut/dotfiles/blob/master/bin/objdump-to-shellcode
+function objdump2shellcode {
+    grep '[0-9a-f]:' |
+    grep -v 'file' |
+    cut -f2 -d: |
+    cut -f1-6 -d' ' |
+    tr -s ' ' |
+    tr '\t' ' ' |
+    sed 's/ $//g' |
+    sed 's/ /\\x/g' |
+    paste -d '' -s |
+    sed 's/^/"/' |
+    sed 's/$/"/g'
+}
+
