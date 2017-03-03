@@ -74,6 +74,7 @@ plugins=(
 
 path=(
    ~/.cabal/bin
+   ~/.local/bin
    ~/opt/go/bin
    # ~/opt/android-sdk-linux/platform-tools
    $path
@@ -102,6 +103,7 @@ export EDITOR='nvim'
 # Make new terminal sessions use the current directory
 [ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
 
+# make less hilight source code
 # http://superuser.com/a/71593/240371
 [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ] &&
     export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
@@ -145,6 +147,8 @@ znt_list_instant_select=1
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
 
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # ctrl + arrows
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
@@ -153,37 +157,35 @@ bindkey '^[[1;5C' forward-word
 bindkey '^[[1;3D' backward-word
 bindkey '^[[1;3C' forward-word
 
-# vi mode is ok but restore common shortcuts in insert mode
 bindkey '^[[Z' reverse-menu-complete
-bindkey '^a' beginning-of-line
-bindkey '^e' end-of-line
-bindkey '^y' yank
 
-# ctrl+del, why it does not work in tmux!!!
+# ctrl+del, why this does not work in tmux!!!
 bindkey '^[[3;5~' kill-word
+# just backup if ctrl+backspace ctrl+del does not work
+bindkey '^[d' kill-word
 
 # ctrl+backspace, not working with tmux (ctrl+h conflict)
 bindkey '^H' backward-kill-word
 
-bindkey '^k' kill-whole-line
-bindkey '^t' transpose-chars
-bindkey '^[t' transpose-words
+# alt+del
+# alt+backspace
+# TODO
+
+# vi mode is ok but restore common shortcuts in insert mode
 bindkey '^f' forward-char
 bindkey '^b' backward-char
+bindkey '^[b' backward-word
 bindkey '^[f' forward-word
-# alt+w is not convinient and backward-kill-word is with ctrl+backspace)
-# instead use alt+w for backward-word
-bindkey '^w' forward-word
-bindkey '^[w' backward-word
-# just backup if ctrl+backspace ctrl+del does not work
-bindkey '^[b' backward-kill-word
-bindkey '^[d' kill-word
+bindkey '^w' backward-kill-word
+bindkey '^a' beginning-of-line
+bindkey '^e' end-of-line
+bindkey '^k' kill-whole-line
+bindkey '^y' yank
+bindkey '^t' trhnspose-chars
+bindkey '^[t' transpose-words
 bindkey '^u' undo
 # autosuggestions
 bindkey '^ ' autosuggest-accept
-
-# bindkey '^f' fzf-file-widget
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # http://www.markhneedham.com/blog/2012/09/16/zsh-dont-verify-substituted-history-expansion-a-k-a-disabling-histverify/
 unsetopt histverify
@@ -193,5 +195,10 @@ unsetopt share_history
 unsetopt inc_append_history
 setopt inc_append_history_time
 
+# prevent error commands to be inserted to history file
 # http://superuser.com/questions/902241/how-to-make-zsh-not-store-failed-command
-zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+# zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+
+# gvm is for golang
+[[ -s "/home/doubleloop/.gvm/scripts/gvm" ]] &&
+    source "/home/doubleloop/.gvm/scripts/gvm"
