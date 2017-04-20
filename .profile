@@ -21,7 +21,7 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-export JAVA_HOME=$HOME/opt/jdk1.8.0_65/
+export JAVA_HOME=$HOME/opt/jdk1.8.0_131
 export GOPATH=$HOME/opt/go
 # synclient TapButton1=1 TapButton2=3 TapButton3=2
 
