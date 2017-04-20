@@ -1,8 +1,3 @@
+! remove my stupid mouse extra keys
 keycode 112 = NoSymbol
 keycode 117 = NoSymbol
-
-! keysym h = h H h H rightsinglequotemark U2022
-! keysym j = j J j J schwa SCHWA
-! keysym k = k K k K ellipsis dead_stroke
-! keysym l = l L l L lstroke Lstroke
-
