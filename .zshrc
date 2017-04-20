@@ -45,8 +45,12 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 export WORKON_HOME=$HOME/.virtualenvs
 export KEYTIMEOUT=1
 
+
 # Git prompt compiled in haskell is 4 times faster than standard python one
 GIT_PROMPT_EXECUTABLE="haskell"
+
+# npm
+export NPM_PACKAGES=$HOME/.npm-packages
 
 # Plugins
 # Add wisely, as too many plugins slow down shell startup
@@ -67,7 +71,7 @@ plugins=(
     cabal stack
     gradle
     valut
-    zsh-navigation-tools
+    # zsh-navigation-tools
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
@@ -76,8 +80,10 @@ path=(
    ~/.cabal/bin
    ~/.local/bin
    ~/opt/go/bin
+   ~/.npm-packages/bin
    # ~/opt/android-sdk-linux/platform-tools
    $path
+   # add sudo bin so that zsh-syntax-hilighting works on sudo commands
    /usr/local/sbin /usr/sbin /sbin
 )
 
@@ -147,8 +153,6 @@ znt_list_instant_select=1
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
 stty -ixon
 
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # ctrl + arrows
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
@@ -202,3 +206,5 @@ setopt inc_append_history_time
 # gvm is for golang
 [[ -s "/home/doubleloop/.gvm/scripts/gvm" ]] &&
     source "/home/doubleloop/.gvm/scripts/gvm"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
