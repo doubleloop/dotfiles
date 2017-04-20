@@ -12,20 +12,20 @@ RPS1='$(vi_mode_prompt_info)${return_code}'
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$terminfo[bold]$fg[cyan]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$terminfo[bold]$fg[cyan]%})%{$reset_color%} "
 
-echo -ne "\e[5 q"
+# echo -ne "\e[5 q"
 
 MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[red]%}<<%{$reset_color%}"
 
 zle-keymap-select () {
-    if [ "$TERM" = "xterm-256color" ]; then
-        if [ $KEYMAP = vicmd ]; then
-            # the command mode for vi
-            echo -ne "\e[2 q"
-        else
-            # the insert mode for vi
-            echo -ne "\e[5 q"
-        fi
-    fi
+    # if [ "$TERM" = "xterm-256color" ]; then
+    #     if [ $KEYMAP = vicmd ]; then
+    #         # the command mode for vi
+    #         echo -ne "\e[2 q"
+    #     else
+    #         # the insert mode for vi
+    #         echo -ne "\e[5 q"
+    #     fi
+    # fi
     zle reset-prompt
     zle -R
 }
