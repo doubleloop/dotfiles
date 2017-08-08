@@ -48,7 +48,8 @@ export WORKON_HOME=$HOME/.virtualenvs
 export KEYTIMEOUT=1
 
 # Git prompt compiled in haskell is 4 times faster than standard python one
-GIT_PROMPT_EXECUTABLE="haskell"
+[ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
+    GIT_PROMPT_EXECUTABLE="haskell"
 
 # Plugins
 # Add wisely, as too many plugins slow down shell startup

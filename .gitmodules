@@ -1,12 +1,9 @@
 [submodule ".oh-my-zsh-custom/zsh-autosuggestions"]
 	path = .oh-my-zsh-custom/plugins/zsh-autosuggestions
-	url = https://github.com/tarruda/zsh-autosuggestions.git
+	url = git@github.com:zsh-users/zsh-autosuggestions.git
 [submodule ".oh-my-zsh-custom/zsh-git-prompt"]
 	path = .oh-my-zsh-custom/plugins/zsh-git-prompt
-	url = https://github.com/olivierverdier/zsh-git-prompt.git
-[submodule ".oh-my-zsh-custom/zsh-navigation-tools"]
-	path = .oh-my-zsh-custom/plugins/zsh-navigation-tools
-	url = git@github.com:psprint/zsh-navigation-tools.git
+	url = git@github.com:doubleloop/zsh-git-prompt.git
 [submodule ".oh-my-zsh-custom/zsh-syntax-highlighting"]
 	path = .oh-my-zsh-custom/plugins/zsh-syntax-highlighting
 	url = git@github.com:zsh-users/zsh-syntax-highlighting.git
