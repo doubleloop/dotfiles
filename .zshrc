@@ -43,14 +43,12 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 
 # virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
-export KEYTIMEOUT=1
 
+# vi-mode: delay for mode change
+export KEYTIMEOUT=1
 
 # Git prompt compiled in haskell is 4 times faster than standard python one
 GIT_PROMPT_EXECUTABLE="haskell"
-
-# npm
-export NPM_PACKAGES=$HOME/.npm-packages
 
 # Plugins
 # Add wisely, as too many plugins slow down shell startup
@@ -78,6 +76,7 @@ plugins=(
 
 path=(
    ~/.cabal/bin
+   ~/.cargo/bin
    ~/.local/bin
    ~/opt/go/bin
    ~/.npm-packages/bin
@@ -204,7 +203,7 @@ setopt inc_append_history_time
 # zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
 # gvm is for golang
-[[ -s "/home/doubleloop/.gvm/scripts/gvm" ]] &&
-    source "/home/doubleloop/.gvm/scripts/gvm"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.gvm/scripts/gvm ] && . ~/.gvm/scripts/gvm
+#
+# fzf is cool
+[ -f ~/.fzf.zsh ] && . ~/.fzf.zsh

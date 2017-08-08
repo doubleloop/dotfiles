@@ -21,8 +21,10 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-export JAVA_HOME=$HOME/opt/jdk1.8.0_131
-export GOPATH=$HOME/opt/go
+[ -d ~/opt/jdk1.8.0_144 ] && export JAVA_HOME=$HOME/opt/jdk1.8.0_144
+[ -d ~/opt/go ] && export GOPATH=$HOME/opt/go
+[ -d ~/.npm-packages ] && export NPM_PACKAGES=$HOME/.npm-packages
+
 # synclient TapButton1=1 TapButton2=3 TapButton3=2
 
 # make CapsLock behave like Ctrl:
@@ -33,5 +35,5 @@ export GOPATH=$HOME/opt/go
 xcape -e 'Control_L=Escape'
 xcape -e 'Caps_Lock=Escape'
 
-[[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
+[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
 
