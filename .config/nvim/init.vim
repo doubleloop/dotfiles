@@ -1,5 +1,8 @@
+let g:python_host_prog = "/home/doubleloop/.virtualenvs/nvim/bin/python"
+let g:python3_host_prog = "/home/doubleloop/.virtualenvs/nvim3/bin/python3"
+
 let mapleader=","
-map ; :
+" map ; :
 
 " Autoreloade .vimrc
 autocmd! bufwritepost $MYVIMRC source $MYVIMRC
@@ -7,7 +10,7 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 " https://github.com/neovim/neovim/wiki/FAQ#how-can-i-use-true-colors-in-the-terminal
 syntax enable
 set termguicolors
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+" let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 set background=dark
 " set background=light
 
@@ -18,7 +21,7 @@ set clipboard=unnamedplus
 " Line numbers
 set number
 " set relativenumber
-set textwidth=79
+set textwidth=0
 set nowrap
 set nofoldenable
 " set foldlevel=1
@@ -26,9 +29,10 @@ set nofoldenable
 set colorcolumn=80
 " highlight ColorColumn ctermbg=233
 
-" set noshowmode      " Don't show current mode (vim airline).
-                      " actually this disables showing how many characters/
-                      " lines are sellected
+" Don't show current mode (vim airline).
+" actually this disables showing how many characters/lines are sellected
+" set noshowmode
+
 set showcmd
 set showtabline=0   " do not disply tab on the top os the screen
 set ruler           " disply line/col in status bar
@@ -48,8 +52,9 @@ set iskeyword+=-
 " map <up> gk
 " map <down> gj
 
-set whichwrap=<,>,[,],b,s " commands that can go to next line
-                          " (added bs and space)
+" commands that can go to next line (added bs and space)
+set whichwrap=<,>,[,],b,s
+
 set startofline     " scrolling puts cursor on first non blank character
 set so=5            " cursor margins
 
@@ -69,15 +74,15 @@ nnoremap <leader>l :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 
 " http://vim.wikia.com/wiki/Highlight_current_line
 augroup CursorLine
-  au!
-  autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-  autocmd WinLeave * setlocal nocursorline
+    au!
+    autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    autocmd WinLeave * setlocal nocursorline
 augroup END
 
 " search settings
 set hlsearch
 set smartcase
-" nmap <silent> <leader><leader> :nohl<cr>
+nmap <silent> <leader><leader> :nohl<cr>
 " nnoremap <silent> <esc> :nohl<cr>
 " http://vim.wikia.com/wiki/highlight_all_search_pattern_matches
 nnoremap <silent> <leader>/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<CR>
@@ -91,22 +96,22 @@ set foldmethod=syntax
 " http://vim.wikia.com/wiki/VimTip572
 nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
 function! AutoHighlightToggle()
-  let @/ = ''
-  if exists('#auto_highlight')
-    au! auto_highlight
-    augroup! auto_highlight
-    setl updatetime=4000
-    echo 'Highlight current word: off'
-    return 0
-  else
-    augroup auto_highlight
-      au!
-      au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-    augroup end
-    setl updatetime=500
-    echo 'Highlight current word: ON'
-    return 1
-  endif
+    let @/ = ''
+    if exists('#auto_highlight')
+        au! auto_highlight
+        augroup! auto_highlight
+        setl updatetime=4000
+        echo 'Highlight current word: off'
+        return 0
+    else
+        augroup auto_highlight
+            au!
+            au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+        augroup end
+        setl updatetime=500
+        echo 'Highlight current word: ON'
+        return 1
+    endif
 endfunction
 
 set tabstop=4
@@ -116,6 +121,7 @@ set shiftround
 set expandtab       " Insert spaces when TAB is pressed.
 
 " todo: think of sane terminal navigation
+tnoremap <C-w> <C-\><C-n><C-w>
 " tnoremap <silent> <C-h> <C-\><C-n><C-w>h
 " tnoremap <silent> <C-j> <C-\><C-n><C-w>j
 " tnoremap <silent> <C-k> <C-\><C-n><C-w>k
@@ -126,6 +132,10 @@ set expandtab       " Insert spaces when TAB is pressed.
 " tnoremap <silent> <S-l> <C-\><C-n>gt
 " tnoremap <Esc> <C-\><C-n>
 " autocmd BufWinEnter,WinEnter term://* startinsert
+
+" always insert mode when focusing terminal
+" autocmd BufWinEnter,WinEnter term://*/zsh startinsert
+
 
 set splitbelow      " Horizontal split below current.
 set splitright      " Vertical split to right of current.
@@ -150,14 +160,14 @@ set thesaurus+=/usr/share/dict/mthesaur.txt
 
 " automatic vim-plug instalation
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall | source $MYVIMRC
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
 
 
 function! DoRemote(arg)
-  UpdateRemotePlugins
+    UpdateRemotePlugins
 endfunction
 
 " Plugins
@@ -170,12 +180,15 @@ Plug 'danro/rename.vim'
 Plug 'christoomey/vim-tmux-navigator'
 
 " Auto save on every escape
-Plug 'vim-auto-save'
+Plug 'vim-scripts/vim-auto-save'
 
 Plug 'easymotion/vim-easymotion'
 
 " Autocompletion engine
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi'
+" Plug 'zchee/deoplete-go'
+" Plug 'sebastianmarkow/deoplete-rust'
 
 " SudoRead, SudoWrite
 Plug 'chrisbra/sudoedit.vim'
@@ -191,7 +204,7 @@ Plug 'mattn/vim-textobj-url' " u
 " Plug 'paulhybryant/vim-textobj-path' " p
 " Plug 'beloglazov/vim-textobj-quotes' " q
 
-Plug 'ReplaceWithRegister' " gr gx
+Plug 'vim-scripts/ReplaceWithRegister' " gr gx
 " Plug 'christoomey/vim-titlecase' " gt
 Plug 'christoomey/vim-system-copy' " cp
 Plug 'christoomey/vim-sort-motion' " gs
@@ -218,7 +231,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'xuyuanp/nerdtree-git-plugin'
 
 " Intelligently toggling line numbers
-" Plug 'myusuf3/numbers.vim'
+Plug 'myusuf3/numbers.vim'
 
 " Help alligning text
 " Plug 'godlygeek/tabular'
@@ -226,6 +239,9 @@ Plug 'xuyuanp/nerdtree-git-plugin'
 " Improved sessions
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
+
+" Autoformat
+Plug 'Chiel92/vim-autoformat'
 
 " Handle sessions, maintain default session, use qa to exit vim
 Plug 'kopischke/vim-stay'
@@ -263,7 +279,8 @@ Plug 'osyo-manga/vim-over'
 Plug 'zenbro/mirror.vim'
 
 " Python
-" Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim'
+Plug 'fisadev/vim-isort'
 Plug 'tmhedberg/SimpylFold'
 Plug 'jmcantrell/vim-virtualenv'
 Plug 'glench/vim-jinja2-syntax'
@@ -321,7 +338,7 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Color themes
 Plug 'godlygeek/csapprox'       " Make gvim-only colorschemes work
-                                " transparently in terminal vim
+" transparently in terminal vim
 " Plug 'altercation/vim-colors-solarized'
 " Plug '29decibel/codeschool-vim-theme'
 " Plug 'ciaranm/inkpot'
@@ -363,8 +380,9 @@ let NERDTreeHighlightCursorline=1
 
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
-" let g:deoplete#disable_auto_complete = 1
 let g:deoplete#enable_smart_case = 1
+let g:jedi#completions_enabled = 0
+call deoplete#custom#set('ultisnips', 'matchers', ['matcher_fuzzy'])
 
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -383,8 +401,23 @@ let g:sudo_no_gui=1
 
 let g:neomake_verbose=0
 
-" run automake
-" autocmd! BufWritePost,BufEnter * Neomake
+" run lint on save
+autocmd! BufWritePost,BufEnter * Neomake
+let g:neomake_rust_cargo_command = ['test', '--no-run']
+
+
+" some outoformat
+nnoremap <silent> <leader>o :call RunAutoformat()<CR>
+function! RunAutoformat()
+    Autoformat
+    if &filetype=='python'
+        Isort
+    endif
+    return 0
+endfunction
+" disabled autoformat due to snippets problems
+" autocmd! BufWritePost * :Autoformat
+" autocmd! BufWritePost *.py :Isort
 
 " Autosave
 let g:auto_save = 1
@@ -397,10 +430,6 @@ let g:multi_cursor_next_key='<C-s>'
 " let g:multi_cursor_prev_key='<C-p>'
 let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
-
-" let g:pymode_lint_cwindow = 0
-" let g:pymode_rope_goto_definition_bind = "<C-]>"
-" let g:jedi#goto_command = "<C-]>"
 
 if has("nvim")
     nmap <C-p> :Files<cr>
@@ -458,9 +487,9 @@ let g:clang_library_path='/usr/lib/llvm-3.8/lib'
 
 
 au BufNewFile,BufRead *.js, *.html, *.css, *.yml. *.yaml
-    \ set tabstop=2
-    \ set softtabstop=2
-    \ set shiftwidth=2
+            \ set tabstop=2
+            \ set softtabstop=2
+            \ set shiftwidth=2
 
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
@@ -472,9 +501,16 @@ vmap <Leader>l <Plug>(easymotion-bd-jk)
 vmap <Leader>w <Plug>(easymotion-bd-w)
 vmap <Leader>f <Plug>(easymotion-bd-f)
 nmap <Space> <Plug>(easymotion-jumptoanywhere)
-nmap f <Plug>(easymotion-bd-fl)
-nmap t <Plug>(easymotion-bd-tl)
-vmap f <Plug>(easymotion-bd-fl)
-vmap t <Plug>(easymotion-bd-tl)
+" nmap f <Plug>(easymotion-bd-fl)
+" nmap t <Plug>(easymotion-bd-tl)
+" vmap f <Plug>(easymotion-bd-fl)
+" vmap t <Plug>(easymotion-bd-tl)
 
 nmap <c-k><c-b> :NERDTreeToggle<cr>
+
+let g:vim_isort_python_version = 'python3'
+let g:vim_isort_map = ''
+
+" navigate quickfix
+nmap [l :lprev<CR>
+nmap ]l :lnext<CR>
