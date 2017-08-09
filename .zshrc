@@ -215,3 +215,6 @@ setopt inc_append_history_time
 #
 # fzf is cool
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
+
+
+[ -f ~/.nvim.sh ] && . ~/.nvim.sh

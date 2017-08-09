@@ -1,5 +1,5 @@
-let g:python_host_prog = "/home/doubleloop/.virtualenvs/nvim/bin/python"
-let g:python3_host_prog = "/home/doubleloop/.virtualenvs/nvim3/bin/python3"
+let g:python_host_prog = $PYTHON2_NVIM_VIRTUALENV
+let g:python3_host_prog = $PYTHON3_NVIM_VIRTUALENV
 
 let mapleader=","
 " map ; :
