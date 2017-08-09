@@ -66,11 +66,14 @@ plugins=(
     gitfast gitignore zsh-git-prompt
     debian
     pip python virtualenv virtualenvwrapper
+    django
     atom sublime
     cabal stack
     gradle
     valut
+    jira
     # zsh-navigation-tools
+    zsh-completions
     zsh-autosuggestions
     zsh-syntax-highlighting
 )
@@ -86,6 +89,9 @@ path=(
    # add sudo bin so that zsh-syntax-hilighting works on sudo commands
    /usr/local/sbin /usr/sbin /sbin
 )
+
+# required for zsh-completions
+autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
 
@@ -105,6 +111,7 @@ export TMPDIR=/tmp
 export EDITOR='nvim'
 
 [ -f ~/.aliases ] && . ~/.aliases
+[ -f ~/.jirarc ] && . ~/.jirarc
 
 # Make new terminal sessions use the current directory
 [ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
