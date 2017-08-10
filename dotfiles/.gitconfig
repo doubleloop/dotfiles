@@ -7,7 +7,7 @@
 	ui = true
 [core]
 	autocrlf = input
-	filemode = false
+	fileMode = false
 [mergetool]
 	keepBackup = false
 [diff]
