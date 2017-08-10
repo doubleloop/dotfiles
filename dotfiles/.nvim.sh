@@ -1,1 +1,0 @@
-export PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python3
