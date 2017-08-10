@@ -13,7 +13,11 @@
 [diff]
 	renames = copies
 	guitool = meld
+	submodule = log
 [merge]
 	conflictstyle = diff3
 [push]
 	default = simple
+	recurseSubmodules = check
+[status]
+	submodulesummary = 1
