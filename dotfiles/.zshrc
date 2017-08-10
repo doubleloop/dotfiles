@@ -1,6 +1,4 @@
 # Path to your oh-my-zsh installation.
-[ ! -d ~/.oh-my-zsh ] && \
-    git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
@@ -219,4 +217,4 @@ setopt inc_append_history_time
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
 
-[ -f ~/.nvim.sh ] && . ~/.nvim.sh
+[ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
