@@ -29,13 +29,10 @@ RUN source /usr/share/virtualenvwrapper/virtualenvwrapper.sh && \
     pip install pip --upgrade && \
     pip install --upgrade mackup
 
-WORKDIR /home/testuser
-COPY dotfiles /home/testuser/dotfiles
-COPY mackup.cfg /home/testuser/.mackup.cfg
+COPY . /home/testuser/dotfiles
 USER root
 RUN chown -R testuser:testuser /home/testuser
+WORKDIR /home/testuser/dotfiles
 USER testuser
-RUN source /usr/share/virtualenvwrapper/virtualenvwrapper.sh && \
-    workon dotfiles && \
-    mackup -f restore
+RUN ./install.sh
 CMD ["zsh"]

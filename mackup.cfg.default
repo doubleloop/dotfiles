@@ -1,6 +1,6 @@
 [storage]
 engine = file_system
-path = .
+path = dotfiles
 directory = dotfiles
 
 [applications_to_ignore]
