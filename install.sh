@@ -32,7 +32,7 @@ pip install neovim
 export PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python3
 vim +PlugInstall +qa
 
-if [ !d  ~/.tmux/plugins/tpm ]; then
+if [ ! -d  ~/.tmux/plugins/tpm ]; then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     ~/.tmux/plugins/tpm/bin/install_plugins
 fi
