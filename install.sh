@@ -1,29 +1,36 @@
 #!/bin/bash
 
+PYTHON3_NVIM_VIRTUALENV=$HOME/.virtualenvs/nvim/bin/python3
+echo $PYTHON3_NVIM_VIRTUALENV
+
+
+[ ! -d mackupenv ] && virtualenv mackupenv
+. mackupenv/bin/activate
+pip install https://github.com/doubleloop/mackup/archive/master.zip
+
+[ ! -f ~/.mackup.cfg ] && cp mackup.cfg.default ~/.mackup.cfg
+mackup -f restore
+
 [ ! -d ~/.oh-my-zsh ] && \
     git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
-# neivun stuff
-if [ ! -d $WORKON_HOME/nvim/ ]; then
-    mkvirtualenv --python=/usr/bin/python3 nvim
-    pip install neovim
-fi
+[ ! -d ~/.fzf ] && \
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --key-bindings --completion --no-update-rc
 
-# install plug if not installed
+
 if [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ]; then
     curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
-source virtualenvwrapper.sh
-mkvirtualenv mackup
-pushd mackup
-python setup.py install
-popd
+WORKON_HOME=$HOME/.virtualenvs
+[ ! -d $WORKON_HOME ] && mkdir -p $WORKON_HOME
+[ ! -d $WORKON_HOME/nvim ] && \
+    virtualenv --python=/usr/bin/python3 $WORKON_HOME/nvim
 
-if [ ! -f ~/.mackup.cfg ]; then
-    cp mackup.cfg.default ~/.mackup.cfg
-fi
-
-mackup -f restore
+. $WORKON_HOME/nvim/bin/activate
+pip install neovim
+export PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python3
+vim +PlugInstall +qa
 

@@ -19,20 +19,14 @@ RUN apt-get update && \
 
 RUN useradd -m -s /bin/zsh testuser
 USER testuser
-SHELL ["/bin/bash", "-c"]
 
 ENV PIP_NO_INPUT=1
 ENV WORKON_HOME=/home/testuser/.virtualenvs
 
-RUN source /usr/share/virtualenvwrapper/virtualenvwrapper.sh && \
-    mkvirtualenv dotfiles && \
-    pip install pip --upgrade && \
-    pip install --upgrade mackup
-
 COPY . /home/testuser/dotfiles
 USER root
 RUN chown -R testuser:testuser /home/testuser
-WORKDIR /home/testuser/dotfiles
 USER testuser
+WORKDIR /home/testuser/dotfiles
 RUN ./install.sh
 CMD ["zsh"]

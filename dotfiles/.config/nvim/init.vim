@@ -158,18 +158,6 @@ set dictionary+=/usr/share/dict/words
 set thesaurus+=/usr/share/dict/mthesaur.txt
 
 
-" automatic vim-plug instalation
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
-    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall | source $MYVIMRC
-endif
-
-
-function! DoRemote(arg)
-    UpdateRemotePlugins
-endfunction
-
 " Plugins
 call plug#begin('~/.nvim/plugged')
 
@@ -382,7 +370,7 @@ let NERDTreeHighlightCursorline=1
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:jedi#completions_enabled = 0
-call deoplete#custom#set('ultisnips', 'matchers', ['matcher_fuzzy'])
+silent! call deoplete#custom#set('ultisnips', 'matchers', ['matcher_fuzzy'])
 
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -464,7 +452,7 @@ nmap <F8> :TagbarToggle<CR>
 " colorscheme peaksea
 let g:molokai_original = 1
 let g:rehash256 = 1
-colorscheme molokai
+silent! colorscheme molokai
 hi MatchParen      guifg=none guibg=none gui=underline
 
 " close current buffer but do not close window
