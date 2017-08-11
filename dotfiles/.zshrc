@@ -95,19 +95,10 @@ autoload -U compinit && compinit
 
 source $ZSH/oh-my-zsh.sh
 
-# colored completions
-eval `dircolors`
-zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
-
-zstyle ':bracketed-paste-magic' active-widgets '.self-*'
-
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-
 export TMPDIR=/tmp
-
-# Preferred editor for local and remote sessions
 export EDITOR='nvim'
 
 [ -f ~/.aliases ] && . ~/.aliases
@@ -212,9 +203,9 @@ setopt inc_append_history_time
 
 # gvm is for golang
 [ -f ~/.gvm/scripts/gvm ] && . ~/.gvm/scripts/gvm
-#
+
 # fzf is cool
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 
-
+# neovim env variables
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh

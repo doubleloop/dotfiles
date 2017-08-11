@@ -1,21 +1,42 @@
-# prompt configuration
+# doubleloop prompt configuration
 
-local prompt_symbol="%(?.$fg[white].$fg[red])$%{$reset_color%}"
-local user_host='%{$terminfo[bold]$fg[green]%}%n@%m%{$reset_color%}'
-local current_dir='%{$terminfo[bold]$fg[yellow]%} %~%{$reset_color%}'
-local pythonenv=' %{$terminfo[bold]$fg[blue]%}$(virtualenv_prompt_info)%{$reset_color%}'
-local git_branch='$(git_super_status)%{$reset_color%}'
+# function inspired by spaceship-zsh-theme version
+# Draw prompt section (bold is used as default)
+# USAGE:
+#   _prompt_section <content> <color> [prefix] [suffix]
+PROMPT_OPENED=false # Internal variable for checking if prompt is opened
+_prompt_section() {
+  local color prefix content suffix
+  [[ -n $1 ]] && content="$1"    || return
+  [[ -n $2 ]] && color="%F{$2}"  || color="%f"
+  (( $# >= 3 )) && prefix="$3"   || prefix=" "
+  (( $# >= 4 )) && suffix="$4"   || suffix=""
 
-PROMPT="${user_host}${current_dir}${rvm_ruby}${pythonenv}${git_branch}
-${prompt_symbol} "
-unset RPS1
+  echo -n "%{%B%}" # set bold
+  if [[ $PROMPT_OPENED == true ]]; then
+    echo -n "$prefix"
+  fi
+  PROMPT_OPENED=true
+  echo -n "%{%b%}" # unset bold
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" %{$terminfo[bold]$fg[cyan]%}("
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$terminfo[bold]$fg[cyan]%})%{$reset_color%} "
+  echo -n "%{%B$color%}" # set color
+  echo -n "$content"     # section content
+  echo -n "%{%b%f%}"     # unset color
 
-function zle-line-init zle-keymap-select () {
+  echo -n "%{%B%}" # reset bold, if it was diabled before
+  echo -n "$suffix"
+  echo -n "%{%b%}" # unset bold
+}
+
+prompt_user()	{ _prompt_section "%n" 							green	 					}
+prompt_host()	{ _prompt_section "@%m"  						green				""		}
+prompt_dir() 	{ _prompt_section "%~ "							yellow 						}
+prompt_pyenv() 	{ _prompt_section "$(virtualenv_prompt_info)" 	blue 						}
+prompt_git() 	{ _prompt_section "$(git_super_status)" 		cyan 						}
+prompt_symbol() { _prompt_section "$ " 						    "%(?.white.red)"	"\n"	}
+prompt_vi()		{
     if [ "$TERM" = "xterm-256color" ]; then
-        if [ $KEYMAP = vicmd ]; then
+        if [ "$KEYMAP" = "vicmd" ]; then
             # the command mode for vi
             echo -ne "\e[2 q"
         else
@@ -23,10 +44,22 @@ function zle-line-init zle-keymap-select () {
             echo -ne "\e[5 q"
         fi
     fi
-    zle reset-prompt
 }
 
-# colors of hilight
+drow_prompt() {
+	prompt_user
+	prompt_host
+	prompt_dir
+	prompt_pyenv
+    prompt_git
+    prompt_vi
+    prompt_symbol
+}
+
+PROMPT='$(drow_prompt)'
+unset RPS1
+
+# zsh-syntax-highlighting settings
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
 ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
