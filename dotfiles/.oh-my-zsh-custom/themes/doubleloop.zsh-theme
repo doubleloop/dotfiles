@@ -1,33 +1,29 @@
 # prompt configuration
-local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})" local current_time="[%{$fg_bold[blue]%}%T%{$reset_color%}]"
+
+local prompt_symbol="%(?.$fg[white].$fg[red])$%{$reset_color%}"
 local user_host='%{$terminfo[bold]$fg[green]%}%n@%m%{$reset_color%}'
 local current_dir='%{$terminfo[bold]$fg[yellow]%} %~%{$reset_color%}'
 local pythonenv=' %{$terminfo[bold]$fg[blue]%}$(virtualenv_prompt_info)%{$reset_color%}'
 local git_branch='$(git_super_status)%{$reset_color%}'
 
 PROMPT="${user_host}${current_dir}${rvm_ruby}${pythonenv}${git_branch}
-%B$%b "
-RPS1='$(vi_mode_prompt_info)${return_code}'
+${prompt_symbol} "
+unset RPS1
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" %{$terminfo[bold]$fg[cyan]%}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$terminfo[bold]$fg[cyan]%})%{$reset_color%} "
 
-# echo -ne "\e[5 q"
-
-MODE_INDICATOR="%{$fg_bold[red]%}<%{$fg[red]%}<<%{$reset_color%}"
-
-zle-keymap-select () {
-    # if [ "$TERM" = "xterm-256color" ]; then
-    #     if [ $KEYMAP = vicmd ]; then
-    #         # the command mode for vi
-    #         echo -ne "\e[2 q"
-    #     else
-    #         # the insert mode for vi
-    #         echo -ne "\e[5 q"
-    #     fi
-    # fi
+function zle-line-init zle-keymap-select () {
+    if [ "$TERM" = "xterm-256color" ]; then
+        if [ $KEYMAP = vicmd ]; then
+            # the command mode for vi
+            echo -ne "\e[2 q"
+        else
+            # the insert mode for vi
+            echo -ne "\e[5 q"
+        fi
+    fi
     zle reset-prompt
-    zle -R
 }
 
 # colors of hilight
