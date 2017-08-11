@@ -39,7 +39,8 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
 
 # Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
+# ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
+ZSH_CUSTOM=$ZSH/custom
 
 # virtualenvwrapper
 export WORKON_HOME=$HOME/.virtualenvs
