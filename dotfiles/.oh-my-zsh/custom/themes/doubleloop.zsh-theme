@@ -6,54 +6,59 @@
 #   _prompt_section <content> <color> [prefix] [suffix]
 PROMPT_OPENED=false # Internal variable for checking if prompt is opened
 _prompt_section() {
-  local color prefix content suffix
-  [[ -n $1 ]] && content="$1"    || return
-  [[ -n $2 ]] && color="%F{$2}"  || color="%f"
-  (( $# >= 3 )) && prefix="$3"   || prefix=" "
-  (( $# >= 4 )) && suffix="$4"   || suffix=""
+   local color prefix content suffix
+   [[ -n $1 ]] && content="$1"    || return
+   [[ -n $2 ]] && color="%F{$2}"  || color="%f"
+   if (( $# >= 3 )); then prefix="$3"; else prefix=" "; fi
+   if (( $# >= 4 )); then suffix="$4"; else suffix=""; fi
 
-  echo -n "%{%B%}" # set bold
-  if [[ $PROMPT_OPENED == true ]]; then
-    echo -n "$prefix"
-  fi
-  PROMPT_OPENED=true
-  echo -n "%{%b%}" # unset bold
+   echo -n "%{%B%}" # set bold
+   if [[ $PROMPT_OPENED == true ]]; then
+      echo -n "$prefix"
+   fi
+   PROMPT_OPENED=true
+   echo -n "%{%b%}" # unset bold
 
-  echo -n "%{%B$color%}" # set color
-  echo -n "$content"     # section content
-  echo -n "%{%b%f%}"     # unset color
+   echo -n "%{%B$color%}" # set color
+   echo -n "$content"     # section content
+   echo -n "%{%b%f%}"     # unset color
 
-  echo -n "%{%B%}" # reset bold, if it was diabled before
-  echo -n "$suffix"
-  echo -n "%{%b%}" # unset bold
+   echo -n "%{%B%}" # reset bold, if it was diabled before
+   echo -n "$suffix"
+   echo -n "%{%b%}" # unset bold
 }
 
-prompt_user()	{ _prompt_section "%n" 							green	 					}
-prompt_host()	{ _prompt_section "@%m"  						green				""		}
-prompt_dir() 	{ _prompt_section "%~ "							yellow 						}
-prompt_pyenv() 	{ _prompt_section "$(virtualenv_prompt_info)" 	blue 						}
-prompt_git() 	{ _prompt_section "$(git_super_status)" 		cyan 						}
-prompt_symbol() { _prompt_section "$ " 						    "%(?.white.red)"	"\n"	}
-prompt_vi()		{
-    if [ "$TERM" = "xterm-256color" ]; then
-        if [ "$KEYMAP" = "vicmd" ]; then
-            # the command mode for vi
-            echo -ne "\e[2 q"
-        else
-            # the insert mode for vi
-            echo -ne "\e[5 q"
-        fi
-    fi
+prompt_user()  { _prompt_section "%n" green }
+prompt_host()  { _prompt_section "@%m" green "" }
+prompt_dir()   { _prompt_section "%~ " yellow }
+prompt_pyenv() { _prompt_section "$(virtualenv_prompt_info)" blue  }
+prompt_git()   { _prompt_section "$(git_super_status)" cyan }
+prompt_symbol() {
+   local sym_color
+   if (( RET_CODE == 0 )); then sym_color=white; else sym_color=red; fi
+   _prompt_section "$ " $sym_color "\n"
+}
+prompt_vi() {
+   if [ "$TERM" = "xterm-256color" ]; then
+      if [ "$KEYMAP" = "vicmd" ]; then
+         # the command mode for vi
+         echo -ne "\e[2 q"
+      else
+         # the insert mode for vi
+         echo -ne "\e[5 q"
+      fi
+   fi
 }
 
 drow_prompt() {
-	prompt_user
-	prompt_host
-	prompt_dir
-	prompt_pyenv
-    prompt_git
-    prompt_vi
-    prompt_symbol
+   RET_CODE=$?
+   prompt_user
+   prompt_host
+   prompt_dir
+   prompt_pyenv
+   prompt_git
+   # prompt_vi
+   prompt_symbol
 }
 
 PROMPT='$(drow_prompt)'
@@ -81,16 +86,16 @@ ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=cyan,bold'
 # LESS_TERMCAP_us: enter underline mode
 
 man() {
-    env \
-        LESS_TERMCAP_mb=$(printf '\e[01;31m') \
-        LESS_TERMCAP_md=$(printf '\e[01;38;5;75m') \
-        LESS_TERMCAP_me=$(printf '\e[0m') \
-        LESS_TERMCAP_se=$(printf '\e[0m') \
-        LESS_TERMCAP_so=$(printf '\e[1;27;7m') \
-        LESS_TERMCAP_ue=$(printf '\e[0m') \
-        LESS_TERMCAP_us=$(printf '\e[04;38;5;200m') \
-        _NROFF_U=1 \
-            man "$@"
+   env \
+      LESS_TERMCAP_mb=$(printf '\e[01;31m') \
+      LESS_TERMCAP_md=$(printf '\e[01;38;5;75m') \
+      LESS_TERMCAP_me=$(printf '\e[0m') \
+      LESS_TERMCAP_se=$(printf '\e[0m') \
+      LESS_TERMCAP_so=$(printf '\e[1;27;7m') \
+      LESS_TERMCAP_ue=$(printf '\e[0m') \
+      LESS_TERMCAP_us=$(printf '\e[04;38;5;200m') \
+      _NROFF_U=1 \
+         man "$@"
 }
 
 #########################################
@@ -104,4 +109,3 @@ man() {
 # Cyan        0;36     Light Cyan    1;36
 # Light Gray  0;37     White         1;37
 #########################################
-
