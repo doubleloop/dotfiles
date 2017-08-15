@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 function _exists {
     type "$1" &>/dev/null
 }
