@@ -25,8 +25,10 @@ mackup -f restore
 
 # mackup changes some file permitions
 git submodule foreach --recursive git reset --hard
+[ -f dotfiles/.oh-my-zsh-custom/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
+    chmod +x dotfiles/.oh-my-zsh-custom/plugins/zsh-git-prompt/src/.bin/gitstatus
 
-_exists nvim && vim +PlugUpgrade +PlugUpdate +qa
+_exists nvim && nvim +PlugUpgrade +PlugUpdate +qa
 
 if [ -d ~/.fzf ]; then
     pushd ~/.fzf
