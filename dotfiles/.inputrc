@@ -1,0 +1,14 @@
+# by default system-wide settings are ignored when local ~/.inputrc exists
+$include /etc/inputrc
+
+# mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+set colored-stats on
+
+TAB: menu-complete
+"\e[Z":menu-complete-backward
+set completion-ignore-case On
+
+set show-all-if-ambiguous on
+set visible-stats on
