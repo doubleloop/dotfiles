@@ -3,6 +3,8 @@
 [ -z $WORKON_HOME ] && WORKON_HOME=$HOME/.virtualenvs
 PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python3
 
+git submodule update --init --recursive
+
 [ ! -d ~/.oh-my-zsh ] && \
     git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
 
