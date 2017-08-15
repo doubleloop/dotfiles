@@ -10,7 +10,7 @@ autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 " https://github.com/neovim/neovim/wiki/FAQ#how-can-i-use-true-colors-in-the-terminal
 syntax enable
 set termguicolors
-" let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
 set background=dark
 " set background=light
 
