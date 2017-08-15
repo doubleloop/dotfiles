@@ -158,3 +158,5 @@ setopt inc_append_history_time &>/dev/null
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
 # all config that should not be tracked in git should go to zshlocalrc
 [ -f ~/.zshlocalrc ] && . ~/.zshlocalrc
+
+true
