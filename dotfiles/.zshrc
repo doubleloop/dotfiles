@@ -1,4 +1,4 @@
-_exists() { type "$1" > /dev/null }
+_exists() { type "$1" >/dev/null }
 
 ### oh-my-zsh settings ###
 # https://github.com/robbyrussell/oh-my-zsh/blob/master/templates/zshrc.zsh-template

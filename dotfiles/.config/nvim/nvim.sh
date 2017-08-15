@@ -6,6 +6,8 @@ elif [ -f $WORKON_HOME/nvim/bin/python ]; then
     export PYTHON2_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python
 fi
 
-alias vim=nvim
-alias vimrc='nvim ~/.config/nvim/init.vim'
-export EDITOR=nvim
+if type nvim &>/dev/null; then
+    alias vim=nvim
+    alias vimrc='nvim ~/.config/nvim/init.vim'
+    export EDITOR=nvim
+fi
