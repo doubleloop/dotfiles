@@ -32,8 +32,11 @@ fi
 # setxkbmap -option ctrl:nocaps
 
 # make short-pressed Ctrl behave like Escape:
-xcape -e 'Control_L=Escape'
-xcape -e 'Caps_Lock=Escape'
+type xcape >/dev/null && {
+    xcape -e 'Control_L=Escape'
+    xcape -e 'Caps_Lock=Escape'
+}
 
-[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
+
+[ -f ~/.Xmodmap ] && type xmodmap >/dev/null && xmodmap ~/.Xmodmap
 
