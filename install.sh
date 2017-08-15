@@ -12,7 +12,7 @@ git submodule update --init --recursive
 
 [ ! -d ~/.oh-my-zsh ] && \
     git clone https://github.com/robbyrussell/oh-my-zsh ~/.oh-my-zsh
-[ -z $FULL_INSTALL ] && \
+[ -z $FULL_INSTALL ] && [ ! -f ~/.zsh_plugins ] && \
     cp zsh_plugins.default ~/.zsh_plugins
 
 [ ! -d mackupenv ] && virtualenv mackupenv
