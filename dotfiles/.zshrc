@@ -3,6 +3,7 @@ _exists() { type "$1" > /dev/null }
 ### oh-my-zsh settings ###
 # https://github.com/robbyrussell/oh-my-zsh/blob/master/templates/zshrc.zsh-template
 export ZSH=$HOME/.oh-my-zsh
+ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 ZSH_THEME="doubleloop"
 HYPHEN_INSENSITIVE="true"
 export UPDATE_ZSH_DAYS=13

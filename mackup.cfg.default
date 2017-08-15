@@ -3,3 +3,5 @@ engine = file_system
 path = dotfiles
 directory = dotfiles
 
+[applications_to_ignore]
+oh-my-zsh
