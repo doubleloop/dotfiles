@@ -38,16 +38,21 @@ prompt_symbol() {
    if (( RET_CODE == 0 )); then sym_color=white; else sym_color=red; fi
    _prompt_section "$ " $sym_color "\n"
 }
+_insert_mode_prompt() { echo -ne "\e[5 q" }
+_normal_mode_prompt() { echo -ne "\e[2 q" }
 prompt_vi() {
-   if [ "$TERM" = "xterm-256color" ]; then
+   if [ "$TERM" = "xterm-256color" ] && [ -z $DISABLE_PROMPT_SWITCH ]; then
       if [ "$KEYMAP" = "vicmd" ]; then
-         # the command mode for vi
-         echo -ne "\e[2 q"
+         _normal_mode_prompt
       else
-         # the insert mode for vi
-         echo -ne "\e[5 q"
+         _insert_mode_prompt
       fi
    fi
+}
+# just in case
+fix_prompt() {
+    DISABLE_PROMPT_SWITCH=1
+    _normal_mode_prompt
 }
 
 drow_prompt() {
@@ -57,7 +62,7 @@ drow_prompt() {
    prompt_dir
    prompt_pyenv
    prompt_git
-   # prompt_vi
+   prompt_vi
    prompt_symbol
 }
 
