@@ -11,7 +11,6 @@ alias mr='mr -j20'
 alias gds='git diff --staged'
 alias j='fasd_cd -d -i'
 alias gdb='gdb -q'
-alias history='fc -ilD 1 | less +G'
 
 # remove conflicting aliases
 unalias ag &>/dev/null

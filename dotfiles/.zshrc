@@ -143,6 +143,7 @@ unsetopt histverify
 unsetopt share_history
 unsetopt inc_append_history
 setopt inc_append_history_time &>/dev/null
+alias history='fc -ilD 1 | less +G'
 
 # prevent error commands to be inserted to history file
 # http://superuser.com/questions/902241/how-to-make-zsh-not-store-failed-command
