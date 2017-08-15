@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WORKON_HOME=$HOME/.virtualenvs
+[ -z $WORKON_HOME ] && WORKON_HOME=$HOME/.virtualenvs
 PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python3
 
 [ ! -d ~/.oh-my-zsh ] && \
