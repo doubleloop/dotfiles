@@ -1,0 +1,50 @@
+set surround
+
+let mapleader=","
+set hlsearch
+set smartcase
+set visualbell
+set incsearch
+nmap <silent> <leader><leader> :nohl<cr>
+
+set clipboard=unnamedplus
+
+vnoremap < <gv
+vnoremap > >gv
+vnoremap <tab> >gv
+vnoremap <s-tab> <gv
+
+set undofile
+set undodir=~/.vim/idea_undo
+
+" disable - as word separator
+" set iskeyword+=-
+
+
+" Movement
+" move visible line, not physical line
+" map k gk
+" map j gj
+" map <up> gk
+" map <down> gj
+
+set whichwrap=<,>,[,],b,s " commands that can go to next line
+                          " (added bs and space)
+set startofline     " scrolling puts cursor on first non blank character
+
+imap <S-Left> <Esc>v<Left>
+imap <S-Right> <Esc>v<Right>
+vmap <S-Left> <Left>
+vmap <S-Right> <Right>
+nmap <S-Left> v<Left>
+nmap <S-Right> v<Right>
+
+nmap <leader>f :action AceAction<CR>
+nmap <space> :action AceAction<CR>
+nmap <leader>w :action AceTargetAction<CR>
+nmap <leader>l :action AceLineAction<CR>
+
+vmap <leader>f :action AceAction<CR>
+vmap <leader>w :action AceTargetAction<CR>
+vmap <leader>l :action AceLineAction<CR>
+
