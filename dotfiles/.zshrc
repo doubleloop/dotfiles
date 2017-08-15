@@ -1,179 +1,123 @@
-# Path to your oh-my-zsh installation.
+_exists() { type "$1" > /dev/null }
+
+### oh-my-zsh settings ###
+# https://github.com/robbyrussell/oh-my-zsh/blob/master/templates/zshrc.zsh-template
 export ZSH=$HOME/.oh-my-zsh
-
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
 ZSH_THEME="doubleloop"
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
+HYPHEN_INSENSITIVE="true"
 export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
 ENABLE_CORRECTION="false"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
+COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 HIST_STAMPS="yyyy-mm-dd"
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
-ZSH_CUSTOM=$ZSH/custom
+### Plugins ###
+# allow custom plugins setup
+if [ -f ~/.zsh_plugins ]; then
+    . ~/.zsh_plugins
+else
+    # Add wisely, as too many plugins slow down shell startup
+    plugins=(
+        alias-tips
+        common-aliases fasd colorize extract command-not-found
+        vagrant
+        docker
+        valut
+        vi-mode
+        golang
+        jsontools
+        supervisor
+        gitfast gitignore zsh-git-prompt
+        debian
+        pip python virtualenv virtualenvwrapper
+        django
+        atom sublime
+        cabal stack
+        jira
+        zsh-completions
+        zsh-autosuggestions
+        zsh-syntax-highlighting
+    )
+fi
 
-# virtualenvwrapper
-export WORKON_HOME=$HOME/.virtualenvs
-
-# vi-mode: delay for mode change
-export KEYTIMEOUT=1
-
-# Git prompt compiled in haskell is 4 times faster than standard python one
-[ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
-    GIT_PROMPT_EXECUTABLE="haskell"
-
-# Plugins
-# Add wisely, as too many plugins slow down shell startup
-
-plugins=(
-    alias-tips
-    common-aliases fasd colorize extract command-not-found
-    vagrant
-    docker
-    vi-mode
-    golang
-    jsontools
-    supervisor
-    gitfast gitignore zsh-git-prompt
-    debian
-    pip python virtualenv virtualenvwrapper
-    django
-    atom sublime
-    cabal stack
-    gradle
-    valut
-    jira
-    # zsh-navigation-tools
-    zsh-completions
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-)
-
-path=(
+### path settings ###
+try_path=(
    ~/.cabal/bin
    ~/.cargo/bin
    ~/.local/bin
    ~/opt/go/bin
+   ~/opt/android-sdk-linux/platform-tools
    ~/.npm-packages/bin
-   # ~/opt/android-sdk-linux/platform-tools
+)
+
+for p in $try_path; do
+    [ -d $p ] && path=($p $path)
+done
+
+# add sudo bin so that zsh-syntax-hilighting works on sudo commands
+path=(
    $path
-   # add sudo bin so that zsh-syntax-hilighting works on sudo commands
    /usr/local/sbin /usr/sbin /sbin
 )
 
+### plugins settings ###
+# virtualenvwrapper settings
+export WORKON_HOME=$HOME/.virtualenvs
+# zsh-git-prompt settings
+# git-prompt compiled in haskell is 4 times faster than standard python one
+[ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
+    GIT_PROMPT_EXECUTABLE="haskell"
 # required for zsh-completions
 autoload -U compinit && compinit
 
+### start oh-my-zsh and all plugins ###
 source $ZSH/oh-my-zsh.sh
 
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
-export TMPDIR=/tmp
-export EDITOR='nvim'
+### plugins settings ###
+# vi-mode settings
+KEYTIMEOUT=1
+# debian plugin settings (aliases)
+apt_pref=apt
+# disable pasted text highlighting (used to be slow)
+zle_highlight=(none)
 
-[ -f ~/.aliases ] && . ~/.aliases
-[ -f ~/.jirarc ] && . ~/.jirarc
+# alias-tips settings
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi please help"
+export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=1
 
-# Make new terminal sessions use the current directory
-[ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
-
-# make less hilight source code
-# http://superuser.com/a/71593/240371
-[ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ] &&
-    export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
-
-# default settings for less. You may also want to disable line wrapping with -S
-export LESS='-MRiS#8j.5'
-#             |||| `- center on search matches
-#             |||`--- scroll horizontally 8 columns at a time
-#             ||`---- case-insensitive search unless pattern contains uppercase
-#             |`----- parse color codes
-#             `------ show more information in prompt
-
-# https://github.com/zsh-users/zsh-autosuggestions/issues/118
-ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=( expand-or-complete )
-
-# prevent forward-char from accepting autosuggestions completions
+# autosuggestions settings
+# make forward-char accept single character (vi-mode does not work as expected)
 ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=( end-of-line vi-end-of-line vi-add-eol )
-
-# but make forward-char partial accept
 ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
     forward-word vi-forward-word vi-forward-word-end
     vi-forward-blank-word vi-forward-blank-word-end
     forward-char vi-forward-char
 )
 
+### env settings ###
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export TMPDIR=/tmp
+_exists vim && export EDITOR=vim || export EDITOR=vi
+export LESS='-MRiS#8j.5'
+# make less hilight source code http://superuser.com/a/71593/240371
+[ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ] && \
+    export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 
-# disable pasted text highlighting
-zle_highlight=(none)
-
-# use apt for debian aliases
-apt_pref=apt
-
-# alias-tips settings
-export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi please help"
-export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=1
-
-# make navigation tools history search select command after pressing
-# enter once (not twice wich is default)
-znt_list_instant_select=1
-
-# http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
-stty -ixon
-
+### key bindings ###
 # ctrl + arrows
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
-
 # alt + arrows
 bindkey '^[[1;3D' backward-word
 bindkey '^[[1;3C' forward-word
-
+# shift+tab
 bindkey '^[[Z' reverse-menu-complete
-
-# ctrl+del, why this does not work in tmux!!!
+# ctrl+del/backspace, this does not work in tmux
+bindkey '^H' backward-kill-word # # ctrl+h conflict in tmux
 bindkey '^[[3;5~' kill-word
-# just backup if ctrl+backspace ctrl+del does not work
-bindkey '^[d' kill-word
-
-# ctrl+backspace, not working with tmux (ctrl+h conflict)
-bindkey '^H' backward-kill-word
-
-# alt+del
-# alt+backspace
-# TODO
-
+# TODO: alt+del alt+backspace
 # vi mode is ok but restore common shortcuts in insert mode
 bindkey '^f' forward-char
 bindkey '^b' backward-char
@@ -187,13 +131,14 @@ bindkey '^y' yank
 bindkey '^t' trhnspose-chars
 bindkey '^[t' transpose-words
 bindkey '^u' undo
-# autosuggestions
-bindkey '^ ' autosuggest-accept
 
-# http://www.markhneedham.com/blog/2012/09/16/zsh-dont-verify-substituted-history-expansion-a-k-a-disabling-histverify/
-unsetopt histverify
+# stop ctrl-s from hanging terminal
+# http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
+stty -ixon
 
+### history ###
 # man zshoptions
+unsetopt histverify
 unsetopt share_history
 unsetopt inc_append_history
 setopt inc_append_history_time &>/dev/null
@@ -202,11 +147,13 @@ setopt inc_append_history_time &>/dev/null
 # http://superuser.com/questions/902241/how-to-make-zsh-not-store-failed-command
 # zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
-# gvm is for golang
+### load external files ###
+# Make new terminal sessions use the current directory
+[ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
+
+[ -f ~/.aliases ] && . ~/.aliases
 [ -f ~/.gvm/scripts/gvm ] && . ~/.gvm/scripts/gvm
-
-# fzf is cool
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
-
-# neovim env variables
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
+# all config that should not be tracked in git should go to zshlocalrc
+[ -f ~/.zshlocalrc ] && . ~/.zshlocalrc
