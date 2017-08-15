@@ -1,3 +1,5 @@
+_exists() { type "$1" > /dev/null }
+
 alias top='htop'
 alias trojka='mplayer mms://stream.polskieradio.pl/program3'
 alias sshconf='$EDITOR ~/.ssh/config'
@@ -5,9 +7,12 @@ function zssh {
     ssh "$@" -t zsh
 }
 alias o="xdg-open"
-alias vimrc='$EDITOR ~/.config/nvim/init.vim'
-alias zshtheme='$EDITOR ~/.oh-my-zsh-custom/themes/doubleloop.zsh-theme'
-alias vim=nvim
+_exists nvim && {
+    alias vim=nvim
+    alias vimrc='nvim ~/.config/nvim/init.vim'
+}
+
+alias zshtheme='$EDITOR ~/.oh-my-zsh/custom/themes/doubleloop.zsh-theme'
 alias vi=vim
 alias mr='mr -j20'
 alias gds='git diff --staged'
@@ -33,6 +38,8 @@ function objdump2shellcode {
     sed 's/$/"/g'
 }
 
-alias atom=atom-beta
-alias apm=apm-beta
+_exists atom-beta && {
+    alias atom=atom-beta
+    alias apm=apm-beta
+}
 
