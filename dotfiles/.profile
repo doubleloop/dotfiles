@@ -22,7 +22,7 @@ fi
 # make short-pressed Ctrl behave like Escape:
 type xcape >/dev/null && {
     xcape -e 'Control_L=Escape'
-    # xcape -e 'Caps_Lock=Escape'
+    xcape -e 'Caps_Lock=Escape'
 }
 
 [ -f ~/.Xmodmap ] && type xmodmap >/dev/null && xmodmap ~/.Xmodmap
