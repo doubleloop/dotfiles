@@ -81,6 +81,7 @@ augroup END
 
 " search settings
 set hlsearch
+set ignorecase
 set smartcase
 nmap <silent> <leader><leader> :nohl<cr>
 " nnoremap <silent> <esc> :nohl<cr>
@@ -434,16 +435,14 @@ let g:multi_cursor_next_key='<C-s>'
 let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
 
-if has("nvim")
-    nmap <C-p> :Files<cr>
-    nmap <leader>p :GFiles<cr>
+" FZF settings
+nmap <C-p> :Files<cr>
+nmap <leader>p :GFiles<cr>
 
-    nmap <A-b> :Buffer<cr>
-    nmap <leader>b :Buffer<cr>
-    cmap <C-f> History:<cr>
-    nmap <leader>/ :Commands<cr>
-endif
-
+nmap <A-b> :History<cr>
+nmap <leader>b :Buffer<cr>
+cmap <C-r> History:<cr>
+nmap <leader>/ :Commands<cr>
 
 " atuo strip whitespace on save
 autocmd BufWritePre * StripWhitespace
@@ -460,6 +459,7 @@ let g:session_persist_colors=0
 let g:session_persist_font=0
 
 nmap <F8> :TagbarToggle<CR>
+nmap <A-e> :TagbarOpenAutoClose<CR>
 
 " let g:solarized_termcolors=256
 " let g:solarized_termcolors=16
