@@ -114,6 +114,17 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
+function! SynStackFun()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+command SyntaxStack call SynStackFun()
+
+command FgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "fg")
+command BgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "bg")
+
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4    " Indentation amount for < and > commands.
@@ -156,10 +167,11 @@ set noswapfile
 " Spelling
 set dictionary+=/usr/share/dict/words
 set thesaurus+=/usr/share/dict/mthesaur.txt
+set spelllang=en_us
 
 
 " Plugins
-call plug#begin('~/.nvim/plugged')
+call plug#begin('~/.local/share/nvim/plugged')
 
 " Better vim in terminal
 Plug 'wincent/terminus'
@@ -319,7 +331,8 @@ Plug 'ekalinin/dockerfile.vim'
 " Syntax handling of markdown
 Plug 'plasticboy/vim-markdown'
 
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline', { 'commit': '470e9870f13830580d1938a2dae1be5b6e43d92a' }
 Plug 'vim-airline/vim-airline-themes'
 
 " Plug 'ryanoasis/vim-devicons'
@@ -502,3 +515,5 @@ let g:vim_isort_map = ''
 " navigate quickfix
 nmap [l :lprev<CR>
 nmap ]l :lnext<CR>
+
+autocmd FileType gitcommit setlocal spell
