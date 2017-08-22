@@ -252,6 +252,8 @@ Plug 'jiangmiao/auto-pairs'
 " Hilight/remove trailing whitespaces
 Plug 'ntpeters/vim-better-whitespace'
 
+Plug 'Yggdroot/indentLine'
+
 " Plug 'kien/rainbow_parentheses.vim'
 
 " This extension is so broken!!! (history/copy/paste)
@@ -517,3 +519,4 @@ nmap [l :lprev<CR>
 nmap ]l :lnext<CR>
 
 autocmd FileType gitcommit setlocal spell
+set listchars=space:•,tab:——
