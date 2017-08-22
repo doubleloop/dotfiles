@@ -386,6 +386,7 @@ let NERDTreeHighlightCursorline=1
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:jedi#completions_enabled = 0
+let g:jedi#goto_command = "<C-]>"
 silent! call deoplete#custom#set('ultisnips', 'matchers', ['matcher_fuzzy'])
 
 let g:UltiSnipsEditSplit="vertical"
