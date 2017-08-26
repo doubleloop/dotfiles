@@ -7,6 +7,7 @@ plugins=(
     vi-mode
     supervisor
     gitfast gitignore zsh-git-prompt
+    jsontools
     pip python virtualenv virtualenvwrapper
     zsh-completions
     zsh-autosuggestions
