@@ -7,8 +7,6 @@ function _exists {
 
 [ -z $WORKON_HOME ] && WORKON_HOME=$HOME/.virtualenvs
 [ ! -d $WORKON_HOME ] && mkdir -p $WORKON_HOME
-PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python3
-
 git submodule update --init --recursive
 
 [ ! -d ~/.oh-my-zsh ] && \
@@ -37,11 +35,17 @@ if _exists nvim; then
     fi
 
     [ ! -d $WORKON_HOME/nvim ] && \
-        virtualenv --python=/usr/bin/python3 $WORKON_HOME/nvim
-
+        virtualenv --python=/usr/bin/python2 $WORKON_HOME/nvim
     . $WORKON_HOME/nvim/bin/activate && \
     pip install neovim
-    export PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python3
+    export PYTHON2_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python
+
+    [ ! -d $WORKON_HOME/nvim3 ] && \
+        virtualenv --python=/usr/bin/python3 $WORKON_HOME/nvim3
+    . $WORKON_HOME/nvim3/bin/activate && \
+    pip install neovim
+    export PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim3/bin/python
+
     vim +PlugInstall +qa
 fi
 
