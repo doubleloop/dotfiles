@@ -25,6 +25,7 @@ set textwidth=0
 set nowrap
 set nofoldenable
 " set foldlevel=1
+set foldmethod=syntax
 
 set colorcolumn=80
 " highlight ColorColumn ctermbg=233
@@ -40,7 +41,6 @@ set autoread
 
 " Enable persistent undo so that undo history persists across vim sessions
 set undofile
-set undodir=~/.vim/undo
 
 " disable - as word separator
 set iskeyword+=-
@@ -83,13 +83,12 @@ augroup END
 set hlsearch
 set ignorecase
 set smartcase
+set inccommand=nosplit
 nmap <silent> <leader><leader> :nohl<cr>
 " nnoremap <silent> <esc> :nohl<cr>
 " http://vim.wikia.com/wiki/highlight_all_search_pattern_matches
 nnoremap <silent> <leader>/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<CR>
 vnoremap <silent> <leader>/ y/<c-r>"<cr>
-
-set foldmethod=syntax
 
 " Highlight all instances of word under cursor, when idle.
 " Useful when studying strange source code.
@@ -149,8 +148,9 @@ tnoremap <C-w> <C-\><C-n><C-w>
 " autocmd BufWinEnter,WinEnter term://*/zsh startinsert
 
 
-set splitbelow      " Horizontal split below current.
+set nosplitbelow
 set splitright      " Vertical split to right of current.
+set previewheight=40
 
 " http://stackoverflow.com/questions/102384/using-vims-tabs-like-buffers
 set hidden
@@ -222,6 +222,9 @@ Plug 'moll/vim-bbye'
 "
 " git integration (todo: learn how to use this)
 Plug 'tpope/vim-fugitive'
+" GitHub/BB extension for fugitive.vim
+Plug 'tpope/vim-rhubarb'
+Plug 'tommcdo/vim-fubitive'
 
 " Symbols on the left showing what has changed
 Plug 'airblade/vim-gitgutter'
@@ -233,6 +236,9 @@ Plug 'xuyuanp/nerdtree-git-plugin'
 
 " Intelligently toggling line numbers
 Plug 'myusuf3/numbers.vim'
+
+" Handy bracket mappings
+Plug 'tpope/vim-unimpaired'
 
 " Help alligning text
 " Plug 'godlygeek/tabular'
@@ -253,7 +259,11 @@ Plug 'jiangmiao/auto-pairs'
 " Hilight/remove trailing whitespaces
 Plug 'ntpeters/vim-better-whitespace'
 
-Plug 'Yggdroot/indentLine'
+" Plug 'Yggdroot/indentLine'
+
+" automatically adjusts 'shiftwidth' and 'expandtab' heuristically
+" based on the current file
+Plug 'tpope/vim-sleuth'
 
 " Plug 'kien/rainbow_parentheses.vim'
 
@@ -273,8 +283,7 @@ Plug 'tpope/vim-repeat'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
-" This should improve highlight while find/replace (still it does notwork)
-" or I can did not figure it out yet
+" This should improve highlight while find/replace
 Plug 'osyo-manga/vim-over'
 
 " Mirroring files on various remote hosts
@@ -303,6 +312,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'lervag/vimtex'
 
 " Haskell
+Plug 'eagletmt/ghcmod-vim'
 
 " Go
 Plug 'fatih/vim-go'
@@ -323,6 +333,8 @@ Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
+Plug 'rking/ag.vim'
+
 Plug 'elzr/vim-json'
 Plug 'stephpy/vim-yaml'
 Plug 'roalddevries/yaml.vim'    " yaml folding
@@ -338,7 +350,7 @@ Plug 'plasticboy/vim-markdown'
 Plug 'vim-airline/vim-airline', { 'commit': '470e9870f13830580d1938a2dae1be5b6e43d92a' }
 Plug 'vim-airline/vim-airline-themes'
 
-" Plug 'ryanoasis/vim-devicons'
+Plug 'ryanoasis/vim-devicons'
 
 " Color themes
 Plug 'godlygeek/csapprox'       " Make gvim-only colorschemes work
@@ -519,5 +531,4 @@ let g:vim_isort_map = ''
 nmap [l :lprev<CR>
 nmap ]l :lnext<CR>
 
-autocmd FileType gitcommit setlocal spell
 set listchars=space:•,tab:——
