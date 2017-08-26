@@ -96,6 +96,11 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
     forward-char vi-forward-char
 )
 
+export FZF_DEFAULT_OPTS='--cycle --tiebreak=end,length'
+_exists ag && \
+    export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""' && \
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 ### env settings ###
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
