@@ -8,14 +8,18 @@
 [core]
 	autocrlf = input
 	fileMode = false
-[mergetool]
-	keepBackup = false
 [diff]
 	renames = copies
-	guitool = meld
 	submodule = log
 [merge]
+	tool = pycharm
 	conflictstyle = diff3
+[mergetool]
+	keepBackup = false
+[mergetool "pycharm"]
+    cmd = /usr/local/bin/charm merge "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+[mergetool "nfugitive"]
+    cmd = nvim -f -c "Gdiff" "$MERGED"
 [push]
 	default = simple
 	recurseSubmodules = check
