@@ -48,7 +48,6 @@ set so=5            " cursor margins
 " search settings
 set hlsearch
 set ignorecase
-set smartcase
 set inccommand=nosplit
 
 set tabstop=4
@@ -72,6 +71,15 @@ set noswapfile
 set dictionary+=/usr/share/dict/words
 set thesaurus+=/usr/share/dict/mthesaur.txt
 set spelllang=en_us
+
+" tab completion
+set wildmode=longest,full
+set wildmenu
+
+set completeopt=menuone,longest,noselect
+set noshowmode
+set path+=**
+
 " }}}
 
 " Plugins {{{
@@ -93,16 +101,19 @@ Plug 'easymotion/vim-easymotion'
 let g:EasyMotion_do_mapping = 0
 let g:EasyMotion_smartcase = 1
 
+" Print function signature
+Plug 'Shougo/echodoc.vim'
+let g:echodoc#enable_at_startup = 1
+
 " Autocompletion engine
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
+let g:deoplete#ignore_sources = {}
+" let g:deoplete#ignore_sources._ = ['buffer', 'around']
 
 Plug 'zchee/deoplete-jedi'
-let g:jedi#completions_enabled = 0
-let g:jedi#goto_command = "<C-]>"
-
-" Plug 'zchee/deoplete-go'
+Plug 'zchee/deoplete-go'
 " Plug 'sebastianmarkow/deoplete-rust'
 
 " SudoRead, SudoWrite
@@ -193,17 +204,25 @@ Plug 'kopischke/vim-stay'
 " Changes Vim working directory to project root
 Plug 'airblade/vim-rooter'
 let g:rooter_silent_chdir = 1
-let g:rooter_manual_only = 0
 let g:rooter_patterns = ['.vim_root']
+let g:rooter_manual_only = 0
 
 " Autoformat
-Plug 'Chiel92/vim-autoformat'
+Plug 'sbdchd/neoformat'
+let g:neoformat_basic_format_trim = 1
+let g:neoformat_run_all_formatters = 1
+let g:neoformat_enabled_python = ['yapf', 'isort']
+let g:neoformat_enabled_go = ['goimports']
+
+
+" Transition between multiline and single-line code
+Plug 'AndrewRadev/splitjoin.vim'
 
 " Eclipse like autoopening of quotes/parenthesis
 Plug 'jiangmiao/auto-pairs'
 
 " Hilight/remove trailing whitespaces
-Plug 'ntpeters/vim-better-whitespace'
+" Plug 'ntpeters/vim-better-whitespace'
 
 " Plug 'Yggdroot/indentLine'
 
@@ -250,6 +269,10 @@ Plug 'zenbro/mirror.vim'
 
 " Python
 Plug 'davidhalter/jedi-vim'
+let g:jedi#completions_enabled = 0
+let g:jedi#show_call_signatures = 0
+let g:jedi#goto_command = "<C-]>"
+
 Plug 'fisadev/vim-isort'
 let g:vim_isort_python_version = 'python3'
 let g:vim_isort_map = ''
@@ -276,8 +299,21 @@ Plug 'lervag/vimtex'
 " Haskell
 Plug 'eagletmt/ghcmod-vim'
 
-" Go
+" Golang
 Plug 'fatih/vim-go'
+let g:go_fmt_autosave = 0
+let g:go_fmt_command = "goimports"
+let g:go_autodetect_gopath = 1
+let g:go_list_type = 'quickfix'
+" let g:go_auto_type_info = 1
+let g:go_auto_sameids = 1
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_generate_tags = 1
 
 " Rust
 Plug 'rust-lang/rust.vim'
@@ -291,9 +327,13 @@ Plug 'tyru/open-browser.vim'
 " Panel with tags
 Plug 'majutsushi/tagbar'
 
-" " Plug 'shougo/unite.vim'
+Plug 'ctrlpvim/ctrlp.vim'
+let g:ctrlp_map = '<leader>t'
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
+Plug 'pbogut/fzf-mru.vim'
 
 Plug 'rking/ag.vim'
 
@@ -312,12 +352,10 @@ let g:airline_powerline_fonts = 1
 let g:airline_exclude_preview = 1
 let g:airline_detect_spell=0
 let g:airline_detect_spelllang=0
+" let g:airline#extensions#vimagit#enabled = 0
+
 " let g:airline#extensions#tabline#enabled = 1
 Plug 'vim-airline/vim-airline-themes'
-
-" helps keep track of all open buffers
-Plug 'bling/vim-bufferline'
-let g:bufferline_echo = 0
 
 Plug 'ryanoasis/vim-devicons'
 
@@ -337,15 +375,23 @@ Plug 'tomasr/molokai'
 let g:rehash256 = 1
 call plug#end()
 
-" Use deoplete.
-silent! call deoplete#custom#set('ultisnips', 'matchers', ['matcher_fuzzy'])
-
 " }}}
-
 
 " Key Mappings {{{
 
 let mapleader=","
+
+" more tmux like behavior
+noremap <C-w>; <C-w>p
+noremap <C-w>n :bnext<cr>
+noremap <C-w>p :bprevious<cr>
+noremap <C-w>N :bnext<cr>
+noremap <C-w>P :bprevious<cr>
+noremap <C-w>c :tabnew<cr>
+noremap <C-w>z :tabedit %<cr>
+
+" nmap <C-n> :bnext<cr>
+" nmap <C-p> :bprevious<cr>
 
 " better indentation (stay in visual mode)
 vmap < <gv
@@ -353,16 +399,33 @@ vmap > >gv
 vmap <tab> >gv
 vmap <s-tab> <gv
 
+" Visual linewise up and down by default (and use gj gk to go quicker)
+noremap <Up> gk
+noremap <Down> gj
+noremap j gj
+noremap k gk
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+
+imap <c-v> <c-r>"
+nmap <cr> o<esc>
+
+noremap <Leader>q q
+nmap q <Nop>
 
 " https://github.com/mhinz/vim-galore#saner-command-line-history
 cmap <c-n>  <down>
 cmap <c-p>  <up>
 
-nmap <leader>l :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 nmap <silent> <leader><leader> :nohl<cr>
-" nmap <silent> <esc> :nohl<cr>
+" fix syntax hl when doing diff
+nmap <leader>r :nohl<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 " http://vim.wikia.com/wiki/highlight_all_search_pattern_matches
-nmap <silent> <leader>/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<CR>
+" nmap <silent> <leader>/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<CR>
 vmap <silent> <leader>/ y/<c-r>"<cr>
 
 " todo: think of sane terminal navigation
@@ -378,10 +441,6 @@ tmap <C-w> <C-\><C-n><C-w>
 " tmap <Esc> <C-\><C-n>
 " autocmd BufWinEnter,WinEnter term://* startinsert
 
-" always insert mode when focusing terminal
-" autocmd BufWinEnter,WinEnter term://*/zsh startinsert
-
-
 nmap <C-_> <Plug>NERDCommenterToggle
 xmap <C-_> <Plug>NERDCommenterToggle
 " nmap ,<C-_> <Plug>NERDCommenterSexy
@@ -390,14 +449,7 @@ nmap <C-g><C-_> <Plug>NERDCommenterAppend
 " TODO: insert mode comments
 
 
-nmap <silent> <leader>o :call RunAutoformat()<CR>
-function! RunAutoformat()
-    Autoformat
-    if &filetype=='python'
-        Isort
-    endif
-    return 0
-endfunction
+nmap <silent> <leader>o :Neoformat<CR>
 
 " Highlight all instances of word under cursor, when idle.
 " Useful when studying strange source code.
@@ -423,16 +475,23 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-nmap <C-p> :FzfFiles<cr>
-nmap <leader>p :FzfGFiles<cr>
-nmap <A-b> :FzfHistory<cr>
+
+
+
+nmap <leader>p :FzfFiles<cr>
+nmap <leader>P :FzfCommands<cr>
+nmap <A-b> :FzfBuffer<cr>
 nmap <leader>b :FzfBuffer<cr>
-cmap <C-r> History:<cr>
+nmap <leader>h :FzfHistory<cr>
+cmap <C-s> FzfHistory:<cr>
 nmap <leader>/ :FzfCommands<cr>
+nmap <leader>m :FZFMru<cr>
+
 nmap <A-e> :TagbarOpenAutoClose<CR>
 
 " close current buffer but do not close window
 nmap <Leader>z :Bdelete<CR>
+" cabbrev q Bdelete
 
 " Settings for openbrowser plugin
 nmap gx <Plug>(openbrowser-smart-search)
@@ -440,19 +499,28 @@ vmap gx <Plug>(openbrowser-smart-search)
 
 " nmap <Leader>l <Plug>(easymotion-overwin-line)
 nmap <Leader>l <Plug>(easymotion-bd-jk)
-nmap <Leader>w <Plug>(easymotion-overwin-w)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
+nmap <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>f <Plug>(easymotion-bd-f)
+nmap <leader>t <Plug>(easymotion-bd-t)
 vmap <Leader>l <Plug>(easymotion-bd-jk)
 vmap <Leader>w <Plug>(easymotion-bd-w)
 vmap <Leader>f <Plug>(easymotion-bd-f)
-nmap <Space> <Plug>(easymotion-overwin-w)
+vmap <leader>t <Plug>(easymotion-bd-t)
+nmap <Space> <Plug>(easymotion-jumptoanywhere)
+vmap <Space> <Plug>(easymotion-jumptoanywhere)
 
 nmap <c-k><c-b> :NERDTreeFind<cr>
 nmap <a-1> :NERDTreeToggle<cr>
 
-" navigate quickfix
+" navigate location window (simmilar to quickfix)
 nmap [l :lprev<CR>
 nmap ]l :lnext<CR>
+
+" push/pull to remote host
+nmap <leader>hh :MirrorPush
+nmap <leader>hd :MirrorDiff
+nmap <leader>hr: MirrorReload
+
 " }}}
 
 " Custom misc functions {{{
@@ -477,11 +545,11 @@ augroup CursorLine
     autocmd WinLeave * setlocal nocursorline
 augroup END
 
-" atuo strip whitespace on save
-autocmd BufWritePre * StripWhitespace
-
 " run lint on save
 autocmd! BufWritePost,BufEnter * Neomake
+
+" always insert mode when focusing terminal
+" autocmd BufWinEnter,WinEnter term://*/zsh startinsert
 
 " }}}
 
@@ -499,4 +567,3 @@ silent! colorscheme molokai
 hi MatchParen      guifg=none guibg=none gui=underline
 
 " }}}
-

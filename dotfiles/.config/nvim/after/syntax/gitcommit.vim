@@ -5,5 +5,3 @@ hi diffFile         guifg=#66D9EF ctermfg=White
 hi diffIndexLine    guifg=#66D9EF ctermfg=White
 hi diffLine         guifg=#66D9EF ctermfg=White
 hi diffSubname      guifg=White ctermfg=White
-
-setlocal spell
