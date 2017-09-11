@@ -516,10 +516,13 @@ nmap <a-1> :NERDTreeToggle<cr>
 nmap [l :lprev<CR>
 nmap ]l :lnext<CR>
 
-" push/pull to remote host
-nmap <leader>hh :MirrorPush
-nmap <leader>hd :MirrorDiff
-nmap <leader>hr: MirrorReload
+" push/pull to remote host (mirror plugin)
+nmap <leader>hh :MirrorPush<cr>
+nmap <leader>hd :MirrorDiff<cr>
+nmap <leader>hr: MirrorReload<cr>
+
+" open session
+nmap <leader>so :SessionOpen<cr>
 
 " }}}
 
