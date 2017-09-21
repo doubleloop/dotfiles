@@ -105,16 +105,22 @@ let g:EasyMotion_smartcase = 1
 Plug 'Shougo/echodoc.vim'
 let g:echodoc#enable_at_startup = 1
 
+Plug 'haya14busa/incsearch.vim'
+let g:incsearch#auto_nohlsearch = 1
+
 " Autocompletion engine
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#ignore_sources = {}
-" let g:deoplete#ignore_sources._ = ['buffer', 'around']
+let g:deoplete#ignore_sources.python = ['around']
 
 Plug 'zchee/deoplete-jedi'
 Plug 'zchee/deoplete-go'
-" Plug 'sebastianmarkow/deoplete-rust'
+Plug 'zchee/deoplete-zsh'
+Plug 'zchee/deoplete-clang'
+Plug 'sebastianmarkow/deoplete-rust'
+Plug 'Shougo/neco-vim'
 
 " SudoRead, SudoWrite
 Plug 'chrisbra/sudoedit.vim'
@@ -169,6 +175,7 @@ Plug 'airblade/vim-gitgutter'
 
 " Nice left panel with tree structured files
 Plug 'scrooloose/nerdtree'
+let g:NERDTreeQuitOnOpen = 1
 let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeWinSize=50
 
@@ -189,7 +196,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-session'
 let g:session_autosave='yes'
-let g:session_autoload='yes'
+let g:session_autoload='no'
 let g:session_default_overwrite=1
 let g:session_autosave_periodic='1'
 let g:session_autosave_silent=1
@@ -205,14 +212,17 @@ Plug 'kopischke/vim-stay'
 Plug 'airblade/vim-rooter'
 let g:rooter_silent_chdir = 1
 let g:rooter_patterns = ['.vim_root']
-let g:rooter_manual_only = 0
+let g:rooter_manual_only = 1
 
 " Autoformat
 Plug 'sbdchd/neoformat'
 let g:neoformat_basic_format_trim = 1
+let g:neoformat_basic_format_retab = 1
+let g:neoformat_only_msg_on_error = 1
 let g:neoformat_run_all_formatters = 1
 let g:neoformat_enabled_python = ['yapf', 'isort']
 let g:neoformat_enabled_go = ['goimports']
+let g:neoformat_enabled_c = ['clang-format', 'astyle']
 
 
 " Transition between multiline and single-line code
@@ -273,13 +283,9 @@ let g:jedi#completions_enabled = 0
 let g:jedi#show_call_signatures = 0
 let g:jedi#goto_command = "<C-]>"
 
-Plug 'fisadev/vim-isort'
-let g:vim_isort_python_version = 'python3'
-let g:vim_isort_map = ''
 Plug 'tmhedberg/SimpylFold'
 Plug 'jmcantrell/vim-virtualenv'
 Plug 'glench/vim-jinja2-syntax'
-" Plug 'bps/vim-textobj-python'
 " http://ipython.readthedocs.io/en/stable/install/kernel_install.html
 " Plug 'bfredl/nvim-ipy'          " ipython frontend, todo: fix
 Plug 'mfukar/robotframework-vim'
@@ -297,23 +303,15 @@ Plug 'pangloss/vim-javascript'
 Plug 'lervag/vimtex'
 
 " Haskell
-Plug 'eagletmt/ghcmod-vim'
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
+Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
+Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
 
 " Golang
-Plug 'fatih/vim-go'
-let g:go_fmt_autosave = 0
-let g:go_fmt_command = "goimports"
-let g:go_autodetect_gopath = 1
-let g:go_list_type = 'quickfix'
-" let g:go_auto_type_info = 1
-let g:go_auto_sameids = 1
-
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_generate_tags = 1
+Plug 'fatih/vim-go', { 'for': 'go' }
 
 " Rust
 Plug 'rust-lang/rust.vim'
@@ -326,7 +324,6 @@ Plug 'tyru/open-browser.vim'
 
 " Panel with tags
 Plug 'majutsushi/tagbar'
-
 Plug 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map = '<leader>t'
 
@@ -334,9 +331,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
 Plug 'pbogut/fzf-mru.vim'
-
 Plug 'rking/ag.vim'
-
 Plug 'elzr/vim-json'
 Plug 'stephpy/vim-yaml'
 Plug 'roalddevries/yaml.vim'    " yaml folding
@@ -346,18 +341,20 @@ Plug 'ekalinin/dockerfile.vim'
 
 " Syntax handling of markdown
 Plug 'plasticboy/vim-markdown'
+Plug 'rooprob/vim-behave'
 
 Plug 'vim-airline/vim-airline'
 let g:airline_powerline_fonts = 1
 let g:airline_exclude_preview = 1
 let g:airline_detect_spell=0
 let g:airline_detect_spelllang=0
-" let g:airline#extensions#vimagit#enabled = 0
+let g:airline_section_x=""
+let g:airline_section_b=""
 
-" let g:airline#extensions#tabline#enabled = 1
 Plug 'vim-airline/vim-airline-themes'
-
 Plug 'ryanoasis/vim-devicons'
+
+Plug 'dhruvasagar/vim-table-mode'
 
 " Color themes
 Plug 'godlygeek/csapprox'       " Make gvim-only colorschemes work
@@ -367,10 +364,11 @@ Plug 'godlygeek/csapprox'       " Make gvim-only colorschemes work
 " let g:solarized_termcolors=16
 " Plug '29decibel/codeschool-vim-theme'
 " Plug 'ciaranm/inkpot'
-" Plug 'jonathanfilip/vim-lucius'
 " Plug 'pyte'
 " Plug 'peaksea'
 Plug 'tomasr/molokai'
+Plug 'joshdick/onedark.vim'
+Plug 'jonathanfilip/vim-lucius'
 " let g:molokai_original = 1
 let g:rehash256 = 1
 call plug#end()
@@ -389,6 +387,9 @@ noremap <C-w>N :bnext<cr>
 noremap <C-w>P :bprevious<cr>
 noremap <C-w>c :tabnew<cr>
 noremap <C-w>z :tabedit %<cr>
+
+" Open file prompt with current path
+nmap <leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
 
 " nmap <C-n> :bnext<cr>
 " nmap <C-p> :bprevious<cr>
@@ -412,7 +413,7 @@ nnoremap N Nzzzv
 
 
 imap <c-v> <c-r>"
-nmap <cr> o<esc>
+" nmap <cr> o<esc>
 
 noremap <Leader>q q
 nmap q <Nop>
@@ -426,7 +427,7 @@ nmap <silent> <leader><leader> :nohl<cr>
 nmap <leader>r :nohl<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 " http://vim.wikia.com/wiki/highlight_all_search_pattern_matches
 " nmap <silent> <leader>/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<CR>
-vmap <silent> <leader>/ y/<c-r>"<cr>
+vmap <silent> * y/<c-r>"<cr>
 
 " todo: think of sane terminal navigation
 tmap <C-w> <C-\><C-n><C-w>
@@ -475,14 +476,21 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-
-
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
 
 nmap <leader>p :FzfFiles<cr>
 nmap <leader>P :FzfCommands<cr>
 nmap <A-b> :FzfBuffer<cr>
 nmap <leader>b :FzfBuffer<cr>
-nmap <leader>h :FzfHistory<cr>
+" nmap <leader>h :FzfHistory<cr>
 cmap <C-s> FzfHistory:<cr>
 nmap <leader>/ :FzfCommands<cr>
 nmap <leader>m :FZFMru<cr>
@@ -509,8 +517,20 @@ vmap <leader>t <Plug>(easymotion-bd-t)
 nmap <Space> <Plug>(easymotion-jumptoanywhere)
 vmap <Space> <Plug>(easymotion-jumptoanywhere)
 
-nmap <c-k><c-b> :NERDTreeFind<cr>
-nmap <a-1> :NERDTreeToggle<cr>
+function! IsNERDTreeOpen()
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+
+function! ToggleFindNerd()
+  if IsNERDTreeOpen()
+    exec ':NERDTreeToggle'
+  else
+    exec ':NERDTreeFind'
+  endif
+endfunction
+
+" nmap <c-k><c-b> <esc>:call ToggleFindNerd()<cr>
+nmap <a-1> <esc>:call ToggleFindNerd()<cr>
 
 " navigate location window (simmilar to quickfix)
 nmap [l :lprev<CR>
@@ -519,7 +539,7 @@ nmap ]l :lnext<CR>
 " push/pull to remote host (mirror plugin)
 nmap <leader>hh :MirrorPush<cr>
 nmap <leader>hd :MirrorDiff<cr>
-nmap <leader>hr: MirrorReload<cr>
+nmap <leader>hr :MirrorReload<cr>
 
 " open session
 nmap <leader>so :SessionOpen<cr>
@@ -549,7 +569,7 @@ augroup CursorLine
 augroup END
 
 " run lint on save
-autocmd! BufWritePost,BufEnter * Neomake
+call neomake#configure#automake('rw', 750)
 
 " always insert mode when focusing terminal
 " autocmd BufWinEnter,WinEnter term://*/zsh startinsert
@@ -564,9 +584,11 @@ autocmd! BufWritePost,BufEnter * Neomake
 " silent! colorscheme pyte
 " silent! colorscheme solarized
 " silent! colorscheme peaksea
-silent! colorscheme molokai
+" silent! colorscheme molokai
+silent! colorscheme onedark
 
 " hilight matching parenthesis style
 hi MatchParen      guifg=none guibg=none gui=underline
 
 " }}}
+
