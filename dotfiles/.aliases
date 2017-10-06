@@ -35,3 +35,4 @@ _exists atom-beta && {
     alias apm=apm-beta
 }
 
+alias tldr="tldr -t ocean"
