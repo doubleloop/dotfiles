@@ -97,7 +97,7 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
 
 export FZF_DEFAULT_OPTS='--cycle --tiebreak=end,length'
 _exists ag && \
-    export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""' && \
+    export FZF_DEFAULT_COMMAND='ag -f --hidden --ignore .git -g ""' && \
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 ### env settings ###
@@ -109,6 +109,9 @@ export LESS='-MRiS#8j.5'
 # make less hilight source code http://superuser.com/a/71593/240371
 [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ] && \
     export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 ### key bindings ###
 # ctrl + arrows
@@ -171,5 +174,7 @@ alias history='fc -ilD 1 | less +G'
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
 # all config that should not be tracked in git should go to zshlocalrc
 [ -f ~/.zshlocalrc ] && . ~/.zshlocalrc
+_exists rbenv && eval "$(rbenv init -)"
 
 true
+
