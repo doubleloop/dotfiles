@@ -24,9 +24,10 @@ set nowrap
 set nofoldenable
 set foldmethod=syntax
 " donot fold diff
-set diffopt=filler,context:1000000
+set diffopt=filler,context:1000000,vertical
 
-set colorcolumn=80
+" set colorcolumn=80
+set colorcolumn=
 
 set showcmd
 set showtabline=0   " do not disply tab on the top os the screen
@@ -37,7 +38,7 @@ set autoread
 set undofile
 
 " disable - as word separator
-set iskeyword+=-
+" set iskeyword+=-
 
 " commands that can go to next line (added bs and space)
 set whichwrap=<,>,[,],b,s
@@ -48,7 +49,7 @@ set so=5            " cursor margins
 " search settings
 set hlsearch
 set ignorecase
-set inccommand=nosplit
+set inccommand=split
 
 set tabstop=4
 set softtabstop=4
@@ -114,11 +115,16 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#ignore_sources = {}
 let g:deoplete#ignore_sources.python = ['around']
+let g:deoplete#ignore_sources.c = ['around']
 
 Plug 'zchee/deoplete-jedi'
 Plug 'zchee/deoplete-go'
 Plug 'zchee/deoplete-zsh'
 Plug 'zchee/deoplete-clang'
+let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
+let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/'
+let g:deoplete#sources#clang#sort_algo = 'priority'
+
 Plug 'sebastianmarkow/deoplete-rust'
 Plug 'Shougo/neco-vim'
 
@@ -144,6 +150,10 @@ Plug 'christoomey/vim-sort-motion' " gs
 
 " Must have surround functionality
 Plug 'tpope/vim-surround'
+
+" Substitute improved (casing, plural)
+" Coercions (crs, crc, cru, etc)
+Plug 'tpope/vim-abolish'
 
 " I do not know why commenting requires plugin, must have functionality
 Plug 'scrooloose/nerdcommenter'
@@ -190,7 +200,7 @@ Plug 'myusuf3/numbers.vim'
 Plug 'tpope/vim-unimpaired'
 
 " Help alligning text
-" Plug 'godlygeek/tabular'
+Plug 'godlygeek/tabular'
 
 " Improved sessions
 Plug 'xolox/vim-misc'
@@ -222,14 +232,18 @@ let g:neoformat_only_msg_on_error = 1
 let g:neoformat_run_all_formatters = 1
 let g:neoformat_enabled_python = ['yapf', 'isort']
 let g:neoformat_enabled_go = ['goimports']
-let g:neoformat_enabled_c = ['clang-format', 'astyle']
+let g:neoformat_enabled_c = ['clangformat']
 
 
 " Transition between multiline and single-line code
 Plug 'AndrewRadev/splitjoin.vim'
 
 " Eclipse like autoopening of quotes/parenthesis
-Plug 'jiangmiao/auto-pairs'
+Plug 'raimondi/delimitmate'
+let g:delimitMate_expand_cr = 1
+
+" Make the yanked region
+Plug 'machakann/vim-highlightedyank'
 
 " Hilight/remove trailing whitespaces
 " Plug 'ntpeters/vim-better-whitespace'
@@ -256,6 +270,7 @@ Plug 'sjl/gundo.vim'
 Plug 'neomake/neomake'          " async linter
 let g:neomake_verbose=0
 let g:neomake_rust_cargo_command = ['test', '--no-run']
+let g:neomake_c_enabled_makers = ['clangcheck']
 
 Plug 'kshenoy/vim-signature'    " show marks
 
@@ -278,13 +293,13 @@ Plug 'osyo-manga/vim-over'
 Plug 'zenbro/mirror.vim'
 
 " Python
-Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim', {'for': ['python', 'python3']}
 let g:jedi#completions_enabled = 0
 let g:jedi#show_call_signatures = 0
 let g:jedi#goto_command = "<C-]>"
 
 Plug 'tmhedberg/SimpylFold'
-Plug 'jmcantrell/vim-virtualenv'
+Plug 'jmcantrell/vim-virtualenv', {'for': ['python', 'python3']}
 Plug 'glench/vim-jinja2-syntax'
 " http://ipython.readthedocs.io/en/stable/install/kernel_install.html
 " Plug 'bfredl/nvim-ipy'          " ipython frontend, todo: fix
@@ -292,9 +307,6 @@ Plug 'mfukar/robotframework-vim'
 
 " C support
 Plug 'vim-scripts/a.vim'      " switch to/from heade file
-" Todo
-Plug 'rip-rip/clang_complete'
-let g:clang_library_path='/usr/lib/llvm-3.8/lib'
 
 " JavaScript
 Plug 'pangloss/vim-javascript'
@@ -314,7 +326,7 @@ Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
 Plug 'fatih/vim-go', { 'for': 'go' }
 
 " Rust
-Plug 'rust-lang/rust.vim'
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 
 " Ruby
 " Plug 'vim-ruby/vim-ruby'
@@ -336,6 +348,7 @@ Plug 'elzr/vim-json'
 Plug 'stephpy/vim-yaml'
 Plug 'roalddevries/yaml.vim'    " yaml folding
 Plug 'ekalinin/dockerfile.vim'
+Plug 'ClockworkNet/vim-junos-syntax'
 
 " Plug 'Konfekt/FastFold'
 
@@ -390,6 +403,25 @@ noremap <C-w>z :tabedit %<cr>
 
 " Open file prompt with current path
 nmap <leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
+
+map <c-]> <c-]>zz
+map <c-t> <c-t>zz
+
+inoremap <c-u> <c-g>u<c-u>
+inoremap <c-w> <c-g>u<c-w>
+inoremap <Space> <Space><C-g>u
+inoremap <c-r> <c-g>u<c-r>
+inoremap <c-z> <c-o>u
+inoremap <c-y> <c-o><c-r>
+
+
+nmap <c-]> <c-]>zz
+nmap <c-t> <c-t>zz
+nmap <c-i> <c-i>zz
+nmap <c-o> <c-o>zz
+nmap gd gdzz
+nmap * *zz
+nmap # #zz
 
 " nmap <C-n> :bnext<cr>
 " nmap <C-p> :bprevious<cr>
@@ -476,15 +508,30 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
+function WinDiff()
+  windo diffthis
+  windo set nocursorline
+endfunction
+
+function WinNoDiff()
+  windo diffoff
+  windo setlocal cursorline
+endfunction
+
+map <leader>ds :call WinDiff()<cr>
+map <leader>de :call WinNoDiff()<cr>
+map <leader>du :diffupdate<cr>
+
+
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
+map n  <Plug>(incsearch-nohl-n)zz
+map N  <Plug>(incsearch-nohl-N)zz
+map *  <Plug>(incsearch-nohl-*)zz
+map #  <Plug>(incsearch-nohl-#)zz
+map g* <Plug>(incsearch-nohl-g*)zz
+map g# <Plug>(incsearch-nohl-g#)zz
 
 nmap <leader>p :FzfFiles<cr>
 nmap <leader>P :FzfCommands<cr>
@@ -564,7 +611,7 @@ command BgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "bg")
 " http://vim.wikia.com/wiki/Highlight_current_line
 augroup CursorLine
     au!
-    autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    autocmd VimEnter,WinEnter,BufWinEnter * if ! &diff | setlocal cursorline | endif
     autocmd WinLeave * setlocal nocursorline
 augroup END
 
@@ -573,6 +620,7 @@ call neomake#configure#automake('rw', 750)
 
 " always insert mode when focusing terminal
 " autocmd BufWinEnter,WinEnter term://*/zsh startinsert
+
 
 " }}}
 
