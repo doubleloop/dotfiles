@@ -11,6 +11,7 @@
 [diff]
 	renames = copies
 	submodule = log
+	algorithm = patience
 [merge]
 	tool = pycharm
 	conflictstyle = diff3
