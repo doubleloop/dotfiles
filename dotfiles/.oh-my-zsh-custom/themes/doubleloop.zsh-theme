@@ -38,8 +38,8 @@ prompt_symbol() {
    if (( RET_CODE == 0 )); then sym_color=white; else sym_color=red; fi
    _prompt_section "$ " $sym_color "\n"
 }
-_insert_mode_prompt() { echo -ne "\e[5 q" }
-_normal_mode_prompt() { echo -ne "\e[2 q" }
+_insert_mode_prompt() { echo -ne "\e[5 q\e]112\a" }
+_normal_mode_prompt() { echo -ne "\e[2 q\e]112\a" }
 prompt_vi() {
    if [ "$TERM" = "xterm-256color" ] && [ -z $DISABLE_PROMPT_SWITCH ]; then
       if [ "$KEYMAP" = "vicmd" ]; then

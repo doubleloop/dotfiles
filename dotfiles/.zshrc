@@ -133,9 +133,17 @@ bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 bindkey '^k' kill-whole-line
 bindkey '^y' yank
-bindkey '^t' trhnspose-chars
+#bindkey '^t' transpose-chars
 bindkey '^[t' transpose-words
 bindkey '^u' undo
+
+# reset prompt after pressing enter
+function reset-prompt-accept-line() {
+   echo -ne "\e[2 q";
+   zle accept-line
+}
+zle -N reset-prompt-accept-line
+bindkey '^M' reset-prompt-accept-line
 
 # stop ctrl-s from hanging terminal
 # http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
