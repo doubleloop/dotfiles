@@ -12,6 +12,8 @@ dotfiles/.mackup.cfg
 mackupenv
 
 **/*.pyo
+**/*.spl
+**/*.sug
 dotfiles/.config/ranger/plugins/__init__.py
 dotfiles/.config/ranger/history
 dotfiles/.config/ranger/tagged
