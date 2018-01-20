@@ -1,4 +1,5 @@
-_exists() { type "$1" >/dev/null }
+# https://www.topbug.net/blog/2016/10/11/speed-test-check-the-existence-of-a-command-in-bash-and-zsh/
+_exists() { (( $+commands[$1] )) }
 
 ### oh-my-zsh settings ###
 # https://github.com/robbyrussell/oh-my-zsh/blob/master/templates/zshrc.zsh-template
@@ -43,7 +44,6 @@ fi
 
 ### path settings ###
 try_path=(
-   ~/.cabal/bin
    ~/.cargo/bin
    ~/.local/bin
    ~/opt/go/bin
@@ -52,14 +52,10 @@ try_path=(
 )
 
 for p in $try_path; do
-    [ -d $p ] && path=($p $path)
+    [ -d $p ] && path+=$path
 done
-
 # add sudo bin so that zsh-syntax-hilighting works on sudo commands
-path=(
-   $path
-   /usr/local/sbin /usr/sbin /sbin
-)
+path+=(/usr/local/sbin /usr/sbin /sbin)
 
 ### plugins settings ###
 # virtualenvwrapper settings
@@ -80,7 +76,12 @@ KEYTIMEOUT=1
 # debian plugin settings (aliases)
 apt_pref=apt
 # disable pasted text highlighting (used to be slow)
-zle_highlight=(none)
+# https://github.com/zsh-users/zsh-autosuggestions/issues/141#issuecomment-210615799
+zstyle ':bracketed-paste-magic' active-widgets '.self-*'
+
+# do not hilight text pasted from kill buffer
+# https://github.com/zsh-users/zsh/blob/ac0dcc9a63dc2a0edc62f8f1381b15b0b5ce5da3/NEWS#L37-L42
+zle_highlight+=(paste:none)
 
 # alias-tips settings
 export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi please help"
@@ -94,8 +95,15 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
     vi-forward-blank-word vi-forward-blank-word-end
     forward-char vi-forward-char
 )
+# I added custom widget to handle pressing enter
+# so it need to be registered
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(reset-prompt-accept-line)
 
-export FZF_DEFAULT_OPTS='--cycle --tiebreak=end,length'
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND=bg=none
+HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND=bg=none
+
+# TODO: switch to ripgrep
+export FZF_DEFAULT_OPTS='--cycle --filepath-word -e'
 _exists ag && \
     export FZF_DEFAULT_COMMAND='ag -f --hidden --ignore .git -g ""' && \
     export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -120,13 +128,14 @@ bindkey '^[[1;5C' forward-word
 # alt + arrows
 bindkey '^[[1;3D' backward-word
 bindkey '^[[1;3C' forward-word
+# ctrl+del/backspace
+bindkey '^H' backward-kill-word # this does not work in tmux (ctrl+h conflict)
+bindkey '^[[3;5~' kill-word
+
 # shift+tab
 bindkey '^[[Z' reverse-menu-complete
-# ctrl+del/backspace, this does not work in tmux
-bindkey '^H' backward-kill-word # # ctrl+h conflict in tmux
-bindkey '^[[3;5~' kill-word
-# TODO: alt+del alt+backspace
-# vi mode is ok but restore common shortcuts in insert mode
+
+# vi mode is cool but restore some common shortcuts in insert mode
 bindkey '^f' forward-char
 bindkey '^b' backward-char
 bindkey '^[b' backward-word
@@ -134,13 +143,12 @@ bindkey '^[f' forward-word
 bindkey '^w' backward-kill-word
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
-bindkey '^k' kill-whole-line
+bindkey '^k' kill-line
 bindkey '^y' yank
-#bindkey '^t' transpose-chars
-bindkey '^[t' transpose-words
-bindkey '^u' undo
+bindkey '^u' kill-buffer
 
 # reset prompt after pressing enter
+# useful when ssh to machine not supporting prompt switching
 function reset-prompt-accept-line() {
    echo -ne "\e[2 q";
    zle accept-line
@@ -148,21 +156,33 @@ function reset-prompt-accept-line() {
 zle -N reset-prompt-accept-line
 bindkey '^M' reset-prompt-accept-line
 
+### zsh settings ###
 # stop ctrl-s from hanging terminal
-# http://unix.stackexchange.com/questions/72086/ctrl-s-hang-terminal-emulator
-stty -ixon
+setopt NO_FLOW_CONTROL
 
-### history ###
-# man zshoptions
-unsetopt histverify
-unsetopt share_history
-unsetopt inc_append_history
-setopt inc_append_history_time &>/dev/null
+## history  ##
+# Accept history expansion (ex !$) without extra key press
+unsetopt HIST_VERIFY
+
+setopt NOBEEP
+setopt NUMERIC_GLOB_SORT
+
+# The three options:
+# INC_APPEND_HISTORY, INC_APPEND_HISTORY_TIME, SHARE_HISTORY
+# should be considered mutually exclusive (man zshoptions).
+# some older zhs do not support INC_APPEND_HISTORY_TIME
+unsetopt SHARE_HISTORY
+setopt INC_APPEND_HISTORY_TIME && unsetopt INC_APPEND_HISTORY || setopt INC_APPEND_HISTORY
+
+setopt EXTENDED_HISTORY
 alias history='fc -ilD 1 | less +G'
 
-# prevent error commands to be inserted to history file
-# http://superuser.com/questions/902241/how-to-make-zsh-not-store-failed-command
-# zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_EXPIRE_DUPS_FIRST
 
 ### load external files ###
 # Make new terminal sessions use the current directory
@@ -175,6 +195,3 @@ alias history='fc -ilD 1 | less +G'
 # all config that should not be tracked in git should go to zshlocalrc
 [ -f ~/.zshlocalrc ] && . ~/.zshlocalrc
 _exists rbenv && eval "$(rbenv init -)"
-
-true
-
