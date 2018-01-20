@@ -1,5 +1,3 @@
-set foldmethod=indent
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+setl foldmethod=indent
+setl ts=2 sts=2 sw=2
 

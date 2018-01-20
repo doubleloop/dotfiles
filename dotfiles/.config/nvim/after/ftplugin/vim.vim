@@ -1,2 +1,3 @@
-set foldmethod=marker
+setl foldenable
+setl foldmethod=marker
 

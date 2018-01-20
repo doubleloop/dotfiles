@@ -6,25 +6,23 @@ let g:python3_host_prog = $PYTHON3_NVIM_VIRTUALENV
 
 syntax enable
 
-" https://github.com/neovim/neovim/wiki/FAQ#how-can-i-use-true-colors-in-the-terminal
-set termguicolors
-set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
-set background=dark
-" set background=light
-
 " Clipboard sanity
-set pastetoggle="<F2>"
+set pastetoggle=<F2>
+set nopaste
 set clipboard=unnamedplus
 
 " Line numbers
 set number
-" set relativenumber
+set relativenumber
 set textwidth=0
 set nowrap
 set nofoldenable
 set foldmethod=syntax
-" donot fold diff
-set diffopt=filler,context:1000000,vertical
+
+set nolist
+set listchars=extends:#,precedes:#,tab:▸-
+
+set diffopt+=vertical
 
 " set colorcolumn=80
 set colorcolumn=
@@ -44,10 +42,11 @@ set undofile
 set whichwrap=<,>,[,],b,s
 
 set startofline     " scrolling puts cursor on first non blank character
-set so=5            " cursor margins
+set scrolloff=15            " cursor margins
 
 " search settings
 set hlsearch
+set incsearch
 set ignorecase
 set inccommand=split
 
@@ -56,30 +55,36 @@ set softtabstop=4
 set shiftwidth=4    " Indentation amount for < and > commands.
 set shiftround
 set expandtab       " Insert spaces when TAB is pressed.
+set smartindent
 
 set nosplitbelow
 set splitright      " Vertical split to right of current.
-set previewheight=40
+set previewheight=20
 
 " http://stackoverflow.com/questions/102384/using-vims-tabs-like-buffers
 set hidden
 
 set nobackup
-set nowritebackup
 set noswapfile
 
 " Spelling
-set dictionary+=/usr/share/dict/words
-set thesaurus+=/usr/share/dict/mthesaur.txt
 set spelllang=en_us
 
 " tab completion
 set wildmode=longest,full
 set wildmenu
+set wildignore+=*.pyc,*/.git/*,*.swp,*.o
 
 set completeopt=menuone,longest,noselect
 set noshowmode
 set path+=**
+set fileignorecase
+
+if executable('rg')
+  set grepprg=rg\ --color=never
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  let g:ctrlp_use_caching = 0
+endif
 
 " }}}
 
@@ -121,7 +126,7 @@ Plug 'zchee/deoplete-jedi'
 Plug 'zchee/deoplete-go'
 Plug 'zchee/deoplete-zsh'
 Plug 'zchee/deoplete-clang'
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
+let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so.1'
 let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/'
 let g:deoplete#sources#clang#sort_algo = 'priority'
 
@@ -142,6 +147,11 @@ Plug 'mattn/vim-textobj-url' " u
 " Plug 'kana/vim-textobj-fold' " z
 " Plug 'paulhybryant/vim-textobj-path' " p
 " Plug 'beloglazov/vim-textobj-quotes' " q
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+nnoremap n nztzv
+nnoremap N Nztzv
+
 
 Plug 'vim-scripts/ReplaceWithRegister' " gr gx
 " Plug 'christoomey/vim-titlecase' " gt
@@ -171,9 +181,6 @@ let g:NERDTrimTrailingWhitespace = 1
 
 Plug 'tpope/vim-commentary'
 
-" Close buffer but do not close window
-Plug 'moll/vim-bbye'
-"
 " git integration (todo: learn how to use this)
 Plug 'tpope/vim-fugitive'
 " GitHub/BB extension for fugitive.vim
@@ -188,7 +195,6 @@ Plug 'scrooloose/nerdtree'
 let g:NERDTreeQuitOnOpen = 1
 let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeWinSize=50
-
 
 " Symbols in nerdtree
 Plug 'xuyuanp/nerdtree-git-plugin'
@@ -214,15 +220,13 @@ let g:session_default_to_last=1
 let g:session_command_aliases=1
 let g:session_persist_colors=0
 let g:session_persist_font=0
-
-" Handle sessions, maintain default session, use qa to exit vim
-Plug 'kopischke/vim-stay'
+let g:session_directory="~/.local/share/nvim/sessions"
 
 " Changes Vim working directory to project root
-Plug 'airblade/vim-rooter'
-let g:rooter_silent_chdir = 1
-let g:rooter_patterns = ['.vim_root']
-let g:rooter_manual_only = 1
+" Plug 'airblade/vim-rooter'
+" let g:rooter_silent_chdir = 1
+" let g:rooter_patterns = ['.vim_root']
+" let g:rooter_manual_only = 1
 
 " Autoformat
 Plug 'sbdchd/neoformat'
@@ -252,12 +256,12 @@ Plug 'machakann/vim-highlightedyank'
 
 " automatically adjusts 'shiftwidth' and 'expandtab' heuristically
 " based on the current file
-Plug 'tpope/vim-sleuth'
+" Plug 'tpope/vim-sleuth'
 
 " Plug 'kien/rainbow_parentheses.vim'
 
 " This extension is so broken!!! (history/copy/paste)
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
 let g:multi_cursor_use_default_mapping=0
 let g:multi_cursor_next_key='<C-s>'
 " let g:multi_cursor_prev_key='<C-p>'
@@ -292,30 +296,33 @@ Plug 'osyo-manga/vim-over'
 " Mirroring files on various remote hosts
 Plug 'zenbro/mirror.vim'
 
+" Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+
 " Python
 Plug 'davidhalter/jedi-vim', {'for': ['python', 'python3']}
 let g:jedi#completions_enabled = 0
 let g:jedi#show_call_signatures = 0
 let g:jedi#goto_command = "<C-]>"
 
-Plug 'tmhedberg/SimpylFold'
+Plug 'tmhedberg/SimpylFold', {'for': ['python', 'python3']}
 Plug 'jmcantrell/vim-virtualenv', {'for': ['python', 'python3']}
 Plug 'glench/vim-jinja2-syntax'
 " http://ipython.readthedocs.io/en/stable/install/kernel_install.html
 " Plug 'bfredl/nvim-ipy'          " ipython frontend, todo: fix
-Plug 'mfukar/robotframework-vim'
+Plug 'mfukar/robotframework-vim', { 'for': ['robot'] }
+" Plug 'rooprob/vim-behave'
 
 " C support
-Plug 'vim-scripts/a.vim'      " switch to/from heade file
+Plug 'vim-scripts/a.vim', { 'for': ['c', 'cpp']}      " switch to/from heade file
+" Plug 'vim-scripts/c.vim', { 'for': ['c', 'cpp']}
 
 " JavaScript
-Plug 'pangloss/vim-javascript'
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 
 " LaTex
-Plug 'lervag/vimtex'
+Plug 'lervag/vimtex', { 'for': 'latex' }
 
 " Haskell
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
 Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
@@ -336,6 +343,7 @@ Plug 'tyru/open-browser.vim'
 
 " Panel with tags
 Plug 'majutsushi/tagbar'
+let g:tagbar_autoclose=1
 Plug 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map = '<leader>t'
 
@@ -344,25 +352,25 @@ Plug 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
 Plug 'pbogut/fzf-mru.vim'
 Plug 'rking/ag.vim'
+
 Plug 'elzr/vim-json'
 Plug 'stephpy/vim-yaml'
 Plug 'roalddevries/yaml.vim'    " yaml folding
 Plug 'ekalinin/dockerfile.vim'
 Plug 'ClockworkNet/vim-junos-syntax'
 
-" Plug 'Konfekt/FastFold'
 
-" Syntax handling of markdown
 Plug 'plasticboy/vim-markdown'
-Plug 'rooprob/vim-behave'
 
 Plug 'vim-airline/vim-airline'
 let g:airline_powerline_fonts = 1
 let g:airline_exclude_preview = 1
 let g:airline_detect_spell=0
 let g:airline_detect_spelllang=0
-let g:airline_section_x=""
-let g:airline_section_b=""
+" let g:airline_section_x=""
+" let g:airline_section_b=""
+let g:airline_left_sep=''
+let g:airline_right_sep=''
 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
@@ -370,20 +378,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'dhruvasagar/vim-table-mode'
 
 " Color themes
-Plug 'godlygeek/csapprox'       " Make gvim-only colorschemes work
-" transparently in terminal vim
-" Plug 'altercation/vim-colors-solarized'
-" let g:solarized_termcolors=256
-" let g:solarized_termcolors=16
-" Plug '29decibel/codeschool-vim-theme'
-" Plug 'ciaranm/inkpot'
-" Plug 'pyte'
-" Plug 'peaksea'
-Plug 'tomasr/molokai'
+Plug 'frankier/neovim-colors-solarized-truecolor-only'
+Plug 'crusoexia/vim-monokai'
+Plug 'morhetz/gruvbox'
 Plug 'joshdick/onedark.vim'
-Plug 'jonathanfilip/vim-lucius'
-" let g:molokai_original = 1
-let g:rehash256 = 1
 call plug#end()
 
 " }}}
@@ -393,19 +391,10 @@ call plug#end()
 let mapleader=","
 
 " more tmux like behavior
-noremap <C-w>; <C-w>p
-noremap <C-w>n :bnext<cr>
-noremap <C-w>p :bprevious<cr>
-noremap <C-w>N :bnext<cr>
-noremap <C-w>P :bprevious<cr>
-noremap <C-w>c :tabnew<cr>
-noremap <C-w>z :tabedit %<cr>
+nnoremap <C-w>c :tabedit %<cr>
 
 " Open file prompt with current path
-nmap <leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
-
-map <c-]> <c-]>zz
-map <c-t> <c-t>zz
+nmap <leader>e :e <C-R>=expand("%:p:h") . '/'<cr>
 
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
@@ -415,13 +404,13 @@ inoremap <c-z> <c-o>u
 inoremap <c-y> <c-o><c-r>
 
 
-nmap <c-]> <c-]>zz
-nmap <c-t> <c-t>zz
-nmap <c-i> <c-i>zz
-nmap <c-o> <c-o>zz
-nmap gd gdzz
-nmap * *zz
-nmap # #zz
+nmap <c-]> <c-]>zt
+nmap <c-t> <c-t>zt
+nmap <c-i> <c-i>zt
+nmap <c-o> <c-o>zt
+nmap gd gdzt
+nmap * *zt
+nmap # #zt
 
 " nmap <C-n> :bnext<cr>
 " nmap <C-p> :bprevious<cr>
@@ -429,8 +418,6 @@ nmap # #zz
 " better indentation (stay in visual mode)
 vmap < <gv
 vmap > >gv
-vmap <tab> >gv
-vmap <s-tab> <gv
 
 " Visual linewise up and down by default (and use gj gk to go quicker)
 noremap <Up> gk
@@ -438,57 +425,35 @@ noremap <Down> gj
 noremap j gj
 noremap k gk
 
-" Search mappings: These will make it so that going to the next one in a
-" search will center on the line it's found in.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-
-imap <c-v> <c-r>"
-" nmap <cr> o<esc>
-
-noremap <Leader>q q
-nmap q <Nop>
+" noremap <Leader>q q
+" nmap q <Nop>
 
 " https://github.com/mhinz/vim-galore#saner-command-line-history
-cmap <c-n>  <down>
-cmap <c-p>  <up>
+cmap <c-n> <down>
+cmap <c-p> <up>
+cmap <c-a> <home>
 
 nmap <silent> <leader><leader> :nohl<cr>
-" fix syntax hl when doing diff
-nmap <leader>r :nohl<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+
 " http://vim.wikia.com/wiki/highlight_all_search_pattern_matches
-" nmap <silent> <leader>/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<CR>
-vmap <silent> * y/<c-r>"<cr>
+nmap <silent> y/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<cr>
 
-" todo: think of sane terminal navigation
-tmap <C-w> <C-\><C-n><C-w>
-" tmap <silent> <C-h> <C-\><C-n><C-w>h
-" tmap <silent> <C-j> <C-\><C-n><C-w>j
-" tmap <silent> <C-k> <C-\><C-n><C-w>k
-" tmap <silent> <C-l> <C-\><C-n><C-w>l
-" nmap <silent> <S-j> gT
-" nmap <silent> <S-k> gt
-" tmap <silent> <S-h> <C-\><C-n>gT
-" tmap <silent> <S-l> <C-\><C-n>gt
-" tmap <Esc> <C-\><C-n>
-" autocmd BufWinEnter,WinEnter term://* startinsert
+" just in case I will use nvim terminal
+tmap <c-\><c-\> <c-\><c-n><c-w><c-w>
 
+let g:NERDCreateDefaultMappings = 0
 nmap <C-_> <Plug>NERDCommenterToggle
-xmap <C-_> <Plug>NERDCommenterToggle
-" nmap ,<C-_> <Plug>NERDCommenterSexy
-" xmap ,<C-_> <Plug>NERDCommenterSexy
-nmap <C-g><C-_> <Plug>NERDCommenterAppend
-" TODO: insert mode comments
+nmap <C-g>gc <Plug>NERDCommenterAppend
+xmap gcs    <Plug>NERDCommenterSexy
+xmap gcu    <Plug>NERDComUncommentLine
 
-
-nmap <silent> <leader>o :Neoformat<CR>
+nmap <leader>o :Neoformat<cr>
 
 " Highlight all instances of word under cursor, when idle.
 " Useful when studying strange source code.
 " Type z/ to toggle highlighting on/off.
 " http://vim.wikia.com/wiki/VimTip572
-nmap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+nmap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<cr>
 function! AutoHighlightToggle()
     let @/ = ''
     if exists('#auto_highlight')
@@ -508,30 +473,20 @@ function! AutoHighlightToggle()
     endif
 endfunction
 
-function WinDiff()
-  windo diffthis
-  windo set nocursorline
-endfunction
-
-function WinNoDiff()
-  windo diffoff
-  windo setlocal cursorline
-endfunction
-
-map <leader>ds :call WinDiff()<cr>
-map <leader>de :call WinNoDiff()<cr>
+map <leader>ds :windo diffthis<cr>
+map <leader>de :windo diffoff<cr>
 map <leader>du :diffupdate<cr>
+" map <leader>du :nohl<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 
-
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-map n  <Plug>(incsearch-nohl-n)zz
-map N  <Plug>(incsearch-nohl-N)zz
-map *  <Plug>(incsearch-nohl-*)zz
-map #  <Plug>(incsearch-nohl-#)zz
-map g* <Plug>(incsearch-nohl-g*)zz
-map g# <Plug>(incsearch-nohl-g#)zz
+" ndo map /  <Plug>(incsearch-forward)
+" map ?  <Plug>(incsearch-backward)
+" map g/ <Plug>(incsearch-stay)
+map n  <Plug>(incsearch-nohl-n)ztzv
+map N  <Plug>(incsearch-nohl-N)ztzv
+map *  <Plug>(incsearch-nohl-*)zt
+map #  <Plug>(incsearch-nohl-#)zt
+map g* <Plug>(incsearch-nohl-g*)zt
+map g# <Plug>(incsearch-nohl-g#)zt
 
 nmap <leader>p :FzfFiles<cr>
 nmap <leader>P :FzfCommands<cr>
@@ -542,27 +497,17 @@ cmap <C-s> FzfHistory:<cr>
 nmap <leader>/ :FzfCommands<cr>
 nmap <leader>m :FZFMru<cr>
 
-nmap <A-e> :TagbarOpenAutoClose<CR>
-
-" close current buffer but do not close window
-nmap <Leader>z :Bdelete<CR>
-" cabbrev q Bdelete
+nmap <A-e> :TagbarToggle<cr>
 
 " Settings for openbrowser plugin
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
-" nmap <Leader>l <Plug>(easymotion-overwin-line)
-nmap <Leader>l <Plug>(easymotion-bd-jk)
-nmap <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader>f <Plug>(easymotion-bd-f)
-nmap <leader>t <Plug>(easymotion-bd-t)
-vmap <Leader>l <Plug>(easymotion-bd-jk)
-vmap <Leader>w <Plug>(easymotion-bd-w)
-vmap <Leader>f <Plug>(easymotion-bd-f)
-vmap <leader>t <Plug>(easymotion-bd-t)
-nmap <Space> <Plug>(easymotion-jumptoanywhere)
-vmap <Space> <Plug>(easymotion-jumptoanywhere)
+nmap t <Plug>(easymotion-s2)
+vmap tk <Plug>(easymotion-k)
+vmap tj <Plug>(easymotion-j)
+vmap th <Plug>(easymotion-linebackward)
+vmap tl <Plug>(easymotion-lineforward)
 
 function! IsNERDTreeOpen()
   return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
@@ -580,16 +525,26 @@ endfunction
 nmap <a-1> <esc>:call ToggleFindNerd()<cr>
 
 " navigate location window (simmilar to quickfix)
-nmap [l :lprev<CR>
-nmap ]l :lnext<CR>
+nmap [l :lprev<cr>zt
+nmap ]l :lnext<cr>zt
 
 " push/pull to remote host (mirror plugin)
-nmap <leader>hh :MirrorPush<cr>
-nmap <leader>hd :MirrorDiff<cr>
-nmap <leader>hr :MirrorReload<cr>
+nmap <leader>rh :MirrorPush<cr>
+nmap <leader>rd :MirrorDiff<cr>
+nmap <leader>rr :MirrorReload<cr>
 
 " open session
 nmap <leader>so :SessionOpen<cr>
+
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+    return deoplete#mappings#close_popup() . "\<CR>"
+endfunction
+
+" toggle spell checking
+map <leader>ss :set spell!<cr>
+
+nmap <leader>l :set list!<cr>
 
 " }}}
 
@@ -604,39 +559,68 @@ command SyntaxStack call SynStackFun()
 
 command FgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "fg")
 command BgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "bg")
+
+
+" https://github.com/clvv/fasd/wiki/Vim-Integration
+command! -nargs=* J :call J(<f-args>)
+function! J(...)
+  let cmd = 'fasd -d -e printf'
+  for arg in a:000
+    let cmd = cmd . ' ' . arg
+  endfor
+  let path = system(cmd)
+  if isdirectory(path)
+    echo path
+    exec 'cd' fnameescape(path)
+  endif
+endfunctio
 " }}}
 
 " Auto Commands {{{
-
-" http://vim.wikia.com/wiki/Highlight_current_line
-augroup CursorLine
-    au!
-    autocmd VimEnter,WinEnter,BufWinEnter * if ! &diff | setlocal cursorline | endif
-    autocmd WinLeave * setlocal nocursorline
-augroup END
 
 " run lint on save
 call neomake#configure#automake('rw', 750)
 
 " always insert mode when focusing terminal
-" autocmd BufWinEnter,WinEnter term://*/zsh startinsert
+autocmd BufWinEnter,WinEnter term://* startinsert
 
+" Remove trailing whitespace on file save
+autocmd BufWritePre * :%s/\s\+$//e
 
 " }}}
 
 " Colors {{{
 
-" silent! colorscheme codeschool
-" silent! colorscheme inkpot
-" silent! colorscheme lucius      " nice light theme
-" silent! colorscheme pyte
+set termguicolors
+
+set background=dark
+" silent! colorscheme onedark
+silent! colorscheme monokai
+" silent! colorscheme gruvbox
+
 " silent! colorscheme solarized
-" silent! colorscheme peaksea
-" silent! colorscheme molokai
-silent! colorscheme onedark
+" set background=light
+
 
 " hilight matching parenthesis style
 hi MatchParen      guifg=none guibg=none gui=underline
 
+" https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
+let g:terminal_color_0  = '#2e3436'
+let g:terminal_color_1  = '#cc0000'
+let g:terminal_color_2  = '#4e9a06'
+let g:terminal_color_3  = '#c4a000'
+let g:terminal_color_4  = '#3465a4'
+let g:terminal_color_5  = '#75507b'
+let g:terminal_color_6  = '#0b939b'
+let g:terminal_color_7  = '#d3d7cf'
+let g:terminal_color_8  = '#555753'
+let g:terminal_color_9  = '#ef2929'
+let g:terminal_color_10 = '#8ae234'
+let g:terminal_color_11 = '#fce94f'
+let g:terminal_color_12 = '#729fcf'
+let g:terminal_color_13 = '#ad7fa8'
+let g:terminal_color_14 = '#00f5e9'
+let g:terminal_color_15 = '#eeeeec'
 " }}}
 

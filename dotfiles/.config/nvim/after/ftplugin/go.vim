@@ -13,39 +13,39 @@ let g:go_highlight_extra_types = 1
 let g:go_highlight_generate_tags = 1
 "
 " Open :GoDeclsDir with ctrl-g
-nmap <C-g> :GoDeclsDir<cr>
-imap <C-g> <esc>:<C-u>GoDeclsDir<cr>
+nmap <buffer> <C-g> :GoDeclsDir<cr>
+imap <buffer> <C-g> <esc>:<C-u>GoDeclsDir<cr>
 
 " Show by default 4 spaces for a tab
-setlocal noexpandtab tabstop=4 shiftwidth=4
+setl noexpandtab ts=4 sts=4 sw=4
 
 " :GoBuild and :GoTestCompile
-nmap <leader>gb :<C-u>call <SID>build_go_files()<CR>
+nmap <buffer> <leader>gb :<C-u>call <SID>build_go_files()<CR>
 
 " :GoTest
-nmap <leader>gt  <Plug>(go-test)
+nmap <buffer> <leader>gt  <Plug>(go-test)
 
 " :GoRun
-nmap <leader>gr  <Plug>(go-run)<esc>
+nmap <buffer> <leader>gr  <Plug>(go-run)<esc>
 
 " :GoDoc
-nmap <Leader>gd <Plug>(go-doc)
+nmap <buffer> <Leader>gd <Plug>(go-doc)
 
 " :GoCoverageToggle
-nmap <Leader>gc <Plug>(go-coverage-toggle)
+nmap <buffer> <Leader>gc <Plug>(go-coverage-toggle)
 
 " :GoInfo
-nmap <Leader>gi <Plug>(go-info)
+nmap <buffer> <Leader>gi <Plug>(go-info)
 
 " :GoMetaLinter
-nmap <Leader>gl <Plug>(go-metalinter)
+nmap <buffer> <Leader>gl <Plug>(go-metalinter)
 
-nmap <leader>gn <Plug>(go-referrers)
+nmap <buffer> <leader>gn <Plug>(go-referrers)
 
 " :GoDef but opens in a vertical split
-" nmap <Leader>gv <Plug>(go-def-vertical)
+" nmap <buffer> <Leader>gv <Plug>(go-def-vertical)
 " :GoDef but opens in a horizontal split
-" nmap <Leader>gs <Plug>(go-def-split)
+" nmap <buffer> <Leader>gs <Plug>(go-def-split)
 
 " :GoAlternate  commands :A, :AV, :AS and :AT
 command! -bang A call go#alternate#Switch(<bang>0, 'edit')
