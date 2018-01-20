@@ -487,3 +487,6 @@ set grepprg=ag\ --line-numbers\ %i\ %a\ %s
 " set classify+=' ::*.bmp,,*.gif,,*.jpeg,,*.jpg,,*.ico,,*.png,,*.ppm,,*.svg,,*.svgz,,*.tga,,*.tif,,*.tiff,,*.xbm,,*.xcf,,*.xpm,,*.xspf,,*.xwd::'
 " " office files
 " set classify+=' ::*.doc,,*.docx::, ::*.xls,,*.xls[mx]::, ::*.pptx,,*.ppt::'
+
+nnoremap <space> t
+nnoremap E :edit<cr>
