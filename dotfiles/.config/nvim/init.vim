@@ -96,6 +96,7 @@ Plug 'wincent/terminus'
 Plug 'danro/rename.vim'
 " Sane pane navigation shortcuts
 Plug 'christoomey/vim-tmux-navigator'
+let g:tmux_navigator_disable_when_zoomed = 1
 
 " Auto save on every escape
 Plug 'vim-scripts/vim-auto-save'
@@ -373,9 +374,12 @@ let g:airline_left_sep=''
 let g:airline_right_sep=''
 
 Plug 'vim-airline/vim-airline-themes'
+" Plug 'edkolev/tmuxline.vim'
+" let g:tmuxline_powerline_separators = 0
+
 Plug 'ryanoasis/vim-devicons'
 
-Plug 'dhruvasagar/vim-table-mode'
+" Plug 'dhruvasagar/vim-table-mode'
 
 " Color themes
 Plug 'frankier/neovim-colors-solarized-truecolor-only'
@@ -442,10 +446,10 @@ nmap <silent> y/ :let @/='\<<c-r>=expand("<cword>")<cr>\>'<cr>:set hls<cr>
 tmap <c-\><c-\> <c-\><c-n><c-w><c-w>
 
 let g:NERDCreateDefaultMappings = 0
-nmap <C-_> <Plug>NERDCommenterToggle
-nmap <C-g>gc <Plug>NERDCommenterAppend
-xmap gcs    <Plug>NERDCommenterSexy
-xmap gcu    <Plug>NERDComUncommentLine
+nmap <C-_>    <Plug>NERDCommenterToggle
+nmap <C-g>cc  <Plug>NERDCommenterAppend
+xmap <C-g>cc  <Plug>NERDCommenterSexy
+xmap <c-g>cu  <Plug>NERDComUncommentLine
 
 nmap <leader>o :Neoformat<cr>
 
@@ -585,7 +589,7 @@ call neomake#configure#automake('rw', 750)
 autocmd BufWinEnter,WinEnter term://* startinsert
 
 " Remove trailing whitespace on file save
-autocmd BufWritePre * :%s/\s\+$//e
+" autocmd BufWritePre * :%s/\s\+$//e
 
 " }}}
 

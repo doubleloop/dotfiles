@@ -41,7 +41,7 @@ prompt_symbol() {
 _insert_mode_prompt() { echo -ne "\e[5 q\e]112\a" }
 _normal_mode_prompt() { echo -ne "\e[2 q\e]112\a" }
 prompt_vi() {
-   if [ "$TERM" = "xterm-256color" ] && [ -z $DISABLE_PROMPT_SWITCH ]; then
+   if [ -z $DISABLE_PROMPT_SWITCH ]; then
       if [ "$KEYMAP" = "vicmd" ]; then
          _normal_mode_prompt
       else
@@ -75,7 +75,7 @@ ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[function]='fg=cyan,bold'
 ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan,bold,underline'
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan,bold'
 # ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
 ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=cyan,bold'
 

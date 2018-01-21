@@ -13,6 +13,9 @@ ENABLE_CORRECTION="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
 
+ZSH_TMUX_AUTOSTART="true"
+ZSH_TMUX_AUTOCONNECT="true"
+
 ### Plugins ###
 # allow custom plugins setup
 if [ -f ~/.zsh_plugins ]; then
@@ -25,6 +28,7 @@ else
         vagrant
         docker
         valut
+        tmux
         vi-mode
         golang
         jsontools
