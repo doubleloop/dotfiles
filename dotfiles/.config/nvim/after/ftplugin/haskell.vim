@@ -50,6 +50,6 @@ nmap <buffer> <leader>hH :Hoogle
 nmap <buffer> <leader>hi :HoogleInfo<cr>
 nmap <buffer> <leader>hI :HoogleInfo
 nmap <buffer> <leader><leader> :GhcModTypeClear<cr>:nohl<cr>
-nmap <buffer> <leader>hc :Neomake ghcmod<cr>
+nmap <buffer> <leader>hc :GhcModCheckAndLintAsync<cr>
 nmap <buffer> <leader>hl :Neomake hlint<cr>
 
