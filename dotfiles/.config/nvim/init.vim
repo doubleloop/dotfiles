@@ -3,9 +3,13 @@ let g:python_host_prog = $PYTHON2_NVIM_VIRTUALENV
 let g:python3_host_prog = $PYTHON3_NVIM_VIRTUALENV
 
 let mapleader=","
-
 " Plugins {{{
-call plug#begin('~/.local/share/nvim/plugged')
+if has('nvim')
+  call plug#begin('~/.local/share/nvim/plugged')
+else
+  set nocompatible
+  call plug#begin('~/.vim/plugged')
+endif
 Plug 'wikitopian/hardmode'
 Plug 'takac/vim-hardtime'
 let g:hardtime_default_on=0
@@ -196,26 +200,27 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 Plug 'honza/vim-snippets'
 
 " Autocompletion engine
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#ignore_sources = {}
-let g:deoplete#ignore_sources.python = ['around']
-let g:deoplete#ignore_sources.c = ['around']
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return deoplete#mappings#close_popup() . "\<CR>"
-endfunction
-
-Plug 'zchee/deoplete-jedi'
-Plug 'zchee/deoplete-go'
-Plug 'zchee/deoplete-zsh'
-Plug 'zchee/deoplete-clang'
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so.1'
-let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/'
-let g:deoplete#sources#clang#sort_algo = 'priority'
-Plug 'sebastianmarkow/deoplete-rust'
-Plug 'Shougo/neco-vim'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  let g:deoplete#enable_at_startup = 1
+  let g:deoplete#enable_smart_case = 1
+  let g:deoplete#ignore_sources = {}
+  let g:deoplete#ignore_sources.python = ['around']
+  let g:deoplete#ignore_sources.c = ['around']
+  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+  function! s:my_cr_function()
+    return deoplete#mappings#close_popup() . "\<CR>"
+  endfunction
+  Plug 'zchee/deoplete-jedi'
+  Plug 'zchee/deoplete-go'
+  Plug 'zchee/deoplete-zsh'
+  Plug 'zchee/deoplete-clang'
+  let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so.1'
+  let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/'
+  let g:deoplete#sources#clang#sort_algo = 'priority'
+  Plug 'sebastianmarkow/deoplete-rust'
+  Plug 'Shougo/neco-vim'
+endif
 
 " Autoformat
 Plug 'sbdchd/neoformat'
@@ -235,7 +240,9 @@ let g:jedi#show_call_signatures = 0
 let g:jedi#goto_command = "<C-]>"
 Plug 'jmcantrell/vim-virtualenv',     { 'for': ['python', 'python3']}
 Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
-Plug 'bfredl/nvim-ipy'
+if has('nvim')
+  Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
+endif
 
 " C/C++
 " switch to/from heade file
@@ -330,7 +337,9 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
-set inccommand=split
+if has("nvim")
+  set inccommand=split
+endif
 
 set tabstop=4
 set softtabstop=4
@@ -489,7 +498,7 @@ augroup end
 " autocmd BufWritePre * :%s/\s\+$//e
 
 " run lint on save
-call neomake#configure#automake('rw', 750)
+silent! call neomake#configure#automake('rw', 750)
 
 " terminal
 if has('nvim')
@@ -538,7 +547,8 @@ function! ColorCustomizations()
   hi DiffText    guifg=#FD9720  guibg=#2D2E27
 endfunction
 au ColorScheme * call ColorCustomizations()
-
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 
 set background=dark
