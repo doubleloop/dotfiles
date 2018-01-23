@@ -125,10 +125,10 @@ let g:NERDTreeWinSize=50
 function! ToggleNerd()
   if exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
     exec ':NERDTreeToggle'
-  elseif empty(expand("%p"))
-    exec ':NERDTree'
-  else
+  elseif filereadable(expand("%p"))
     exec ':NERDTreeFind'
+  else
+    exec ':NERDTree'
   endif
 endfunction
 nnoremap <a-1> <esc>:call ToggleNerd()<cr>
