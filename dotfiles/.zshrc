@@ -13,9 +13,6 @@ ENABLE_CORRECTION="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
 
-ZSH_TMUX_AUTOSTART="true"
-ZSH_TMUX_AUTOCONNECT="true"
-
 ### Plugins ###
 # allow custom plugins setup
 if [ -f ~/.zsh_plugins ]; then
@@ -56,12 +53,15 @@ try_path=(
 )
 
 for p in $try_path; do
-    [ -d $p ] && path+=$path
+    [ -d $p ] && path+=$p
 done
 # add sudo bin so that zsh-syntax-hilighting works on sudo commands
 path+=(/usr/local/sbin /usr/sbin /sbin)
 
 ### plugins settings ###
+ZSH_TMUX_AUTOSTART="true"
+ZSH_TMUX_AUTOCONNECT="true"
+ZSH_TMUX_AUTOQUIT="false"
 # virtualenvwrapper settings
 export WORKON_HOME=$HOME/.virtualenvs
 # zsh-git-prompt settings
