@@ -33,6 +33,12 @@ let g:sleuth_automatic=0
 " Plug 'tpope/vim-abolish'    " substitute imrpoved
 Plug 'christoomey/vim-tmux-navigator'
 let g:tmux_navigator_disable_when_zoomed = 1
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <a-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <a-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <a-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <a-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <a-\> :TmuxNavigatePrevious<cr>
 
 " Auto save on every escape
 Plug '907th/vim-auto-save'
@@ -61,8 +67,9 @@ vmap tl <Plug>(easymotion-lineforward)
 
 Plug 'haya14busa/incsearch.vim'
 let g:incsearch#auto_nohlsearch = 1
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
+" map /  <Plug>(incsearch-forward)
+" map ?  <Plug>(incsearch-backward)
+" maping / and ? break ctrl-f shortcut..
 map g/ <Plug>(incsearch-stay)
 map n  <Plug>(incsearch-nohl-n)zt
 map N  <Plug>(incsearch-nohl-N)zt
@@ -76,6 +83,8 @@ Plug 'machakann/vim-highlightedyank'
 
 " This should improve highlight while find/replace
 " Plug 'osyo-manga/vim-over'
+
+Plug 'rhysd/vim-grammarous'
 
 " Mirroring files on various remote hosts
 Plug 'zenbro/mirror.vim'
@@ -138,10 +147,6 @@ endfunction
 nnoremap <a-1> <esc>:call ToggleNerd()<cr>
 Plug 'xuyuanp/nerdtree-git-plugin'
 
-" Intelligently toggling line numbers
-" todo: fix nvim terminal
-Plug 'myusuf3/numbers.vim'
-
 " Help alligning text
 Plug 'godlygeek/tabular'
 " Plug 'dhruvasagar/vim-table-mode'
@@ -172,6 +177,7 @@ nnoremap <leader>so :SessionOpen<cr>
 " Eclipse like autoopening of quotes/parenthesis
 Plug 'raimondi/delimitmate'
 let g:delimitMate_expand_cr = 1
+" todo: configure this
 
 " Hilight/remove trailing whitespaces
 " Plug 'ntpeters/vim-better-whitespace'
@@ -307,7 +313,7 @@ set mouse=a
 
 " Line numbers
 set number
-set relativenumber
+set norelativenumber
 set textwidth=0
 set nowrap
 set nofoldenable
@@ -361,10 +367,11 @@ set noswapfile
 " Spelling
 set spelllang=en_us
 
-" tab completion
-set wildmode=longest:full,list:full
+" tab completion in comand mode
+set wildmode=longest:full,full
 set wildmenu
 set wildignore+=*/.git/*,*.pyc,*.swp,*.o
+set wildignorecase
 set path+=**
 
 set completeopt=menuone,longest
@@ -483,7 +490,7 @@ endfunctio
 " Auto commands {{{
 augroup filetype_settings
   au!
-  au FileType html setl ts=2 sts=2 sw=2 
+  au FileType html setl ts=2 sts=2 sw=2
   au FileType yaml setl fdm=indent ts=2 sts=2 sw=2
   au FileType gitcommit setl spell
   au FileType vim setl fdm=marker ts=2 sts=2 sw=2
@@ -500,22 +507,43 @@ augroup end
 " run lint on save
 silent! call neomake#configure#automake('rw', 750)
 
+" smart number toggling
+augroup smartnumbers
+  au!
+  au InsertEnter * if empty(&buftype) | setl nornu | endif
+  au InsertLeave * if empty(&buftype) | setl rnu | endif
+  au WinEnter,BufNewFile,BufReadPost * if empty(&buftype) | setl rnu | endif
+  au WinLeave   * if empty(&buftype) | set rnu< | endif
+augroup end
+
 " terminal
 if has('nvim')
+  function! TerminalSet()
+    " let g:last_terminal_job_id = b:terminal_job_id
+    setl nonu nornu
+    startinsert
+    nnoremap <buffer> q i
+    vnoremap <buffer> q <Esc>i
+    " do not use incsearch-nohl
+    nnoremap <buffer> n n
+    nnoremap <buffer> N N
+  endfunction
   augroup Terminal
     au!
-    au TermOpen * let g:last_terminal_job_id = b:terminal_job_id
+    au TermOpen *  call TerminalSet()
     au WinEnter term://* startinsert
   augroup END
-  tnoremap <c-\><c-\> <c-\><c-n><c-w><c-w>
-  " c-w is not good prefix as it breakes instant c-w in fzf
-  " tnoremap <c-w>j <c-\><c-n><c-w>j
-  " tnoremap <c-w>k <c-\><c-n><c-w>k
-  " tnoremap <c-w>h <c-\><c-n><c-w>h
-  " tnoremap <c-w>l <c-\><c-n><c-w>l
-  " tnoremap <silent> <c-w>z <c-\><c-n>:ZoomWinTabToggle<cr>
+  tnoremap <silent> <A-\> <c-\><c-n>:TmuxNavigatePrevious<cr>
+  tnoremap <silent> <A-h> <C-\><C-N>:TmuxNavigateLeft<cr>
+  tnoremap <silent> <A-j> <C-\><C-N>:TmuxNavigateDown<cr>
+  tnoremap <silent> <A-k> <C-\><C-N>:TmuxNavigateUp<cr>
+  tnoremap <silent> <A-l> <C-\><C-N>:TmuxNavigateRight<cr>
+  tnoremap <silent> <c-[> <C-\><C-n>0k
   tnoremap <pageup> <c-\><c-n><pageup>
   tnoremap <pagedown> <c-\><c-n><pagedown>
+  nnoremap <silent> <leader>tb :botright term://zsh<cr>
+  nnoremap <silent> <leader>tv :vsplit term://zsh<cr>
+  nnoremap <silent> <leader>ts :split term://zsh<cr>
   " https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
   let g:terminal_color_0  = '#2e3436'
   let g:terminal_color_1  = '#cc0000'
@@ -534,7 +562,6 @@ if has('nvim')
   let g:terminal_color_14 = '#00f5e9'
   let g:terminal_color_15 = '#eeeeec'
 endif
-
 " }}}
 
 " Colors {{{
