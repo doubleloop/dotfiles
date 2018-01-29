@@ -1,0 +1,32 @@
+#!/bin/sh
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+    against=HEAD
+else
+    # Initial commit: diff against an empty tree object
+    against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
+fi
+
+exec 1>&2
+files_with_whitespace=`git diff-index --check --cached $against |
+                       sed '/^[+-]/d' |
+                       sed -E 's/:[0-9]+:.*//' |
+                       uniq`
+
+if [ -n "$files_with_whitespace" ]; then
+    for FILE in $files_with_whitespace ; do
+        echo "Fixing whitespace in $FILE" >&2
+        # it looks like sed is different on mac
+        # sed -i '' -E 's/[[:space:]]*$//' "$FILE"
+        sed -i -E 's/[[:space:]]*$//' "$FILE"
+        git add "$FILE"
+    done
+
+    # fail if commit becomes an empty commit
+    if [ -z "$(git diff-index --cached $against)" ]; then
+        echo
+        echo "After fixing whitespaces the commit became empty!"
+        exit 1
+    fi
+fi

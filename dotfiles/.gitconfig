@@ -8,6 +8,7 @@
 [core]
 	autocrlf = input
 	fileMode = false
+	hooksPath = ~/.config/git/hooks
 [diff]
 	renames = copies
 	submodule = log

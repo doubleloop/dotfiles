@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ -z "$ISSUE_REGEXP" ]; then
+    exit 0
+fi
+
+issue_from_title=$(head -1 $1 | sed -nr $ISSUE_REGEXP)
+if [ -n "$issue_from_title" ]; then
+    exit 0
+fi
+
+branch=$(git rev-parse --abbrev-ref HEAD)
+issue=$(echo $branch | sed -nr $ISSUE_REGEXP)
+
+if [ -n "$issue" ]; then
+    echo "$issue $(cat $1)" >$1
+fi
+
