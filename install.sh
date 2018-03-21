@@ -46,7 +46,7 @@ if _exists nvim; then
     pip install neovim
     export PYTHON3_NVIM_VIRTUALENV=$WORKON_HOME/nvim3/bin/python
 
-    vim +PlugInstall +qa
+    nvim +PlugInstall +qa
 fi
 
 if _exists tmux && [ ! -d  ~/.tmux/plugins/tpm ]; then
