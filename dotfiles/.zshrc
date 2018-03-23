@@ -8,7 +8,7 @@ ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
 ZSH_THEME="doubleloop"
 HYPHEN_INSENSITIVE="true"
 export UPDATE_ZSH_DAYS=13
-eISABLE_AUTO_TITLE="true"
+DISABLE_AUTO_TITLE="true"
 ENABLE_CORRECTION="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
@@ -81,7 +81,7 @@ source $ZSH/oh-my-zsh.sh
 
 ### plugins settings ###
 # vi-mode settings
-KEYTIMEOUT=1
+KEYTIMEOUT=10
 # debian plugin settings (aliases)
 apt_pref=apt
 # disable pasted text highlighting (used to be slow)
