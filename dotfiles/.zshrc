@@ -58,7 +58,7 @@ fi
 # prevent duplications on path (TMUX)
 typeset -aU path
 
-path=(~/.local/bin $path)
+path=(~/.local/bin ~/bin $path)
 
 # add sudo bin so that zsh-syntax-hilighting works on sudo commands
 path+=(/usr/local/sbin /usr/sbin /sbin)
@@ -167,6 +167,7 @@ bindkey '^M' reset-prompt-accept-line
 setopt NO_FLOW_CONTROL
 
 ## history  ##
+HISTSIZE=100000
 # Accept history expansion (ex !$) without extra key press
 unsetopt HIST_VERIFY
 

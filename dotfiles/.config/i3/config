@@ -42,7 +42,8 @@ bindsym $mod+Return exec tilix
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+d exec dmenu_run
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+$left focus left
@@ -136,7 +137,8 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
-for_window [class="keepassxc"] floating enable
+# for_window [class="keepassxc"] floating enable
+assign [class="Google Play Music Desktop Player"] $ws10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -189,8 +191,8 @@ bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
 
 # Media player controls
-bindsym XF86AudioPlay exec playerctl play
-bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl stop
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
@@ -203,8 +205,9 @@ bindsym --release Print exec scrot -m ~/Pictures/screenshots/%s_%H%M_%d.%m.%Y_$w
 bindsym --release Shift+Print exec scrot -s ~/Pictures/screenshots/%s_%H%M_%d%m%Y_$wx$h.png
 bindsym --release $mod+Shift+Print exec scrot -u -d 4 ~/Pictures/screenshots/%s_%H%M_%d%m%Y_$wx$h.png
 
-exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
-exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
+# this sometimes crashes on my system..
+# exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
+# exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
 
 exec_always feh --bg-scale ~/Dropbox/private/backups/profile/jawsk1111.jpg
 exec dropbox start
