@@ -32,7 +32,7 @@ prompt_user()  { _prompt_section "%n" green }
 prompt_host()  { _prompt_section "@%m" green "" }
 prompt_dir()   { _prompt_section "%~ " yellow }
 prompt_pyenv() { _prompt_section "$(virtualenv_prompt_info)" blue  }
-prompt_git()   { _prompt_section "$(git_super_status)" cyan }
+prompt_git()   { _prompt_section "$(git_super_status)" white }
 prompt_symbol() {
    local sym_color
    if (( RET_CODE == 0 )); then sym_color=white; else sym_color=red; fi
