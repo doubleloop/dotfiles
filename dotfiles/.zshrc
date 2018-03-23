@@ -44,23 +44,28 @@ else
 fi
 
 ### path settings ###
-try_path=(
-   ~/.cargo/bin
-   ~/.local/bin
-   ~/opt/go/bin
-   ~/opt/android-sdk-linux/platform-tools
-   ~/.npm-packages/bin
-)
+# try_path=(
+#    ~/.cargo/bin
+#    ~/opt/go/bin
+#    ~/opt/android-sdk-linux/platform-tools
+#    ~/.npm-packages/bin
+# )
 
-for p in $try_path; do
-    [ -d $p ] && path+=$p
-done
+# for p in $try_path; do
+#     [ -d $p ] && path+=$p
+# done
+
+# prevent duplications on path (TMUX)
+typeset -aU path
+
+path=(~/.local/bin $path)
+
 # add sudo bin so that zsh-syntax-hilighting works on sudo commands
 path+=(/usr/local/sbin /usr/sbin /sbin)
 
 ### plugins settings ###
 ZSH_TMUX_AUTOSTART="true"
-ZSH_TMUX_AUTOCONNECT="true"
+ZSH_TMUX_AUTOCONNECT="false"
 ZSH_TMUX_AUTOQUIT="false"
 # virtualenvwrapper settings
 export WORKON_HOME=$HOME/.virtualenvs
@@ -122,9 +127,6 @@ export LESS='-MRiS#8j.5'
 [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ] && \
     export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 ### key bindings ###
 # ctrl + arrows
 bindkey '^[[1;5D' backward-word
@@ -196,6 +198,8 @@ setopt HIST_EXPIRE_DUPS_FIRST
 [ -f ~/.gvm/scripts/gvm ] && . ~/.gvm/scripts/gvm
 [ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
+[ -f "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+_exists rbenv && eval "$(rbenv init -)"
 # all config that should not be tracked in git should go to zshlocalrc
 [ -f ~/.zshlocalrc ] && . ~/.zshlocalrc
-_exists rbenv && eval "$(rbenv init -)"
+
