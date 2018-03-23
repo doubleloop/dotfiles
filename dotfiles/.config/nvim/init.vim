@@ -592,8 +592,10 @@ augroup filetype_settings
     \ | nmap <buffer> <leader>hc :GhcModCheckAndLintAsync<cr>
     \ | nmap <buffer> <leader>hl :Neomake hlint<cr>
   au FileType c setl fdm=syntax cms=//%s
+    \ | let &path.="/usr/include/AL,"
+    \ | setl tags+=~/.tags
   au FileType sql setl cms=--%s ts=2 sts=2 sw=2
-  au FileType asm setl cms=//%s
+  " au FileType asm setl
   au FileType python let b:delimitMate_nesting_quotes = ['"']
   au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
@@ -665,6 +667,18 @@ endif
 " }}}
 
 " Colors {{{
+if has('nvim')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+else
+  echon "test"
+  " cursor schape
+  let &t_SI = "\<Esc>[6 q"
+  let &t_SR = "\<Esc>[4 q"
+  let &t_EI = "\<Esc>[2 q"
+  set ttimeoutlen=50
+  autocmd VimEnter * silent !echo -ne "\e[2 q"
+endif
 
 function! ColorCustomizations()
   hi MatchParen     guifg=none     guibg=none  gui=underline
@@ -682,8 +696,6 @@ function! ColorCustomizations()
   hi diffSubname    guifg=White   ctermfg=White
 endfunction
 au ColorScheme * call ColorCustomizations()
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 
 set background=dark
