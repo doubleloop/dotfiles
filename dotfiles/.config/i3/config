@@ -194,11 +194,14 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
+bindsym XF86Display exec --no-startup-id ~/bin/monitor
+
+bindsym XF86ScreenSaver exec i3lock -e -n -c 000000
+bindsym $mod+b exec i3lock -e -n -c 000000
+
 bindsym --release Print exec scrot -m ~/Pictures/screenshots/%s_%H%M_%d.%m.%Y_$wx$h.png
 bindsym --release Shift+Print exec scrot -s ~/Pictures/screenshots/%s_%H%M_%d%m%Y_$wx$h.png
 bindsym --release $mod+Shift+Print exec scrot -u -d 4 ~/Pictures/screenshots/%s_%H%M_%d%m%Y_$wx$h.png
-
-bindsym $mod+b exec i3lock -e -n -c 000000
 
 exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
 exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
