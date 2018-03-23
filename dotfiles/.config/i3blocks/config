@@ -1,0 +1,90 @@
+# i3blocks config file
+#
+# Please see man i3blocks for a complete reference!
+# The man page is also hosted at http://vivien.github.io/i3blocks
+#
+# List of valid properties:
+#
+# align
+# color
+# command
+# full_text
+# instance
+# interval
+# label
+# min_width
+# name
+# separator
+# separator_block_width
+# short_text
+# signal
+# urgent
+
+# Global properties
+#
+# The top properties below are applied to every block, but can be overridden.
+# Each block command defaults to the script name to avoid boilerplate.
+command=/usr/share/i3blocks/$BLOCK_NAME
+separator_block_width=15
+markup=none
+
+# Date Time
+#
+[time]
+command=date '+%A, %d %b %H:%M'
+min_width=xxxxxxxxxxxxxxxxxxxx
+interval=5
+# separator=false
+align=left
+
+# [wifi]
+# instance=wlp3s0
+# interval=10
+# separator=false
+
+[cpu_usage]
+label=
+interval=10
+min_width= 100.00%
+separator=false
+align=center
+
+[memory]
+label=
+interval=30
+separator=false
+align=center
+
+[wifi]
+instance=wlp3s0
+label=
+interval=10
+align=center
+# separator=false
+
+#[load_average]
+#interval=10
+
+[volume]
+label=
+instance=Master
+#instance=PCM
+interval=1
+signal=10
+min_width=xxxxxxxx
+align=center
+
+# Battery indicator
+# The battery instance defaults to 0.
+[battery]
+label=
+#instance=1
+interval=30
+align=center
+min_width=xxxxxxxxxx
+
+# OpenVPN support
+#
+# Support multiple VPN, with colors.
+#[openvpn]
+#interval=20
