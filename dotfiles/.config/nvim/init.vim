@@ -5,8 +5,18 @@ let g:python3_host_prog = $PYTHON3_NVIM_VIRTUALENV
 let mapleader=","
 " Plugins {{{
 if has('nvim')
+  if empty(glob('~/.config/nvim/autoload/plug.vim'))
+    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    " autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
   call plug#begin('~/.local/share/nvim/plugged')
 else
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    " autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
   set nocompatible
   call plug#begin('~/.vim/plugged')
 endif
@@ -231,12 +241,14 @@ let g:neomake_c_enabled_makers = ['clangcheck']
 let g:neomake_haskell_ghc_mod_args = '-g-Wall'
 
 " Snippets
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsEditSplit="vertical"
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-Plug 'honza/vim-snippets'
+if has('python')
+  Plug 'SirVer/ultisnips'
+  let g:UltiSnipsEditSplit="vertical"
+  let g:UltiSnipsExpandTrigger="<tab>"
+  let g:UltiSnipsJumpForwardTrigger="<tab>"
+  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+  Plug 'honza/vim-snippets'
+endif
 
 " Autoformat
 Plug 'sbdchd/neoformat'
@@ -670,8 +682,7 @@ endif
 if has('nvim')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-else
-  echon "test"
+elseif (v:version >= 800)
   " cursor schape
   let &t_SI = "\<Esc>[6 q"
   let &t_SR = "\<Esc>[4 q"
@@ -696,7 +707,9 @@ function! ColorCustomizations()
   hi diffSubname    guifg=White   ctermfg=White
 endfunction
 au ColorScheme * call ColorCustomizations()
-set termguicolors
+if has('nvim') || (v:version >= 800)
+  set termguicolors
+endif
 
 set background=dark
 " silent! colorscheme onedark
