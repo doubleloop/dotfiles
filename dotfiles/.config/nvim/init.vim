@@ -116,6 +116,7 @@ Plug 'Shougo/vinarise.vim' " hex editor
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line' " l
 Plug 'mattn/vim-textobj-url' " u
+Plug 'bps/vim-textobj-python', {'for': ['python', 'python3']}
 
 Plug 'vim-scripts/ReplaceWithRegister' " gr gx
 Plug 'christoomey/vim-sort-motion'     " gs
@@ -177,6 +178,13 @@ let g:session_persist_font=0
 let g:session_directory="~/.local/share/nvim/sessions"
 nnoremap <leader>so :SessionOpen<cr>
 
+Plug 'moll/vim-bbye'
+map <leader>bd :Bdelete<cr>
+map <leader>bD :bdelete<cr>
+
+Plug 'machakann/vim-swap'
+
+Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 " Changes Vim working directory to project root
 " Plug 'airblade/vim-rooter'
 " let g:rooter_silent_chdir = 1
@@ -198,6 +206,7 @@ let g:delimitMate_expand_cr = 1
 " Panel with tags
 Plug 'majutsushi/tagbar'
 let g:tagbar_autoclose=1
+let g:tagbar_sort = 0
 nnoremap <A-e> :TagbarToggle<cr>
 let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : 'hasktags',
@@ -230,6 +239,19 @@ let g:tagbar_type_haskell = {
         \ 'type'   : 't'
     \ }
 \ }
+let g:tagbar_type_rust = {
+    \ 'ctagstype' : 'rust',
+    \ 'kinds' : [
+        \'T:types,type definitions',
+        \'f:functions,function definitions',
+        \'g:enum,enumeration names',
+        \'s:structure names',
+        \'m:modules,module names',
+        \'c:consts,static constants',
+        \'t:traits',
+        \'i:impls,trait implementations',
+    \]
+    \}
 
 Plug 'mbbill/undotree'
 nnoremap <leader>u :UndotreeToggle<cr>
@@ -263,20 +285,22 @@ let g:neoformat_enabled_haskell = ['hindent']
 nnoremap <leader>o :Neoformat<cr>
 
 " Python
+Plug 'Vimjas/vim-python-pep8-indent', { 'for': ['python', 'python3']}
 Plug 'davidhalter/jedi-vim',          { 'for': ['python', 'python3']}
 let g:jedi#completions_enabled = 0
-let g:jedi#show_call_signatures = 0
+let g:jedi#show_call_signatures = 1
 let g:jedi#goto_command = "<C-]>"
-Plug 'jmcantrell/vim-virtualenv',     { 'for': ['python', 'python3']}
 Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
 if has('nvim')
-  Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins', 'for': ['python', 'python3'] }
+  Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
+  Plug 'BurningEther/iron.nvim',      { 'do': ':UpdateRemotePlugins' }
+  let g:iron_repl_open_cmd = 'vsplit'
 endif
 
 " C/C++
-" switch to/from heade file
+" switch to/from heade file with :A
 Plug 'vim-scripts/a.vim',             { 'for': ['c', 'cpp']}
-" Plug 'vim-scripts/c.vim',           { 'for': ['c', 'cpp']}
+Plug 'justinmk/vim-syntax-extra'
 
 " Haskell
 Plug 'Shougo/vimproc.vim',            { 'do' : 'make'}
@@ -291,11 +315,14 @@ let g:hlintRefactor#disableDefaultKeybindings = 1
 
 Plug 'fatih/vim-go',                  { 'for': 'go' }
 let g:go_fmt_autosave = 0
+let g:go_term_mode = 'split'
+let g:go_term_enabled = 1
 let g:go_fmt_command = "goimports"
 let g:go_autodetect_gopath = 1
 let g:go_list_type = 'quickfix'
+let g:go_bin_path = $HOME.'/.local/bin'
 " let g:go_auto_type_info = 1
-let g:go_auto_sameids = 1
+" let g:go_auto_sameids = 1
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_functions = 1
@@ -305,10 +332,29 @@ let g:go_highlight_generate_tags = 1
 Plug 'jalvesaq/Nvim-R',               { 'for': 'r' }
 Plug 'pangloss/vim-javascript',       { 'for': 'javascript' }
 Plug 'lervag/vimtex',                 { 'for': 'tex' }
+let g:tex_flavor='latex'
+
 Plug 'rust-lang/rust.vim',            { 'for': 'rust' }
 " Plug 'vim-ruby/vim-ruby',            { 'for': 'ruby' }
 
 Plug 'plasticboy/vim-markdown',       { 'for' : 'markdown' }
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release
+    else
+      !cargo build --release --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
+Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+let g:markdown_composer_open_browser = 0
+if executable('qutebrowser')
+  let g:markdown_composer_browser = "qutebrowser --target window"
+endif
+
+
+
 Plug 'elzr/vim-json',                 { 'for' : 'json' }
 Plug 'stephpy/vim-yaml',              { 'for' : 'vim' }
 Plug 'glench/vim-jinja2-syntax',      { 'for' : 'jinja' }
@@ -316,6 +362,8 @@ Plug 'mfukar/robotframework-vim',     { 'for' : 'robot' }
 Plug 'roalddevries/yaml.vim',         { 'for' : 'yaml' }
 Plug 'ekalinin/dockerfile.vim',       { 'for' : 'Dockerfile' }
 Plug 'momota/junos.vim',              { 'for' : 'junos' }
+Plug 'let-def/vimbufsync'
+Plug 'the-lambda-church/coquille',    { 'branch' : 'pathogen-bundle' }
 
 " Autocompletion engine
 if has('nvim')
@@ -325,6 +373,9 @@ if has('nvim')
   let g:deoplete#ignore_sources = {}
   let g:deoplete#ignore_sources.python = ['around']
   let g:deoplete#ignore_sources.c = ['around', 'buffer', 'tag']
+  " timeout for numpy cache
+  let g:deoplete#sources#jedi#server_timeout=60
+
   " this conflicts with delimitmate expand_cr
   " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
   " function! s:my_cr_function()
@@ -333,7 +384,8 @@ if has('nvim')
   Plug 'zchee/deoplete-jedi',           { 'for': ['python', 'python3']}
   Plug 'zchee/deoplete-go',             { 'for': 'go' }
   Plug 'zchee/deoplete-zsh',            { 'for': 'zsh' }
-  Plug 'zchee/deoplete-clang',          { 'for': ['c', 'cpp']}
+  " Plug 'zchee/deoplete-clang',          { 'for': ['c', 'cpp']}
+  Plug 'Shougo/deoplete-clangx',         { 'for': ['c', 'cpp']}
   let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-4.0/lib/libclang.so'
   let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-4.0/lib/clang/'
   let g:deoplete#sources#clang#sort_algo = 'priority'
@@ -350,7 +402,7 @@ let g:airline_detect_spell=0
 let g:airline_detect_spelllang=0
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 let g:airline_section_y=""
-let g:airline_section_z='%4l,%3v'
+let g:airline_section_z='%3P %4l,%3v'
 let g:airline_left_sep=''
 let g:airline_right_sep=''
 let g:airline#extensions#tagbar#enabled = 0
@@ -391,6 +443,7 @@ set diffopt+=vertical
 
 " set colorcolumn=80
 set colorcolumn=
+set virtualedit=block
 
 set showtabline=0 " do not disply tab on the top os the screen
 set ruler     " disply line/col in status bar
@@ -438,14 +491,33 @@ set wildignore+=*/.git/*,*.pyc,*.swp,*.o
 set wildignorecase
 set path+=**
 
+if has('cscope') && executable('cscope')
+  set cscopetag cscopeverbose
+  if has('quickfix')
+    set cscopequickfix=s-,c-,d-,i-,t-,e-
+  endif
+  if filereadable("cscope.out")
+    silent cs add cscope.out
+  elseif $CSCOPE_DB != ""
+    silent cs add $CSCOPE_DB
+  endif
+endif
+
 set completeopt=menuone,longest
 
 set noshowmode
 set showcmd
 
+set signcolumn=yes
+
+" mainly for tagbar hilight
+set updatetime=1000
+
 if executable('rg')
   set grepprg=rg\ --color=never
 endif
+
+set shortmess+=cW
 
 " }}}
 
@@ -568,54 +640,89 @@ augroup filetype_settings
   au!
   au FileType html setl ts=2 sts=2 sw=2
   au FileType yaml setl fdm=indent ts=2 sts=2 sw=2
-  au FileType gitcommit setl spell
+  au FileType gitcommit setl spell comments=b:#
   au FileType vim setl fdm=marker ts=2 sts=2 sw=2
   au FileType go
-    \   setl noet ts=4 sts=4 sw=4
-    \ | nmap <buffer> <C-g> :GoDeclsDir<cr>
-    \ | imap <buffer> <C-g> <esc>:<C-u>GoDeclsDir<cr>
-    \ | nmap <buffer> <leader>gb :<C-u>call <SID>build_go_files()<CR>
-    \ | nmap <buffer> <leader>gt  <Plug>(go-test)
-    \ | nmap <buffer> <leader>gr  <Plug>(go-run)
-    \ | nmap <buffer> <Leader>gd <Plug>(go-doc)
-    \ | nmap <buffer> <Leader>gc <Plug>(go-coverage-toggle)
-    \ | nmap <buffer> <Leader>gi <Plug>(go-info)
-    \ | nmap <buffer> <Leader>gl <Plug>(go-metalinter)
-    \ | nmap <buffer> <leader>gn <Plug>(go-referrers)
-    \ | nmap <buffer> <Leader>gv <Plug>(go-def-vertical)
-    \ | nmap <buffer> <Leader>gs <Plug>(go-def-split)
-    \ | command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-    \ | command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-    \ | command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-    \ | command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+    \  setl noet ts=4 sts=4 sw=4
+    \| nmap <buffer> <C-g> :GoDeclsDir<cr>
+    \| imap <buffer> <C-g> <esc>:<C-u>GoDeclsDir<cr>
+    \| nmap <buffer> <leader>gb :<C-u>call <SID>build_go_files()<CR>
+    \| nmap <buffer> <leader>gt  <Plug>(go-test)
+    \| nmap <buffer> <leader>gr  <Plug>(go-run)
+    \| nmap <buffer> <Leader>gd <Plug>(go-doc)
+    \| nmap <buffer> <Leader>gc <Plug>(go-coverage-toggle)
+    \| nmap <buffer> <Leader>gi <Plug>(go-info)
+    \| nmap <buffer> <Leader>gl <Plug>(go-metalinter)
+    \| nmap <buffer> <leader>gn <Plug>(go-referrers)
+    \| nmap <buffer> <Leader>gv <Plug>(go-def-vertical)
+    \| nmap <buffer> <Leader>gs <Plug>(go-def-split)
+    \| command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+    \| command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+    \| command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+    \| command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
   au FileType haskell
-    \   setl tags+=codex.tags;/
-    \ | setl ts=2 sts=2 sw=2
-    \ | nmap <buffer> <leader>hc :GhcModCheckAndLintAsync<cr>
-    \ | nmap <buffer> <leader>hr :call ApplyOneSuggestion()<cr>
-    \ | nmap <buffer> <leader>hR :call ApplyAllSuggestions()<cr>
-    \ | nmap <buffer> <leader>ht :GhcModType<cr>
-    \ | nmap <buffer> <leader>hT :GhcModTypeInsert<cr>
-    \ | nmap <buffer> <leader>hh :Hoogle<cr>
-    \ | nmap <buffer> <leader>hH :Hoogle
-    \ | nmap <buffer> <leader>hi :HoogleInfo<cr>
-    \ | nmap <buffer> <leader>hI :HoogleInfo
-    \ | nmap <buffer> <leader><leader> :GhcModTypeClear<cr>:nohl<cr>
-    \ | nmap <buffer> <leader>hc :GhcModCheckAndLintAsync<cr>
-    \ | nmap <buffer> <leader>hl :Neomake hlint<cr>
-  au FileType c setl fdm=syntax cms=//%s
-    \ | let &path.="/usr/include/AL,"
-    \ | setl tags+=~/.tags
+    \  setl tags+=codex.tags;/
+    \| setl ts=2 sts=2 sw=2
+    \| nmap <buffer> <leader>hc :GhcModCheckAndLintAsync<cr>
+    \| nmap <buffer> <leader>hr :call ApplyOneSuggestion()<cr>
+    \| nmap <buffer> <leader>hR :call ApplyAllSuggestions()<cr>
+    \| nmap <buffer> <leader>ht :GhcModType<cr>
+    \| nmap <buffer> <leader>hT :GhcModTypeInsert<cr>
+    \| nmap <buffer> <leader>hh :Hoogle<cr>
+    \| nmap <buffer> <leader>hH :Hoogle
+    \| nmap <buffer> <leader>hi :HoogleInfo<cr>
+    \| nmap <buffer> <leader>hI :HoogleInfo
+    \| nmap <buffer> <leader><leader> :GhcModTypeClear<cr>:nohl<cr>
+    \| nmap <buffer> <leader>hc :GhcModCheckAndLintAsync<cr>
+    \| nmap <buffer> <leader>hl :Neomake hlint<cr>
+  au FileType c,cpp
+    \  setl fdm=syntax cms=//%s
+    \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/7/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
+    \| setl tags+=~/.tags/c.tags
+    \| nmap <buffer> <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+    \| nmap <buffer> <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+    \| nmap <buffer> <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+    \| nmap <buffer> <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+    \| nmap <buffer> <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+    \| nmap <buffer> <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    \| nmap <buffer> <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+    \| nmap <buffer> <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+  au FileType rust setl tags=./rusty-tags.vi;/,$RUST_SRC_PATH/rusty-tags.vi
   au FileType sql setl cms=--%s ts=2 sts=2 sw=2
   " au FileType asm setl
-  au FileType python let b:delimitMate_nesting_quotes = ['"']
+  au FileType python
+    \  let b:delimitMate_nesting_quotes = ['"']
+    \| nmap <buffer> <F5> ctral
+    \| vmap <buffer> <F5> <Plug>(iron-send-motion)
+    \| nmap <buffer> <F8> <Plug>(iron-interrupt)
   au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
   au FileType help nnoremap <silent> <buffer> q :q<cr>
+  au FileType cmake setl cms=#%s
+  au FileType tex
+    \  if !exists('g:deoplete#omni#input_patterns')
+    \|   let g:deoplete#omni#input_patterns = {}
+    \| endif
+    \| let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+  au FileType vifm setl syntax=vim cms=\"%s
+  au FileType coq
+    \  setl cms=(*%s*) ts=2 sts=2 sw=2
+    \| nmap <buffer> <silent> <leader>cc :CoqLaunch<cr>
+    \| nmap <buffer> <silent> <leader>cq :CoqKill<cr>
+    \| nmap <buffer> <silent> <F5> :CoqToCursor<cr>
+    \| nmap <buffer> <silent> <C-n> :CoqNext<cr>
+    \| nmap <buffer> <silent> <C-p> :CoqUndo<cr>
+    \| vmap <buffer> <silent> <C-n> :CoqNext<cr>
+    \| vmap <buffer> <silent> <C-p> :CoqUndo<cr>
+    \| imap <buffer> <silent> <C-n> <C-\><C-o>:CoqNext<cr>
+    \| imap <buffer> <silent> <C-p> <C-\><C-o>:CoqUndo<cr>
 augroup end
 
 " Remove trailing whitespace on file save
-" autocmd BufWritePre * :%s/\s\+$//e
+" augroup prewrite
+"   au!
+"   au BufWritePre * :%s/\s\+$//e
+" augroup end
 
 " run lint on save
 silent! call neomake#configure#automake('rw', 750)
@@ -697,7 +804,7 @@ function! ColorCustomizations()
   hi DiffAdd        guifg=#A6E22D  guibg=#2D2E27
   hi DiffChange     guifg=#d7d7ff  guibg=bg
   hi DiffDelete     guifg=#575b61  guibg=#2D2E27
-  hi DiffText       guifg=#FD9720  guibg=#2D2E27
+  hi DiffText       guifg=#FD9720  guibg=#3d1c25
 
   hi diffAdded      guifg=#A6E22D ctermfg=DarkGreen
   hi diffRemoved    guifg=#66d9ef ctermfg=DarkRed
@@ -705,6 +812,8 @@ function! ColorCustomizations()
   hi diffIndexLine  guifg=#66D9EF ctermfg=White
   hi diffLine       guifg=#66D9EF ctermfg=White
   hi diffSubname    guifg=White   ctermfg=White
+  hi CheckedByCoq   guibg=#313337
+  hi SentToCoq      guibg=#313337
 endfunction
 au ColorScheme * call ColorCustomizations()
 if has('nvim') || (v:version >= 800)
