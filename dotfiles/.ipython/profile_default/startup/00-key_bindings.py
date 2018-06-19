@@ -7,7 +7,7 @@ ip = get_ipython()
 insert_mode = ViInsertMode() | EmacsInsertMode()
 
 # Register the shortcut if IPython is using prompt_toolkit
-if getattr(ip, 'pt_cli'):
+if getattr(ip, 'pt_cli', None):
     registry = ip.pt_cli.application.key_bindings_registry
     handle = registry.add_binding
 
