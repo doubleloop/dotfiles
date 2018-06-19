@@ -116,12 +116,9 @@ set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
 mark b ~/bin/
 mark h ~/
 mark d ~/downloads
-mark e ~/workspace/esi/src
-mark s ~/pworkspace/study
+mark s ~/workspace/study
 mark p ~/dropbox/private/
-mark f ~/dropbox/private/księgowość/faktury
 mark t ~/tmp
-mark r ~/remotes
 
 " ------------------------------------------------------------------------------
 
@@ -445,7 +442,7 @@ nnoremap A cw
 nnoremap ,t :!xterm &<cr>
 
 " Open editor to edit vifmrc and apply settings after returning to vifm
-nnoremap ,c :write | edit $MYVIFMRC | restart<cr>
+nnoremap ,e :write | edit $MYVIFMRC | restart<cr>
 " Open gvim to edit vifmrc
 " nnoremap ,C :!gvim --remote-tab-silent $MYVIFMRC &<cr>
 
@@ -476,17 +473,16 @@ set grepprg=ag\ --line-numbers\ %i\ %a\ %s
 "
 " nnoremap <left> <nop>
 
-
 " file types
-" set classify=' :dir:/, :exe:, :reg:, :link:'
-" " various file names
-" set classify+=' ::..::, ::*.sh::, ::*.[hc]pp::, ::*.[hc]::, ::/^copying|license$/::, ::.git,,*.git::, ::*.epub,,*.fb2,,*.djvu::, ::*.pdf::, ::*.htm,,*.html,,**.[sx]html,,*.xml::'
-" " archives
-" set classify+=' ::*.7z,,*.ace,,*.arj,,*.bz2,,*.cpio,,*.deb,,*.dz,,*.gz,,*.jar,,*.lzh,,*.lzma,,*.rar,,*.rpm,,*.rz,,*.tar,,*.taz,,*.tb2,,*.tbz,,*.tbz2,,*.tgz,,*.tlz,,*.trz,,*.txz,,*.tz,,*.tz2,,*.xz,,*.z,,*.zip,,*.zoo::'
-" " images
-" set classify+=' ::*.bmp,,*.gif,,*.jpeg,,*.jpg,,*.ico,,*.png,,*.ppm,,*.svg,,*.svgz,,*.tga,,*.tif,,*.tiff,,*.xbm,,*.xcf,,*.xpm,,*.xspf,,*.xwd::'
-" " office files
-" set classify+=' ::*.doc,,*.docx::, ::*.xls,,*.xls[mx]::, ::*.pptx,,*.ppt::'
+set classify=' :dir:/, :exe:, :reg:, :link:'
+" various file names
+set classify+=' ::..::, ::*.sh::, ::*.[hc]pp::, ::*.[hc]::, ::/^copying|license$/::, ::.git,,*.git::, ::*.epub,,*.fb2,,*.djvu::, ::*.pdf::, ::*.htm,,*.html,,**.[sx]html,,*.xml::'
+" archives
+set classify+=' ::*.7z,,*.ace,,*.arj,,*.bz2,,*.cpio,,*.deb,,*.dz,,*.gz,,*.jar,,*.lzh,,*.lzma,,*.rar,,*.rpm,,*.rz,,*.tar,,*.taz,,*.tb2,,*.tbz,,*.tbz2,,*.tgz,,*.tlz,,*.trz,,*.txz,,*.tz,,*.tz2,,*.xz,,*.z,,*.zip,,*.zoo::'
+" images
+set classify+=' ::*.bmp,,*.gif,,*.jpeg,,*.jpg,,*.ico,,*.png,,*.ppm,,*.svg,,*.svgz,,*.tga,,*.tif,,*.tiff,,*.xbm,,*.xcf,,*.xpm,,*.xspf,,*.xwd::'
+" office files
+set classify+=' ::*.doc,,*.docx::, ::*.xls,,*.xls[mx]::, ::*.pptx,,*.ppt::'
 
 nnoremap <space> t
 nnoremap E :edit<cr>
