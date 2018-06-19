@@ -127,6 +127,7 @@ export LESS='-MRiS#8j.5'
 [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ] && \
     export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 export NVM_DIR="$HOME/.nvm"
+_exists rustc && export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 ### key bindings ###
 # ctrl + arrows
 bindkey '^[[1;5D' backward-word
