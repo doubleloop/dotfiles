@@ -3,9 +3,7 @@ dotfiles/.gnupg
 dotfiles/.fasd
 dotfiles/.workrave
 dotfiles/.config/transmission
-dotfiles/.config/doublecmd
 dotfiles/.config/htop
-dotfiles/.xchat2
 dotfiles/.config/sublime-text-3
 dotfiles/.mrconfig
 dotfiles/.mackup.cfg
@@ -14,10 +12,3 @@ mackupenv
 **/*.pyo
 **/*.spl
 **/*.sug
-dotfiles/.config/ranger/plugins/__init__.py
-dotfiles/.config/ranger/history
-dotfiles/.config/ranger/tagged
-dotfiles/.config/ranger/commands_full.py
-dotfiles/.config/ranger/bookmarks
-
-
