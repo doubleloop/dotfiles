@@ -75,18 +75,18 @@ vmap tj <Plug>(easymotion-j)
 vmap th <Plug>(easymotion-linebackward)
 vmap tl <Plug>(easymotion-lineforward)
 
-Plug 'haya14busa/incsearch.vim'
-let g:incsearch#auto_nohlsearch = 1
+" Plug 'haya14busa/incsearch.vim'
+" let g:incsearch#auto_nohlsearch = 1
 " map /  <Plug>(incsearch-forward)
 " map ?  <Plug>(incsearch-backward)
 " maping / and ? break ctrl-f shortcut..
-map g/ <Plug>(incsearch-stay)
-map n  <Plug>(incsearch-nohl-n)zt
-map N  <Plug>(incsearch-nohl-N)zt
-map *  <Plug>(incsearch-nohl-*)zt
-map #  <Plug>(incsearch-nohl-#)zt
-map g* <Plug>(incsearch-nohl-g*)zt
-map g# <Plug>(incsearch-nohl-g#)zt
+" map g/ <Plug>(incsearch-stay)
+" map n  <Plug>(incsearch-nohl-n)zt
+" map N  <Plug>(incsearch-nohl-N)zt
+" map *  <Plug>(incsearch-nohl-*)zt
+" map #  <Plug>(incsearch-nohl-#)zt
+" map g* <Plug>(incsearch-nohl-g*)zt
+" map g# <Plug>(incsearch-nohl-g#)zt
 
 " Hilight the yanked region for a moment
 Plug 'machakann/vim-highlightedyank'
@@ -202,6 +202,7 @@ let g:delimitMate_expand_cr = 1
 
 " Plug 'Yggdroot/indentLine'
 " Plug 'kien/rainbow_parentheses.vim'
+Plug 'RRethy/vim-illuminate'
 
 " Panel with tags
 Plug 'majutsushi/tagbar'
@@ -456,7 +457,7 @@ set startofline   " scrolling puts cursor on first non blank character
 set scrolloff=15  " cursor margins
 
 " search settings
-set hlsearch
+set nohlsearch
 set incsearch
 set ignorecase
 set smartcase
@@ -557,26 +558,32 @@ nnoremap <silent> <leader><leader> :nohlsearch<c-r>=has('diff')?'<bar>diffupdate
 " Useful when studying strange source code.
 " Type z/ to toggle highlighting on/off.
 " http://vim.wikia.com/wiki/VimTip572
-nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<cr>
-function! AutoHighlightToggle()
-  let @/ = ''
-  if exists('#auto_highlight')
-    au! auto_highlight
-    augroup! auto_highlight
-    setl updatetime=4000
-    echo 'Highlight current word: off'
-    return 0
-  else
-    augroup auto_highlight
-      au!
-      au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-    augroup end
-    setl updatetime=500
-    echo 'Highlight current word: ON'
-    return 1
-  endif
-endfunction
+" nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<cr>
+" function! AutoHighlightToggle()
+"   let @/ = ''
+"   if exists('#auto_highlight')
+"     au! auto_highlight
+"     augroup! auto_highlight
+"     setl updatetime=4000
+"     echo 'Highlight current word: off'
+"     return 0
+"   else
+"     augroup auto_highlight
+"       au!
+"       au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+"     augroup end
+"     setl updatetime=500
+"     echo 'Highlight current word: ON'
+"     return 1
+"   endif
+" endfunction
 
+nmap n nzt
+nmap N Nzt
+nmap * *zt
+nmap # #zt
+nmap g* g*zt
+nmap g# g#zt
 nmap <c-]> <c-]>zt
 nmap <c-t> <c-t>zt
 nmap <c-i> <c-i>zt
