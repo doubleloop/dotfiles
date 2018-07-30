@@ -179,8 +179,8 @@ let g:session_directory="~/.local/share/nvim/sessions"
 nnoremap <leader>so :SessionOpen<cr>
 
 Plug 'moll/vim-bbye'
-map <leader>bd :Bdelete<cr>
-map <leader>bD :bdelete<cr>
+map <leader>Bd :Bdelete<cr>
+map <leader>BD :bdelete<cr>
 
 Plug 'machakann/vim-swap'
 
