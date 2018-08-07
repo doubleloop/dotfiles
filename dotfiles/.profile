@@ -11,9 +11,6 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-[ -d $HOME/opt/jdk1.8.0_144 ] && export JAVA_HOME=$HOME/opt/jdk1.8.0_144
-[ -d $HOME/.npm-packages ] && export NPM_PACKAGES=$HOME/.npm-packages
-
 # make CapsLock behave like Ctrl:
 # moved to gnome tweek tools settings
 # setxkbmap -option ctrl:nocaps
