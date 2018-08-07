@@ -39,7 +39,7 @@ else
         jira
         zsh-completions
         zsh-autosuggestions
-        zsh-syntax-highlighting
+        fast-syntax-highlighting
     )
 fi
 

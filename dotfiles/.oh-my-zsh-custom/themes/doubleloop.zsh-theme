@@ -69,16 +69,6 @@ drow_prompt() {
 PROMPT='$(drow_prompt)'
 unset RPS1
 
-# zsh-syntax-highlighting settings
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
-ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[builtin]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[function]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[command]='fg=cyan,bold'
-ZSH_HIGHLIGHT_STYLES[precommand]='fg=cyan,bold'
-# ZSH_HIGHLIGHT_STYLES[commandseparator]='none'
-ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=cyan,bold'
-
 # colored man, based on zsh plugin
 # http://www.tuxarena.com/2012/04/tutorial-colored-man-pages-how-it-works/
 
