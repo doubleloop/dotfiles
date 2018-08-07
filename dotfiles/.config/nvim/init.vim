@@ -589,12 +589,12 @@ nmap <c-t> <c-t>zt
 nmap <c-i> <c-i>zt
 nmap <c-o> <c-o>zt
 nmap gd gdzt
+nmap [c <Plug>GitGutterPrevHunkzt
+nmap ]c <Plug>GitGutterNextHunkzt
 
 noremap <leader>ds :windo diffthis<cr>
 noremap <leader>de :windo diffoff<cr>
 nnoremap <leader>z :let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
-nnoremap <leader>s :set spell!<cr>
-nnoremap <leader>l :set list!<cr>
 nnoremap <leader>e :e $MYVIMRC<cr>
 " nnoremap <leader>e :e <C-R>=expand("%:p:h") . '/'<cr>
 
