@@ -24,6 +24,7 @@ settings:
         <Alt+n>: tab-next
         <Alt+p>: tab-prev
         <Alt+q>: tab-focus last
+        <Ctrl+6>: tab-focus last
         <Ctrl+r>: reload
         <Ctrl+w>: null
         B: set-cmd-text -s :bookmark-load -t
@@ -45,6 +46,13 @@ settings:
   confirm_quit:
     global:
     - never
+  content.autoplay:
+    global: false
+  content.cookies.accept:
+    global: all
+  content.register_protocol_handler:
+    calendar.google.com: true
+    mail.google.com: true
   downloads.location.directory:
     global: ~/downloads
   downloads.location.prompt:
