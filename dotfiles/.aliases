@@ -9,7 +9,7 @@ function zssh {
 }
 alias o="xdg-open"
 alias vi=vim
-alias mr='mr -j20'
+alias mr='mr -j30'
 alias gds='git diff --staged'
 alias j='fasd_cd -d -i'
 alias gdb='gdb -q'
