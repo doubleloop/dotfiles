@@ -1,7 +1,9 @@
+# utils {{{
 # https://www.topbug.net/blog/2016/10/11/speed-test-check-the-existence-of-a-command-in-bash-and-zsh/
 _exists() { (( $+commands[$1] )) }
+# }}}
 
-### oh-my-zsh settings ###
+### oh-my-zsh settings ### {{{
 # https://github.com/robbyrussell/oh-my-zsh/blob/master/templates/zshrc.zsh-template
 export ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
@@ -12,8 +14,9 @@ DISABLE_AUTO_TITLE="true"
 ENABLE_CORRECTION="false"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
+# }}}
 
-### Plugins ###
+### Plugins ### {{{
 # allow custom plugins setup
 if [ -f ~/.zsh_plugins ]; then
     . ~/.zsh_plugins
@@ -22,48 +25,30 @@ else
     plugins=(
         alias-tips
         common-aliases fasd colorize extract command-not-found
-        vagrant
-        docker
-        valut
+        # vagrant
+        # docker
+        # valut
         tmux
         vi-mode
+        fzf
         golang
         jsontools
-        supervisor
+        # supervisor
         gitfast gitignore zsh-git-prompt
         debian
         pip python virtualenv virtualenvwrapper
-        django
-        atom sublime
-        cabal stack
-        jira
+        # django
+        # atom sublime
+        # cabal stack
+        # jira
         zsh-completions
         zsh-autosuggestions
         fast-syntax-highlighting
     )
 fi
+# }}}
 
-### path settings ###
-# try_path=(
-#    ~/.cargo/bin
-#    ~/opt/go/bin
-#    ~/opt/android-sdk-linux/platform-tools
-#    ~/.npm-packages/bin
-# )
-
-# for p in $try_path; do
-#     [ -d $p ] && path+=$p
-# done
-
-# prevent duplications on path (TMUX)
-typeset -aU path
-
-path=(~/.local/bin ~/bin $path)
-
-# add sudo bin so that zsh-syntax-hilighting works on sudo commands
-path+=(/usr/local/sbin /usr/sbin /sbin)
-
-### plugins settings ###
+### Preload plugins settings ### {{{
 ZSH_TMUX_AUTOSTART="true"
 ZSH_TMUX_AUTOCONNECT="false"
 ZSH_TMUX_AUTOQUIT="false"
@@ -73,17 +58,19 @@ export WORKON_HOME=$HOME/.virtualenvs
 # git-prompt compiled in haskell is 4 times faster than standard python one
 [ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
     GIT_PROMPT_EXECUTABLE="haskell"
+
 # required for zsh-completions
 autoload -U compinit && compinit
+# }}}
 
-### start oh-my-zsh and all plugins ###
 source $ZSH/oh-my-zsh.sh
 
-### plugins settings ###
+### Postload plugins settings ### {{{
 # vi-mode settings
 KEYTIMEOUT=10
 # debian plugin settings (aliases)
 apt_pref=apt
+
 # disable pasted text highlighting (used to be slow)
 # https://github.com/zsh-users/zsh-autosuggestions/issues/141#issuecomment-210615799
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
@@ -104,20 +91,19 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
     vi-forward-blank-word vi-forward-blank-word-end
     forward-char vi-forward-char
 )
-# I added custom widget to handle pressing enter
-# so it need to be registered
-ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(reset-prompt-accept-line)
 
-HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND=bg=none
-HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND=bg=none
-
-# TODO: switch to ripgrep
+# fzf
 export FZF_DEFAULT_OPTS='--cycle --filepath-word -e'
-_exists ag && \
-    export FZF_DEFAULT_COMMAND='ag -f --hidden --ignore .git -g ""' && \
-    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+if _exists rg; then
+	export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git" 2>/dev/null'
+	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+elif _exists ag; then
+    export FZF_DEFAULT_COMMAND='ag -f --hidden --ignore .git -g "" 2>/dev/null'
+	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
+# }}}
 
-### env settings ###
+### env settings ### {{{
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export TMPDIR=/tmp
@@ -128,7 +114,9 @@ export LESS='-MRiS#8j.5'
     export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 export NVM_DIR="$HOME/.nvm"
 _exists rustc && export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
-### key bindings ###
+# }}}
+
+### key bindings ### {{{
 # ctrl + arrows
 bindkey '^[[1;5D' backward-word
 bindkey '^[[1;5C' forward-word
@@ -162,8 +150,10 @@ function reset-prompt-accept-line() {
 }
 zle -N reset-prompt-accept-line
 bindkey '^M' reset-prompt-accept-line
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(reset-prompt-accept-line)
+# }}}
 
-### zsh settings ###
+### zsh settings ### {{{
 # stop ctrl-s from hanging terminal
 setopt NO_FLOW_CONTROL
 
@@ -191,8 +181,9 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_EXPIRE_DUPS_FIRST
+# }}}
 
-### load external files ###
+### load external files ### {{{
 # Make new terminal sessions use the current directory
 [ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
 
@@ -202,6 +193,23 @@ setopt HIST_EXPIRE_DUPS_FIRST
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
 [ -f "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 _exists rbenv && eval "$(rbenv init -)"
+# gcloud completions
+if [ -f /usr/lib/google-cloud-sdk/completion.bash.inc ]; then
+    autoload bashcompinit
+    bashcompinit
+    . /usr/lib/google-cloud-sdk/completion.bash.inc
+fi
 # all config that should not be tracked in git should go to zshlocalrc
 [ -f ~/.zshlocalrc ] && . ~/.zshlocalrc
 
+# }}}
+
+### path {{{
+path=(~/.local/bin $path)
+# add sudo bin so that zsh-syntax-hilighting works on sudo commands
+path+=(/usr/local/sbin /usr/sbin /sbin)
+
+# prevent duplications on path (TMUX)
+# typeset -aU path
+
+# }}}
