@@ -41,6 +41,7 @@ Plug 'tpope/vim-unimpaired'  " Handy bracket mappings
 Plug 'tpope/vim-sleuth'    " guess ts heuristically
 let g:sleuth_automatic=0
 " Plug 'tpope/vim-abolish'    " substitute imrpoved
+Plug 'ericpruitt/tmux.vim'
 Plug 'christoomey/vim-tmux-navigator'
 let g:tmux_navigator_disable_when_zoomed = 1
 let g:tmux_navigator_no_mappings = 1
@@ -49,6 +50,9 @@ nnoremap <silent> <a-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <a-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <a-l> :TmuxNavigateRight<cr>
 nnoremap <silent> <a-\> :TmuxNavigatePrevious<cr>
+
+" allow to open file:line from terminal
+Plug 'bogado/file-line'
 
 " Auto save on every escape
 Plug '907th/vim-auto-save'
