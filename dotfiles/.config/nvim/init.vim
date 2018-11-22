@@ -712,6 +712,7 @@ augroup filetype_settings
   " au FileType asm setl
   au FileType python
     \  let b:delimitMate_nesting_quotes = ['"']
+    \| let b:delimitMate_smart_quotes = '\%([a-eg-qs-zA-Z_]\|[^[:punct:][:space:]fr]\|\%(\\\\\)*\\\)\%#\|\%#\%(\w\|[^[:space:][:punct:]]\)'
     \| nmap <buffer> <F5> ctral
     \| vmap <buffer> <F5> <Plug>(iron-send-motion)
     \| nmap <buffer> <F8> <Plug>(iron-interrupt)
