@@ -347,6 +347,9 @@ Plug 'lervag/vimtex',                 { 'for': 'tex' }
 let g:tex_flavor='latex'
 
 Plug 'rust-lang/rust.vim',            { 'for': 'rust' }
+Plug 'racer-rust/vim-racer',          { 'for': 'rust' }
+let g:racer_experimental_completer = 1
+
 " Plug 'vim-ruby/vim-ruby',            { 'for': 'ruby' }
 
 Plug 'plasticboy/vim-markdown',       { 'for' : 'markdown' }
@@ -401,7 +404,6 @@ if has('nvim')
   let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-4.0/lib/libclang.so'
   let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-4.0/lib/clang/'
   let g:deoplete#sources#clang#sort_algo = 'priority'
-  Plug 'sebastianmarkow/deoplete-rust', { 'for': 'rust' }
   Plug 'Shougo/neco-vim',               { 'for': 'vim' }
   Plug 'eagletmt/neco-ghc',             { 'for': 'haskell' }
 endif
@@ -716,7 +718,10 @@ augroup filetype_settings
     \| nmap <buffer> <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
     \| nmap <buffer> <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
     \| nmap <buffer> <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
-  au FileType rust setl tags=./rusty-tags.vi;/,$RUST_SRC_PATH/rusty-tags.vi
+  au FileType rust
+    \  setl tags=./rusty-tags.vi;/,$RUST_SRC_PATH/rusty-tags.vi
+    \| nmap K <Plug>(rust-doc)
+    \| nmap gd <Plug>(rust-def)
   au FileType sql setl cms=--%s ts=2 sts=2 sw=2
   " au FileType asm setl
   au FileType python
