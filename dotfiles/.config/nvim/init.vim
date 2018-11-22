@@ -60,11 +60,23 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
 Plug 'pbogut/fzf-mru.vim'
-Plug 'rking/ag.vim'
 nnoremap <leader>p :FzfFiles<cr>
 nnoremap <leader>P :FzfCommands<cr>
 nnoremap <leader>b :FzfBuffer<cr>
 nnoremap <leader>m :FZFMru<cr>
+
+Plug 'mileszs/ack.vim'
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep'
+  set grepprg=rg\ --vimgrep
+  set grepformat=%f:%l:%c:%m
+  command Rg Ack
+elseif executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+  set grepprg=ag\ --vimgrep
+  set grepformat=%f:%l:%c:%m
+  command Ag Ack
+endif
 
 Plug 'easymotion/vim-easymotion'
 let g:EasyMotion_do_mapping = 0
@@ -512,10 +524,6 @@ set signcolumn=yes
 
 " mainly for tagbar hilight
 set updatetime=1000
-
-if executable('rg')
-  set grepprg=rg\ --color=never
-endif
 
 set shortmess+=cW
 
