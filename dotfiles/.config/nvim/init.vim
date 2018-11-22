@@ -91,24 +91,8 @@ vmap tj <Plug>(easymotion-j)
 vmap th <Plug>(easymotion-linebackward)
 vmap tl <Plug>(easymotion-lineforward)
 
-" Plug 'haya14busa/incsearch.vim'
-" let g:incsearch#auto_nohlsearch = 1
-" map /  <Plug>(incsearch-forward)
-" map ?  <Plug>(incsearch-backward)
-" maping / and ? break ctrl-f shortcut..
-" map g/ <Plug>(incsearch-stay)
-" map n  <Plug>(incsearch-nohl-n)zt
-" map N  <Plug>(incsearch-nohl-N)zt
-" map *  <Plug>(incsearch-nohl-*)zt
-" map #  <Plug>(incsearch-nohl-#)zt
-" map g* <Plug>(incsearch-nohl-g*)zt
-" map g# <Plug>(incsearch-nohl-g#)zt
-
 " Hilight the yanked region for a moment
 Plug 'machakann/vim-highlightedyank'
-
-" This should improve highlight while find/replace
-" Plug 'osyo-manga/vim-over'
 
 Plug 'rhysd/vim-grammarous'
 
@@ -124,8 +108,6 @@ let g:zoomwintab_remap = 0
 nnoremap <silent> <c-w>z :ZoomWinTabToggle<cr>
 vnoremap <silent> <c-w>z <c-\><c-n>:ZoomWinTabToggle<cr>gv
 
-" Plug 'Shougo/echodoc.vim' " Print function signature
-" let g:echodoc#enable_at_startup = 1
 Plug 'Shougo/vinarise.vim' " hex editor
 
 " Various text objects
