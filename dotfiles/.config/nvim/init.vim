@@ -295,7 +295,6 @@ Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
 if has('nvim')
   Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
   Plug 'BurningEther/iron.nvim',      { 'do': ':UpdateRemotePlugins' }
-  let g:iron_repl_open_cmd = 'vsplit'
 endif
 
 " C/C++
@@ -639,6 +638,21 @@ function! s:build_go_files()
     call go#cmd#Build(0)
   endif
 endfunction
+
+if has('nvim')
+function! ConfigIron()
+lua << EOF
+    iron = require("iron")
+    iron.core.set_config {
+        preferred = {
+            python = "ipython"
+        },
+        repl_open_cmd = "vsplit"
+    }
+EOF
+endfunction
+call ConfigIron()
+endif
 
 " }}}
 
