@@ -677,10 +677,10 @@ augroup filetype_settings
     \| nmap <buffer> <leader>gn <Plug>(go-referrers)
     \| nmap <buffer> <Leader>gv <Plug>(go-def-vertical)
     \| nmap <buffer> <Leader>gs <Plug>(go-def-split)
-    \| command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-    \| command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-    \| command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-    \| command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+  au FileType go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  au FileType go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  au FileType go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  au FileType go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
   au FileType haskell
     \  setl tags+=codex.tags;/
     \| setl ts=2 sts=2 sw=2
