@@ -22,7 +22,7 @@ else
 endif
 Plug 'wikitopian/hardmode'
 Plug 'takac/vim-hardtime'
-let g:hardtime_default_on=0
+let g:hardtime_default_on=1
 let g:hardtime_allow_different_key = 1
 
 Plug 'tpope/vim-sensible'
@@ -198,7 +198,6 @@ let g:delimitMate_expand_cr = 1
 " Hilight/remove trailing whitespaces
 " Plug 'ntpeters/vim-better-whitespace'
 
-" Plug 'Yggdroot/indentLine'
 " Plug 'kien/rainbow_parentheses.vim'
 Plug 'RRethy/vim-illuminate'
 
@@ -385,10 +384,9 @@ if has('nvim')
   Plug 'zchee/deoplete-jedi',           { 'for': ['python', 'python3']}
   Plug 'zchee/deoplete-go',             { 'for': 'go' }
   Plug 'zchee/deoplete-zsh',            { 'for': 'zsh' }
-  " Plug 'zchee/deoplete-clang',          { 'for': ['c', 'cpp']}
   Plug 'Shougo/deoplete-clangx',         { 'for': ['c', 'cpp']}
-  let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-4.0/lib/libclang.so'
-  let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-4.0/lib/clang/'
+  let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-6.0/lib/libclang.so'
+  let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-6.0/lib/clang/'
   let g:deoplete#sources#clang#sort_algo = 'priority'
   Plug 'Shougo/neco-vim',               { 'for': 'vim' }
   Plug 'eagletmt/neco-ghc',             { 'for': 'haskell' }
@@ -548,30 +546,6 @@ cnoremap <c-p> <up>
 cnoremap <c-a> <home>
 
 nnoremap <silent> <leader><leader> :nohlsearch<c-r>=has('diff')?'<bar>diffupdate':''<cr><cr><c-l>
-
-" Highlight all instances of word under cursor, when idle.
-" Useful when studying strange source code.
-" Type z/ to toggle highlighting on/off.
-" http://vim.wikia.com/wiki/VimTip572
-" nnoremap z/ :if AutoHighlightToggle()<Bar>set hls<Bar>endif<cr>
-" function! AutoHighlightToggle()
-"   let @/ = ''
-"   if exists('#auto_highlight')
-"     au! auto_highlight
-"     augroup! auto_highlight
-"     setl updatetime=4000
-"     echo 'Highlight current word: off'
-"     return 0
-"   else
-"     augroup auto_highlight
-"       au!
-"       au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
-"     augroup end
-"     setl updatetime=500
-"     echo 'Highlight current word: ON'
-"     return 1
-"   endif
-" endfunction
 
 nmap n nzt
 nmap N Nzt
