@@ -713,6 +713,11 @@ augroup filetype_settings
     \| imap <buffer> <silent> <C-p> <C-\><C-o>:CoqUndo<cr>
 augroup end
 
+augroup particular_file_settings
+  au!
+  autocmd BufRead */.zshrc set fdm=marker
+augroup end
+
 " Remove trailing whitespace on file save
 " augroup prewrite
 "   au!
