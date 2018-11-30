@@ -19,8 +19,8 @@ settings:
         <Ctrl+n>: completion-item-focus next
         <Ctrl+p>: completion-item-focus prev
       normal:
-        ',m': spawn totem --enqueue {url}
         ',M': hint links spawn totem --enqueue {hint-url}
+        ',m': spawn totem --enqueue {url}
         <Alt+n>: tab-next
         <Alt+p>: tab-prev
         <Alt+q>: tab-focus last
@@ -50,6 +50,8 @@ settings:
     global: false
   content.cookies.accept:
     global: all
+  content.geolocation:
+    '*': false
   content.register_protocol_handler:
     calendar.google.com: true
     mail.google.com: true
@@ -73,7 +75,7 @@ settings:
     global:
     - ppapi-widevine-path=/usr/lib/chromium/libwidevinecdmadapter.so
   scrolling.bar:
-    global: true
+    global: always
   scrolling.smooth:
     global: true
   session.lazy_restore:
