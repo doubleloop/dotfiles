@@ -34,7 +34,7 @@ else
         golang
         jsontools
         # supervisor
-        gitfast gitignore zsh-git-prompt
+        gitfast gitignore github zsh-git-prompt
         debian
         pip python virtualenv virtualenvwrapper
         # django
