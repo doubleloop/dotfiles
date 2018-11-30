@@ -50,6 +50,16 @@ nnoremap <silent> <a-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <a-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <a-l> :TmuxNavigateRight<cr>
 nnoremap <silent> <a-\> :TmuxNavigatePrevious<cr>
+inoremap <silent> <a-h> <esc>:TmuxNavigateLeft<cr>
+inoremap <silent> <a-j> <esc>:TmuxNavigateDown<cr>
+inoremap <silent> <a-k> <esc>:TmuxNavigateUp<cr>
+inoremap <silent> <a-l> <esc>:TmuxNavigateRight<cr>
+inoremap <silent> <a-\> <esc>:TmuxNavigatePrevious<cr>
+vnoremap <silent> <a-h> <esc>:TmuxNavigateLeft<cr>
+vnoremap <silent> <a-j> <esc>:TmuxNavigateDown<cr>
+vnoremap <silent> <a-k> <esc>:TmuxNavigateUp<cr>
+vnoremap <silent> <a-l> <esc>:TmuxNavigateRight<cr>
+vnoremap <silent> <a-\> <esc>:TmuxNavigatePrevious<cr>
 
 " allow to open file:line from terminal
 Plug 'bogado/file-line'
