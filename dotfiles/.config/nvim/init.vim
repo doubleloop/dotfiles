@@ -4,22 +4,17 @@ let g:python3_host_prog = $PYTHON3_NVIM_VIRTUALENV
 
 let mapleader=","
 " Plugins {{{
-if has('nvim')
-  if empty(glob('~/.config/nvim/autoload/plug.vim'))
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  function! PlugInstall()
     silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    " autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
-  call plug#begin('~/.local/share/nvim/plugged')
-else
-  if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    " autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-  endif
-  set nocompatible
-  call plug#begin('~/.vim/plugged')
+    source $MYVIMRC
+    PlugInstall --sync
+    source $MYVIMRC
+  endfunc
+  command! Prep :call PlugInstall()
 endif
+call plug#begin('~/.local/share/nvim/plugged')
 Plug 'wikitopian/hardmode'
 Plug 'takac/vim-hardtime'
 let g:hardtime_default_on=1
@@ -299,10 +294,8 @@ let g:jedi#completions_enabled = 0
 let g:jedi#show_call_signatures = 1
 let g:jedi#goto_command = "<C-]>"
 Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
-if has('nvim')
-  Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
-  Plug 'BurningEther/iron.nvim',      { 'do': ':UpdateRemotePlugins' }
-endif
+Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
+Plug 'BurningEther/iron.nvim',      { 'do': ':UpdateRemotePlugins' }
 
 " C/C++
 " switch to/from heade file with :A
@@ -350,11 +343,7 @@ let g:racer_experimental_completer = 1
 Plug 'plasticboy/vim-markdown',       { 'for' : 'markdown' }
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
-    if has('nvim')
-      !cargo build --release
-    else
-      !cargo build --release --no-default-features --features json-rpc
-    endif
+    !cargo build --release
   endif
 endfunction
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
@@ -376,31 +365,29 @@ Plug 'let-def/vimbufsync'
 Plug 'the-lambda-church/coquille',    { 'branch' : 'pathogen-bundle' }
 
 " Autocompletion engine
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  let g:deoplete#enable_at_startup = 1
-  let g:deoplete#enable_smart_case = 1
-  let g:deoplete#ignore_sources = {}
-  let g:deoplete#ignore_sources.python = ['around']
-  let g:deoplete#ignore_sources.c = ['around', 'buffer', 'tag']
-  " timeout for numpy cache
-  let g:deoplete#sources#jedi#server_timeout=60
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#ignore_sources = {}
+let g:deoplete#ignore_sources.python = ['around']
+let g:deoplete#ignore_sources.c = ['around', 'buffer', 'tag']
+" timeout for numpy cache
+let g:deoplete#sources#jedi#server_timeout=60
 
-  " this conflicts with delimitmate expand_cr
-  " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  " function! s:my_cr_function()
-  "   return deoplete#mappings#close_popup() . "\<CR>"
-  " endfunction
-  Plug 'zchee/deoplete-jedi',           { 'for': ['python', 'python3']}
-  Plug 'zchee/deoplete-go',             { 'for': 'go' }
-  Plug 'zchee/deoplete-zsh',            { 'for': 'zsh' }
-  Plug 'Shougo/deoplete-clangx',         { 'for': ['c', 'cpp']}
-  let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-6.0/lib/libclang.so'
-  let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-6.0/lib/clang/'
-  let g:deoplete#sources#clang#sort_algo = 'priority'
-  Plug 'Shougo/neco-vim',               { 'for': 'vim' }
-  Plug 'eagletmt/neco-ghc',             { 'for': 'haskell' }
-endif
+" this conflicts with delimitmate expand_cr
+" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" function! s:my_cr_function()
+"   return deoplete#mappings#close_popup() . "\<CR>"
+" endfunction
+Plug 'zchee/deoplete-jedi',           { 'for': ['python', 'python3']}
+Plug 'zchee/deoplete-go',             { 'for': 'go' }
+Plug 'zchee/deoplete-zsh',            { 'for': 'zsh' }
+Plug 'Shougo/deoplete-clangx',         { 'for': ['c', 'cpp']}
+let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-6.0/lib/libclang.so'
+let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-6.0/lib/clang/'
+let g:deoplete#sources#clang#sort_algo = 'priority'
+Plug 'Shougo/neco-vim',               { 'for': 'vim' }
+Plug 'eagletmt/neco-ghc',             { 'for': 'haskell' }
 
 
 Plug 'vim-airline/vim-airline'
@@ -417,17 +404,11 @@ let g:airline#extensions#tagbar#enabled = 0
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
 
-" Color themes
-Plug 'frankier/neovim-colors-solarized-truecolor-only'
 Plug 'crusoexia/vim-monokai'
-Plug 'morhetz/gruvbox'
-Plug 'joshdick/onedark.vim'
 call plug#end()
 " }}}
 
 " Basic Settings {{{
-
-syntax enable
 
 " Clipboard sanity
 set pastetoggle=<F2>
@@ -468,9 +449,7 @@ set nohlsearch
 set incsearch
 set ignorecase
 set smartcase
-if has("nvim")
-  set inccommand=split
-endif
+set inccommand=split
 
 set tabstop=4
 set softtabstop=4
@@ -619,7 +598,6 @@ function! s:build_go_files()
   endif
 endfunction
 
-if has('nvim')
 function! ConfigIron()
 lua << EOF
     iron = require("iron")
@@ -632,7 +610,6 @@ lua << EOF
 EOF
 endfunction
 call ConfigIron()
-endif
 
 " }}}
 
@@ -747,66 +724,57 @@ augroup smartnumbers
 augroup end
 
 " terminal
-if has('nvim')
-  function! TerminalSet()
-    " let g:last_terminal_job_id = b:terminal_job_id
-    setl nonu nornu
-    startinsert
-    nnoremap <buffer> q i
-    vnoremap <buffer> q <Esc>i
-    " do not use incsearch-nohl
-    nnoremap <buffer> n n
-    nnoremap <buffer> N N
-  endfunction
-  augroup Terminal
-    au!
-    au TermOpen *  call TerminalSet()
-    au WinEnter term://* startinsert
-    " this breaks some extensions (go-run)
-  augroup END
-  tnoremap <silent> <A-\> <c-\><c-n>:TmuxNavigatePrevious<cr>
-  tnoremap <silent> <A-h> <C-\><C-N>:TmuxNavigateLeft<cr>
-  tnoremap <silent> <A-j> <C-\><C-N>:TmuxNavigateDown<cr>
-  tnoremap <silent> <A-k> <C-\><C-N>:TmuxNavigateUp<cr>
-  tnoremap <silent> <A-l> <C-\><C-N>:TmuxNavigateRight<cr>
-  " tnoremap <silent> <c-[> <C-\><C-n>0k
-  tnoremap <pageup> <c-\><c-n><pageup>
-  tnoremap <pagedown> <c-\><c-n><pagedown>
-  nnoremap <silent> <leader>tb :botright term://zsh<cr>
-  nnoremap <silent> <leader>tv :vsplit term://zsh<cr>
-  nnoremap <silent> <leader>ts :split term://zsh<cr>
-  " https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
-  let g:terminal_color_0  = '#2e3436'
-  let g:terminal_color_1  = '#cc0000'
-  let g:terminal_color_2  = '#4e9a06'
-  let g:terminal_color_3  = '#c4a000'
-  let g:terminal_color_4  = '#3465a4'
-  let g:terminal_color_5  = '#75507b'
-  let g:terminal_color_6  = '#0b939b'
-  let g:terminal_color_7  = '#d3d7cf'
-  let g:terminal_color_8  = '#555753'
-  let g:terminal_color_9  = '#ef2929'
-  let g:terminal_color_10 = '#8ae234'
-  let g:terminal_color_11 = '#fce94f'
-  let g:terminal_color_12 = '#729fcf'
-  let g:terminal_color_13 = '#ad7fa8'
-  let g:terminal_color_14 = '#00f5e9'
-  let g:terminal_color_15 = '#eeeeec'
-endif
+function! TerminalSet()
+  " let g:last_terminal_job_id = b:terminal_job_id
+  setl nonu nornu
+  startinsert
+  nnoremap <buffer> q i
+  vnoremap <buffer> q <Esc>i
+  " do not use incsearch-nohl
+  nnoremap <buffer> n n
+  nnoremap <buffer> N N
+endfunction
+augroup Terminal
+  au!
+  au TermOpen *  call TerminalSet()
+  au WinEnter term://* startinsert
+  " this breaks some extensions (go-run)
+augroup END
+tnoremap <silent> <A-\> <c-\><c-n>:TmuxNavigatePrevious<cr>
+tnoremap <silent> <A-h> <C-\><C-N>:TmuxNavigateLeft<cr>
+tnoremap <silent> <A-j> <C-\><C-N>:TmuxNavigateDown<cr>
+tnoremap <silent> <A-k> <C-\><C-N>:TmuxNavigateUp<cr>
+tnoremap <silent> <A-l> <C-\><C-N>:TmuxNavigateRight<cr>
+" tnoremap <silent> <c-[> <C-\><C-n>0k
+tnoremap <pageup> <c-\><c-n><pageup>
+tnoremap <pagedown> <c-\><c-n><pagedown>
+nnoremap <silent> <leader>tb :botright term://zsh<cr>
+nnoremap <silent> <leader>tv :vsplit term://zsh<cr>
+nnoremap <silent> <leader>ts :split term://zsh<cr>
+" https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
+let g:terminal_color_0  = '#2e3436'
+let g:terminal_color_1  = '#cc0000'
+let g:terminal_color_2  = '#4e9a06'
+let g:terminal_color_3  = '#c4a000'
+let g:terminal_color_4  = '#3465a4'
+let g:terminal_color_5  = '#75507b'
+let g:terminal_color_6  = '#0b939b'
+let g:terminal_color_7  = '#d3d7cf'
+let g:terminal_color_8  = '#555753'
+let g:terminal_color_9  = '#ef2929'
+let g:terminal_color_10 = '#8ae234'
+let g:terminal_color_11 = '#fce94f'
+let g:terminal_color_12 = '#729fcf'
+let g:terminal_color_13 = '#ad7fa8'
+let g:terminal_color_14 = '#00f5e9'
+let g:terminal_color_15 = '#eeeeec'
 " }}}
 
 " Colors {{{
-if has('nvim')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-elseif (v:version >= 800)
-  " cursor schape
-  let &t_SI = "\<Esc>[6 q"
-  let &t_SR = "\<Esc>[4 q"
-  let &t_EI = "\<Esc>[2 q"
-  set ttimeoutlen=50
-  autocmd VimEnter * silent !echo -ne "\e[2 q"
-endif
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
+set background=dark
 
 function! ColorCustomizations()
   hi MatchParen     guifg=none     guibg=none  gui=underline
@@ -826,13 +794,8 @@ function! ColorCustomizations()
   hi SentToCoq      guibg=#313337
 endfunction
 au ColorScheme * call ColorCustomizations()
-if has('nvim') || (v:version >= 800)
-  set termguicolors
-endif
 
-set background=dark
-" silent! colorscheme onedark
 silent! colorscheme monokai
-" silent! colorscheme gruvbox
+syntax enable
 
 " }}}
