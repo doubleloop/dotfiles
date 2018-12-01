@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+# Usage: screencast-window [ARGUMENTS_FOR_BYZANZ_RECORD...]
+#
+# Take a video capture, in GIF format, of a single window.
+#
+# Written in 2010 by Suraj N. Kurapati <https://github.com/sunaku>
+
+echo 'Usage: gifrec filename.gif (--duration=5)\n'
+echo 'After selecting window place mouse over this window.'
+echo 'When done recording click on mouse (to select this window'
+echo 'and press Ctrl-c - this stops the recording.\n'
+echo 'The gif can be directly uploaded to a Stackexchange post'
+
+echo 'Select the window you want to video capture...'
+byzanz-record $(xwininfo | awk '
+  /Absolute upper-left X/ { x = $4 }
+  /Absolute upper-left Y/ { y = $4 }
+  /Width/                 { w = $2 }
+  /Height/                { h = $2 }
+  END                     { print "-x", x, "-y", y, "-w", w, "-h", h }
+')  --delay=3 --duration=60 -v "$@"
