@@ -8,8 +8,6 @@ if [ -f $WORKON_HOME/nvim/bin/python ]; then
     export PYTHON2_NVIM_VIRTUALENV=$WORKON_HOME/nvim/bin/python
 fi
 
-_exists() { (( $+commands[$1] )) }
-
 if [ -n "$NVIM_TERMINAL" ]; then
     alias vim='nvr -s'
     alias vimrc='nvr -s ~/.config/nvim/init.vim'
