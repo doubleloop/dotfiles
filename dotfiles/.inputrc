@@ -1,34 +1,54 @@
-# by default system-wide settings are ignored when local ~/.inputrc exists
-$include /etc/inputrc
+set keymap vi-insert
+# Home/End/Delete/Insert
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+"\e[3~": delete-char
+"\e[2~": quoted-insert
+# Ctrl/Alt-left/right arrows
+"\e[1;5C": forward-word
+"\e[1;3C": forward-word
+"\e[1;5D": backward-word
+"\e[1;3D": backward-word
 
-set editing-mode vi
-"\C-w": backward-kill-word
-"\C-f": forward-char
-"\C-b": backward-char
-"\eb": backward-word
-"\ef": forward-word
 "\C-w": backward-kill-word
 "\C-a": beginning-of-line
 "\C-e": end-of-line
 "\C-k": kill-whole-line
 "\C-y": yank
+"\C-u": undo
+
+"\eb": backward-word
+"\ef": forward-word
+"\C-f": forward-char
+"\C-b": backward-char
 "\C-t": transpose-chars
 "\et": transpose-words
-"\C-u": undo
 
 "\C-p": previous-history
 "\C-n": next-history
 
-# mappings for Ctrl-left-arrow and Ctrl-right-arrow for word moving
-"\e[1;5C": forward-word
-"\e[1;5D": backward-word
-set colored-stats on
-set visible-stats on
-set mark-symlinked-directories On
-
 TAB: menu-complete
 "\e[Z":menu-complete-backward
-set completion-ignore-case On
+
+set keymap vi-command
+# Home/End
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+# Ctrl/Alt-left/right arrows
+"\e[1;5C": forward-word
+"\e[1;3C": forward-word
+"\e[1;5D": backward-word
+"\e[1;3D": backward-word
+
+set bell-style none
 set colored-completion-prefix On
+set colored-stats on
+set completion-ignore-case On
+set editing-mode vi
+set enable-bracketed-paste On
+set input-meta on
+set mark-symlinked-directories On
 set menu-complete-display-prefix On
-set show-all-if-ambiguous on
+set output-meta on
+set show-all-if-ambiguous On
+set visible-stats on
