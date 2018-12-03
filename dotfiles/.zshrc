@@ -117,39 +117,11 @@ _exists rustc && export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/
 # }}}
 
 ### key bindings ### {{{
-# ctrl + arrows
-bindkey '^[[1;5D' backward-word
-bindkey '^[[1;5C' forward-word
-# alt + arrows
-bindkey '^[[1;3D' backward-word
-bindkey '^[[1;3C' forward-word
-# ctrl+del/backspace
-bindkey '^H' backward-kill-word # this does not work in tmux (ctrl+h conflict)
-bindkey '^[[3;5~' kill-word
-
 # shift+tab
 bindkey '^[[Z' reverse-menu-complete
 
-# vi mode is cool but restore some common shortcuts in insert mode
-bindkey '^f' forward-char
-bindkey '^b' backward-char
-bindkey '^[b' backward-word
-bindkey '^[f' forward-word
-bindkey '^w' backward-kill-word
-bindkey '^a' beginning-of-line
-bindkey '^e' end-of-line
-bindkey '^k' kill-line
-bindkey '^y' yank
-bindkey '^u' kill-buffer
-
 # reset prompt after pressing enter
 # useful when ssh to machine not supporting prompt switching
-function reset-prompt-accept-line() {
-   echo -ne "\e[2 q";
-   zle accept-line
-}
-zle -N reset-prompt-accept-line
-bindkey '^M' reset-prompt-accept-line
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(reset-prompt-accept-line)
 # }}}
 
