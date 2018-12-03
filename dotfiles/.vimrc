@@ -108,6 +108,7 @@ set nolist
 set listchars=extends:#,precedes:#,tab:▸-
 set fillchars=vert:│
 set diffopt+=vertical
+silent! set diffopt+=indent-heuristic,algorithm:patience
 set colorcolumn=
 set virtualedit=block
 set showtabline=0
