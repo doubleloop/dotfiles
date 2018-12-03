@@ -776,9 +776,8 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 set background=dark
 
+hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
 function! ColorCustomizations()
-  hi MatchParen     guifg=none     guibg=none  gui=underline
-
   hi DiffAdd        guifg=#A6E22D  guibg=#2D2E27
   hi DiffChange     guifg=#d7d7ff  guibg=bg
   hi DiffDelete     guifg=#575b61  guibg=#2D2E27

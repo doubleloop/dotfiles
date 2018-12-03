@@ -146,7 +146,6 @@ set showcmd
 set signcolumn=yes
 set shortmess+=cW
 set background=dark
-
 nnoremap <c-w>c :tabedit %<cr>
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
@@ -213,12 +212,31 @@ augroup particular_file_settings
 augroup end
 
 if (v:version >= 800)
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
   let &t_SI = "\<Esc>[6 q"
   let &t_SR = "\<Esc>[4 q"
   let &t_EI = "\<Esc>[2 q"
   set ttimeoutlen=50
   autocmd VimEnter * silent !echo -ne "\e[2 q"
 endif
+
+hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
+function! ColorCustomizations()
+  hi DiffAdd        guifg=#A6E22D  guibg=#2D2E27
+  hi DiffChange     guifg=#d7d7ff  guibg=bg
+  hi DiffDelete     guifg=#575b61  guibg=#2D2E27
+  hi DiffText       guifg=#FD9720  guibg=#3d1c25
+
+  hi diffAdded      guifg=#A6E22D ctermfg=DarkGreen
+  hi diffRemoved    guifg=#66d9ef ctermfg=DarkRed
+  hi diffFile       guifg=#66D9EF ctermfg=White
+  hi diffIndexLine  guifg=#66D9EF ctermfg=White
+  hi diffLine       guifg=#66D9EF ctermfg=White
+  hi diffSubname    guifg=White   ctermfg=White
+endfunction
+au ColorScheme * call ColorCustomizations()
 
 silent! colorscheme monokai
 syntax enable
