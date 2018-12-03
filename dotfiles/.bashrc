@@ -1,6 +1,6 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+_exists() {
+    type "$1" &>/dev/null
+}
 
 # If not running interactively, don't do anything
 case $- in
@@ -29,10 +29,12 @@ shopt -s checkwinsize
 
 # If set, the pattern "**" used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+shopt -s globstar
 
-# make less more friendly for non-text input files, see lesspipe(1)
+export LESS='-MRiS#8j.5'
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+[ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ] && \
+    export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
@@ -65,17 +67,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
-function _exists {
-    type "$1" &>/dev/null
-}
-
 # next tab in gnome terminal will be opened in current directory
 [ -f "/etc/profile.d/vte.sh" ] && . "/etc/profile.d/vte.sh"
 
-# default settings for less. You may also want to disable line wrapping with -S
-export LESS='-MRi#8j.5'
-
-GIT_PROMPT_ONLY_IN_REPO=1
 GIT_PROMPT_THEME=Custom
 [ -f ~/.bash-git-prompt/gitprompt.sh ] && \
     unset __GIT_PROMPT_DIR && \
@@ -83,4 +77,3 @@ GIT_PROMPT_THEME=Custom
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 [ -f ~/.aliases ] && source ~/.aliases
 [ -f ~/.config/nvim/nvim.sh ] && source ~/.config/nvim/nvim.sh
-
