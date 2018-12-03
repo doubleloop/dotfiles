@@ -679,7 +679,7 @@ augroup filetype_settings
     \| nmap <buffer> <F8> <Plug>(iron-interrupt)
   au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
-  au FileType help nnoremap <silent> <buffer> q :q<cr>
+  au FileType help setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
   au FileType cmake setl cms=#%s
   au FileType tex
     \  if !exists('g:deoplete#omni#input_patterns')
@@ -726,7 +726,7 @@ augroup end
 " terminal
 function! TerminalSet()
   " let g:last_terminal_job_id = b:terminal_job_id
-  setl nonu nornu
+  setl nonu nornu signcolumn=no
   startinsert
   nnoremap <buffer> q i
   vnoremap <buffer> q <Esc>i
