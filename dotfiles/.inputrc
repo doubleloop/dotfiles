@@ -47,6 +47,7 @@ set completion-ignore-case On
 set editing-mode vi
 set enable-bracketed-paste On
 set input-meta on
+set keyseq-timeout 10
 set mark-symlinked-directories On
 set menu-complete-display-prefix On
 set output-meta on
