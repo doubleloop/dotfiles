@@ -126,8 +126,8 @@ Plug 'christoomey/vim-sort-motion'     " gs
 Plug 'AndrewRadev/splitjoin.vim'       " gJ gS
 
 Plug 'tyru/open-browser.vim'
-nnoremap gx <Plug>(openbrowser-smart-search)
-vnoremap gx <Plug>(openbrowser-smart-search)
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
 
 Plug 'scrooloose/nerdcommenter'
 let g:NERDSpaceDelims = 1
@@ -796,5 +796,4 @@ au ColorScheme * call ColorCustomizations()
 
 silent! colorscheme monokai
 syntax enable
-
 " }}}
