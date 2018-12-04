@@ -79,12 +79,12 @@ if executable('rg')
   let g:ackprg = 'rg --vimgrep'
   set grepprg=rg\ --vimgrep
   set grepformat=%f:%l:%c:%m
-  command Rg Ack
+  cnoreabbrev Rg Ack
 elseif executable('ag')
   let g:ackprg = 'ag --vimgrep'
   set grepprg=ag\ --vimgrep
   set grepformat=%f:%l:%c:%m
-  command Ag Ack
+  cnoreabbrev Ag Ack
 endif
 
 Plug 'easymotion/vim-easymotion'
