@@ -32,7 +32,9 @@ else
         vi-mode
         fzf
         golang
+        rust cargo
         jsontools
+        # rbenv nvm
         # supervisor
         gitfast gitignore github zsh-git-prompt
         debian
@@ -68,14 +70,12 @@ source $ZSH/oh-my-zsh.sh
 ### Postload plugins settings ### {{{
 # vi-mode settings
 KEYTIMEOUT=10
-# debian plugin settings (aliases)
-apt_pref=apt
 
-# disable pasted text highlighting (used to be slow)
+# disable widgets on paste (slow when pasting large text buffers)
 # https://github.com/zsh-users/zsh-autosuggestions/issues/141#issuecomment-210615799
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
 
-# do not hilight text pasted from kill buffer
+# do not hilight pasted text
 # https://github.com/zsh-users/zsh/blob/ac0dcc9a63dc2a0edc62f8f1381b15b0b5ce5da3/NEWS#L37-L42
 zle_highlight+=(paste:none)
 
@@ -114,7 +114,6 @@ export LESS='-MRiS#8j.5'
 # make less hilight source code http://superuser.com/a/71593/240371
 [ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ] && \
     export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
-export NVM_DIR="$HOME/.nvm"
 _exists rustc && export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
 # }}}
 
@@ -157,16 +156,9 @@ setopt HIST_EXPIRE_DUPS_FIRST
 
 [ -f ~/.aliases ] && . ~/.aliases
 [ -f ~/.gvm/scripts/gvm ] && . ~/.gvm/scripts/gvm
-[ -f ~/.fzf.zsh ] && . ~/.fzf.zsh
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
-[ -f "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-# _exists rbenv && eval "$(rbenv init -)"
-# gcloud completions
-if [ -f /usr/lib/google-cloud-sdk/completion.bash.inc ]; then
-    autoload bashcompinit
-    bashcompinit
-    . /usr/lib/google-cloud-sdk/completion.bash.inc
-fi
+[ -f /usr/lib/google-cloud-sdk/completion.zsh.inc ] && \
+    . /usr/lib/google-cloud-sdk/completion.zsh.inc
 # all config that should not be tracked in git should go to zshlocalrc
 [ -f ~/.zshlocalrc ] && . ~/.zshlocalrc
 # }}}
@@ -175,7 +167,6 @@ fi
 path=(~/.local/bin $path)
 # add sudo bin so that zsh-syntax-hilighting works on sudo commands
 path+=(/usr/local/sbin /usr/sbin /sbin)
-
 # prevent duplications on path (TMUX)
 # typeset -aU path
 # }}}
