@@ -6,9 +6,8 @@ from prompt_toolkit.keys import Keys
 ip = get_ipython()
 insert_mode = ViInsertMode() | EmacsInsertMode()
 
-# Register the shortcut if IPython is using prompt_toolkit
-if getattr(ip, 'pt_cli', None):
-    registry = ip.pt_cli.application.key_bindings_registry
+
+def register(registry):
     handle = registry.add_binding
 
     handle(Keys.ControlA, filter=insert_mode)(get_by_name('beginning-of-line'))
@@ -24,3 +23,14 @@ if getattr(ip, 'pt_cli', None):
 
     handle(Keys.ControlP)(get_by_name('previous-history'))
     handle(Keys.ControlN)(get_by_name('next-history'))
+
+
+# Register the shortcut if IPython is using prompt_toolkit
+registry = None
+if hasattr(ip, 'pt_app'):
+    registry = ip.pt_app.key_bindings
+elif hasattr(ip, 'pt_cli'):
+    registry = ip.pt_cli.application.key_bindings_registry
+
+if registry is not None:
+    register(registry)
