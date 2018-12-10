@@ -20,6 +20,7 @@ alias qbw='qutebrowser --target window'
 
 # remove conflicting aliases
 unalias ag &>/dev/null
+alias ag='ag --pager less'
 
 # https://github.com/hut/dotfiles/blob/master/bin/objdump-to-shellcode
 function objdump2shellcode {
