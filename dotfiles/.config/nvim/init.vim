@@ -730,9 +730,6 @@ function! TerminalSet()
   startinsert
   nnoremap <buffer> q i
   vnoremap <buffer> q <Esc>i
-  " do not use incsearch-nohl
-  nnoremap <buffer> n n
-  nnoremap <buffer> N N
 endfunction
 augroup Terminal
   au!
