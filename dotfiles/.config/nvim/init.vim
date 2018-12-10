@@ -428,7 +428,7 @@ set foldnestmax=10
 set nolist
 set listchars=extends:#,precedes:#,tab:▸-
 set fillchars=vert:│
-set diffopt+=vertical
+set diffopt+=vertical,indent-heuristic,algorithm:patience
 
 " set colorcolumn=80
 set colorcolumn=
