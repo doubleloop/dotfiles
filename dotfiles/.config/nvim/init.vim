@@ -138,9 +138,9 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 let g:NERDCreateDefaultMappings = 0
 let g:NERDAltDelims_c = 1
-nmap <C-_>    <Plug>NERDCommenterToggle
-nmap <C-g>cc  <Plug>NERDCommenterAppend
-xmap <C-g>cc  <Plug>NERDCommenterSexy
+nmap <c-_>    <Plug>NERDCommenterToggle
+nmap <c-g>cc  <Plug>NERDCommenterAppend
+xmap <c-g>cc  <Plug>NERDCommenterSexy
 xmap <c-g>cu  <Plug>NERDComUncommentLine
 
 Plug 'airblade/vim-gitgutter' " show git changes
@@ -216,7 +216,7 @@ Plug 'RRethy/vim-illuminate'
 Plug 'majutsushi/tagbar'
 let g:tagbar_autoclose=1
 let g:tagbar_sort = 0
-nnoremap <A-e> :TagbarToggle<cr>
+nnoremap <a-e> :TagbarToggle<cr>
 let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : 'hasktags',
     \ 'ctagsargs' : '-x -c -o-',
@@ -300,7 +300,7 @@ Plug 'Vimjas/vim-python-pep8-indent', { 'for': ['python', 'python3']}
 Plug 'davidhalter/jedi-vim',          { 'for': ['python', 'python3']}
 let g:jedi#completions_enabled = 0
 let g:jedi#show_call_signatures = 1
-let g:jedi#goto_command = "<C-]>"
+let g:jedi#goto_command = "<c-]>"
 Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
 Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
 Plug 'BurningEther/iron.nvim',      { 'do': ':UpdateRemotePlugins' }
@@ -384,9 +384,9 @@ let g:deoplete#ignore_sources.c = ['around', 'buffer', 'tag']
 let g:deoplete#sources#jedi#server_timeout=60
 
 " this conflicts with delimitmate expand_cr
-" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" inoremap <silent> <cr> <c-r>=<SID>my_cr_function()<cr>
 " function! s:my_cr_function()
-"   return deoplete#mappings#close_popup() . "\<CR>"
+"   return deoplete#mappings#close_popup() . "\<cr>"
 " endfunction
 Plug 'zchee/deoplete-jedi',           { 'for': ['python', 'python3']}
 Plug 'zchee/deoplete-go',             { 'for': 'go' }
@@ -447,9 +447,6 @@ set showtabline=0 " do not disply tab on the top os the screen
 set ruler     " disply line/col in status bar
 set autoread
 
-" Enable persistent undo so that undo history persists across vim sessions
-set undofile
-
 set startofline   " scrolling puts cursor on first non blank character
 set scrolloff=15  " cursor margins
 
@@ -473,6 +470,9 @@ set previewheight=20
 
 " http://stackoverflow.com/questions/102384/using-vims-tabs-like-buffers
 set hidden
+
+" Enable persistent undo so that undo history persists across vim sessions
+set undofile
 
 set nobackup
 set noswapfile
@@ -522,7 +522,7 @@ cnoremap <Up>     <nop>
 cnoremap <Down>   <nop>
 
 " more tmux like behavior
-nnoremap <C-w>c :tabedit %<cr>
+nnoremap <c-w>c :tabedit %<cr>
 
 " update history on certain input events
 " note: careful, this is not cool when using macro..
@@ -530,7 +530,7 @@ nnoremap <C-w>c :tabedit %<cr>
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 inoremap <c-r> <c-g>u<c-r>
-" inoremap <Space> <Space><C-g>u
+" inoremap <Space> <Space><c-g>u
 
 vnoremap < <gv
 vnoremap > >gv
@@ -563,7 +563,7 @@ noremap <leader>ds :windo diffthis<cr>
 noremap <leader>de :windo diffoff<cr>
 nnoremap <leader>z :let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
 nnoremap <leader>e :e $MYVIMRC<cr>
-" nnoremap <leader>e :e <C-R>=expand("%:p:h") . '/'<cr>
+" nnoremap <leader>e :e <c-R>=expand("%:p:h") . '/'<cr>
 
 nnoremap <silent> <leader>q :botright copen 10<cr>
 nnoremap <silent> <leader>l :botright lopen 10<cr>
@@ -631,9 +631,9 @@ augroup filetype_settings
   au FileType vim setl fdm=marker ts=2 sts=2 sw=2
   au FileType go
     \  setl noet ts=4 sts=4 sw=4
-    \| nmap <buffer> <C-g> :GoDeclsDir<cr>
-    \| imap <buffer> <C-g> <esc>:<C-u>GoDeclsDir<cr>
-    \| nmap <buffer> <leader>gb :<C-u>call <SID>build_go_files()<CR>
+    \| nmap <buffer> <c-g> :GoDeclsDir<cr>
+    \| imap <buffer> <c-g> <esc>:<c-u>GoDeclsDir<cr>
+    \| nmap <buffer> <leader>gb :<c-u>call <SID>build_go_files()<cr>
     \| nmap <buffer> <leader>gt  <Plug>(go-test)
     \| nmap <buffer> <leader>gr  <Plug>(go-run)
     \| nmap <buffer> <Leader>gd <Plug>(go-doc)
@@ -666,14 +666,14 @@ augroup filetype_settings
     \  setl fdm=syntax cms=//%s
     \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/7/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
     \| setl tags+=~/.tags/c.tags
-    \| nmap <buffer> <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-    \| nmap <buffer> <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-    \| nmap <buffer> <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-    \| nmap <buffer> <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-    \| nmap <buffer> <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-    \| nmap <buffer> <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-    \| nmap <buffer> <C-\>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-    \| nmap <buffer> <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+    \| nmap <buffer> <c-\>s :cs find s <c-R>=expand("<cword>")<cr><cr>
+    \| nmap <buffer> <c-\>g :cs find g <c-R>=expand("<cword>")<cr><cr>
+    \| nmap <buffer> <c-\>c :cs find c <c-R>=expand("<cword>")<cr><cr>
+    \| nmap <buffer> <c-\>t :cs find t <c-R>=expand("<cword>")<cr><cr>
+    \| nmap <buffer> <c-\>e :cs find e <c-R>=expand("<cword>")<cr><cr>
+    \| nmap <buffer> <c-\>f :cs find f <c-R>=expand("<cfile>")<cr><cr>
+    \| nmap <buffer> <c-\>i :cs find i ^<c-R>=expand("<cfile>")<cr>$<cr>
+    \| nmap <buffer> <c-\>d :cs find d <c-R>=expand("<cword>")<cr><cr>
   au FileType rust
     \  setl tags=./rusty-tags.vi;/,$RUST_SRC_PATH/rusty-tags.vi
     \| nmap K <Plug>(rust-doc)
@@ -701,12 +701,12 @@ augroup filetype_settings
     \| nmap <buffer> <silent> <leader>cc :CoqLaunch<cr>
     \| nmap <buffer> <silent> <leader>cq :CoqKill<cr>
     \| nmap <buffer> <silent> <F5> :CoqToCursor<cr>
-    \| nmap <buffer> <silent> <C-n> :CoqNext<cr>
-    \| nmap <buffer> <silent> <C-p> :CoqUndo<cr>
-    \| vmap <buffer> <silent> <C-n> :CoqNext<cr>
-    \| vmap <buffer> <silent> <C-p> :CoqUndo<cr>
-    \| imap <buffer> <silent> <C-n> <C-\><C-o>:CoqNext<cr>
-    \| imap <buffer> <silent> <C-p> <C-\><C-o>:CoqUndo<cr>
+    \| nmap <buffer> <silent> <c-n> :CoqNext<cr>
+    \| nmap <buffer> <silent> <c-p> :CoqUndo<cr>
+    \| vmap <buffer> <silent> <c-n> :CoqNext<cr>
+    \| vmap <buffer> <silent> <c-p> :CoqUndo<cr>
+    \| imap <buffer> <silent> <c-n> <c-\><c-o>:CoqNext<cr>
+    \| imap <buffer> <silent> <c-p> <c-\><c-o>:CoqUndo<cr>
 augroup end
 
 augroup particular_file_settings
@@ -746,12 +746,12 @@ augroup Terminal
   au WinEnter term://* startinsert
   " this breaks some extensions (go-run)
 augroup END
-tnoremap <silent> <A-\> <c-\><c-n>:TmuxNavigatePrevious<cr>
-tnoremap <silent> <A-h> <C-\><C-N>:TmuxNavigateLeft<cr>
-tnoremap <silent> <A-j> <C-\><C-N>:TmuxNavigateDown<cr>
-tnoremap <silent> <A-k> <C-\><C-N>:TmuxNavigateUp<cr>
-tnoremap <silent> <A-l> <C-\><C-N>:TmuxNavigateRight<cr>
-" tnoremap <silent> <c-[> <C-\><C-n>0k
+tnoremap <silent> <a-\> <c-\><c-n>:TmuxNavigatePrevious<cr>
+tnoremap <silent> <a-h> <c-\><c-N>:TmuxNavigateLeft<cr>
+tnoremap <silent> <a-j> <c-\><c-N>:TmuxNavigateDown<cr>
+tnoremap <silent> <a-k> <c-\><c-N>:TmuxNavigateUp<cr>
+tnoremap <silent> <a-l> <c-\><c-N>:TmuxNavigateRight<cr>
+" tnoremap <silent> <c-[> <c-\><c-n>0k
 tnoremap <pageup> <c-\><c-n><pageup>
 tnoremap <pagedown> <c-\><c-n><pagedown>
 nnoremap <silent> <leader>tb :botright term://zsh<cr>
