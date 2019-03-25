@@ -17,9 +17,9 @@ files_with_whitespace=`git diff-index --check --cached $against |
 if [ -n "$files_with_whitespace" ]; then
     for FILE in $files_with_whitespace ; do
         echo "Fixing whitespace in $FILE" >&2
-        # it looks like sed is different on mac
-        # sed -i '' -E 's/[[:space:]]*$//' "$FILE"
-        sed -i -E 's/[[:space:]]*$//' "$FILE"
+        # it looks like GNU sed -i is different from mac version
+        # todo: test this on mac
+        sed -i'' -E 's/[[:space:]]*$//' "$FILE"
         git add "$FILE"
     done
 
