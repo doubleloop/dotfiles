@@ -1,29 +1,29 @@
 [user]
-	name = Jakub Łuczyński
-	email = doubleloop@o2.pl
+    name = Jakub Łuczyński
+    email = doubleloop@o2.pl
 [help]
-	autocorrect = 1
+    autocorrect = 1
 [color]
-	ui = true
+    ui = true
 [core]
-	autocrlf = input
-	fileMode = false
-	hooksPath = ~/.config/git/hooks
+    autocrlf = input
+    fileMode = false
+    hooksPath = ~/.config/git/hooks
 [diff]
-	renames = copies
-	submodule = log
-	algorithm = patience
+    renames = copies
+    submodule = log
+    algorithm = patience
 [merge]
-	tool = pycharm
-	conflictstyle = diff3
+    tool = pycharm
+    conflictstyle = diff3
 [mergetool]
-	keepBackup = false
+    keepBackup = false
 [mergetool "pycharm"]
     cmd = /usr/local/bin/charm merge "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 [mergetool "nfugitive"]
     cmd = nvim -f -c "Gdiff" "$MERGED"
 [push]
-	default = simple
-	recurseSubmodules = check
+    default = simple
+    recurseSubmodules = check
 [status]
-	submodulesummary = 1
+    submodulesummary = 1
