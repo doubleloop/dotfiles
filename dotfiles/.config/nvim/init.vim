@@ -120,6 +120,7 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line' " l
 Plug 'mattn/vim-textobj-url' " u
 Plug 'bps/vim-textobj-python', {'for': ['python', 'python3']}
+Plug 'wellle/targets.vim'
 
 Plug 'vim-scripts/ReplaceWithRegister' " gr gx
 Plug 'christoomey/vim-sort-motion'     " gs
@@ -186,6 +187,11 @@ map <leader>Bd :Bdelete<cr>
 map <leader>BD :bdelete<cr>
 
 Plug 'machakann/vim-swap'
+let g:swap_no_default_key_mappings = 1
+nmap g< <Plug>(swap-prev)
+nmap g> <Plug>(swap-next)
+nmap g? <Plug>(swap-interactive)
+xmap g? <Plug>(swap-interactive)
 
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 " Changes Vim working directory to project root
@@ -260,7 +266,8 @@ Plug 'mbbill/undotree'
 nnoremap <leader>u :UndotreeToggle<cr>
 
 Plug 'neomake/neomake'      " async linter
-let g:neomake_verbose=0
+let g:neomake_virtualtext_current_error = 0
+let g:neomake_verbose = 0
 let g:neomake_rust_cargo_command = ['test', '--no-run']
 let g:neomake_c_enabled_makers = ['clangcheck']
 let g:neomake_haskell_ghc_mod_args = '-g-Wall'
@@ -285,6 +292,7 @@ let g:neoformat_enabled_python = ['yapf', 'isort']
 let g:neoformat_enabled_go = ['goimports']
 let g:neoformat_enabled_c = ['clangformat']
 let g:neoformat_enabled_haskell = ['hindent']
+let g:neoformat_enabled_javascript = ['jsbeautify']
 nnoremap <leader>o :Neoformat<cr>
 
 " Python
@@ -333,6 +341,7 @@ Plug 'jalvesaq/Nvim-R',               { 'for': 'r' }
 Plug 'pangloss/vim-javascript',       { 'for': 'javascript' }
 Plug 'lervag/vimtex',                 { 'for': 'tex' }
 let g:tex_flavor='latex'
+let g:vimtex_compiler_progname = 'nvr'
 
 Plug 'rust-lang/rust.vim',            { 'for': 'rust' }
 Plug 'racer-rust/vim-racer',          { 'for': 'rust' }
@@ -616,7 +625,7 @@ call ConfigIron()
 " Auto commands {{{
 augroup filetype_settings
   au!
-  au FileType html setl ts=2 sts=2 sw=2
+  au FileType html,xhtml,css setl ts=2 sts=2 sw=2
   au FileType yaml setl fdm=indent ts=2 sts=2 sw=2
   au FileType gitcommit setl spell comments=b:#
   au FileType vim setl fdm=marker ts=2 sts=2 sw=2
