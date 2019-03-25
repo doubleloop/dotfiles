@@ -17,7 +17,7 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'wikitopian/hardmode'
 Plug 'takac/vim-hardtime'
-let g:hardtime_default_on=1
+let g:hardtime_default_on=0
 let g:hardtime_allow_different_key = 1
 
 Plug 'tpope/vim-sensible'
@@ -55,6 +55,11 @@ vnoremap <silent> <a-j> <esc>:TmuxNavigateDown<cr>
 vnoremap <silent> <a-k> <esc>:TmuxNavigateUp<cr>
 vnoremap <silent> <a-l> <esc>:TmuxNavigateRight<cr>
 vnoremap <silent> <a-\> <esc>:TmuxNavigatePrevious<cr>
+cnoremap <silent> <a-h> <c-c>:TmuxNavigateLeft<cr>
+cnoremap <silent> <a-j> <c-c>:TmuxNavigateDown<cr>
+cnoremap <silent> <a-k> <c-c>:TmuxNavigateUp<cr>
+cnoremap <silent> <a-l> <c-c>:TmuxNavigateRight<cr>
+cnoremap <silent> <a-\> <c-c>:TmuxNavigatePrevious<cr>
 
 " allow to open file:line from terminal
 Plug 'bogado/file-line'
