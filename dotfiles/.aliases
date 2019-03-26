@@ -18,6 +18,7 @@ alias rmf='rm -rf'
 alias pp='ipython3'
 alias qb='qutebrowser'
 alias qbw='qutebrowser --target window'
+alias fd=fdfind
 
 # remove conflicting aliases
 unalias ag &>/dev/null

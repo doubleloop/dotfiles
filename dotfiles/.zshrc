@@ -45,7 +45,7 @@ else
         # atom sublime
         # cabal stack
         # jira
-        zsh-completions
+        zsh-completions ripgrep fd
         zsh-autosuggestions
         fast-syntax-highlighting
     )
@@ -99,7 +99,10 @@ ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(reset-prompt-accept-line)
 
 # fzf
 export FZF_DEFAULT_OPTS='--cycle --filepath-word -e'
-if _exists rg; then
+if _exists fdfind; then
+    export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --follow --exclude .git'
+	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+elif _exists rg; then
 	export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git" 2>/dev/null'
 	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 elif _exists ag; then
