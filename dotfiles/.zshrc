@@ -40,7 +40,7 @@ else
         # supervisor
         gitfast gitignore github zsh-git-prompt
         debian
-        pip python virtualenv virtualenvwrapper
+        pip python virtualenv virtualenvwrapper pyenv
         # django
         # atom sublime
         # cabal stack
