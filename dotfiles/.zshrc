@@ -24,13 +24,15 @@ else
     # Add wisely, as too many plugins slow down shell startup
     plugins=(
         alias-tips
-        common-aliases fasd colorize extract command-not-found
+        common-aliases colorize extract command-not-found
         # vagrant
         # docker
         # valut
         tmux
         vi-mode
         fzf
+        # fasd
+        z.lua
         golang
         rust cargo
         jsontools
@@ -60,7 +62,8 @@ export WORKON_HOME=$HOME/.virtualenvs
 # git-prompt compiled in haskell is 4 times faster than standard python one
 [ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
     GIT_PROMPT_EXECUTABLE="haskell"
-
+# z.lua settings
+export _ZL_DATA=$HOME/.zlua/data
 # required for zsh-completions
 autoload -U compinit && compinit
 # }}}
