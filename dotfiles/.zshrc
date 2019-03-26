@@ -23,28 +23,23 @@ if [ -f ~/.zsh_plugins ]; then
 else
     # Add wisely, as too many plugins slow down shell startup
     plugins=(
-        alias-tips
-        common-aliases colorize extract command-not-found
-        # vagrant
-        # docker
-        # valut
+        alias-tips common-aliases debian
         tmux
         vi-mode
+        extract
         fzf
         # fasd
         z.lua
-        golang
-        rust cargo
-        jsontools
-        # rbenv nvm
-        # supervisor
         gitfast gitignore github zsh-git-prompt
-        debian
+        # jira
+        # docker docker-compose docker-machine
         pip python virtualenv virtualenvwrapper pyenv
         # django
-        # atom sublime
+        golang
+        rust cargo
+        # rbenv
+        # nvm
         # cabal stack
-        # jira
         zsh-completions ripgrep fd
         zsh-autosuggestions
         fast-syntax-highlighting
