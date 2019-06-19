@@ -246,7 +246,10 @@ c.url.searchengines = {
     'im': 'http://www.imdb.com/find?s=all&q={}',
     'm': 'https://www.google.com/maps?q={}',
     'w': 'http://en.wikipedia.org/wiki/Special:Search?search={}',
-    'y': 'http://www.youtube.com/results?search_query={}'
+    'y': 'http://www.youtube.com/results?search_query={}',
+    'gr': 'https://www.goodreads.com/search?q={}',
+    'a': 'https://allegro.pl/listing?string={}',
+    'deb': 'https://packages.debian.org/search?suite=buster&section=all&arch=any&searchon=names&keywords={}'
 }
 
 # Hide the window decoration.  This setting requires a restart on
