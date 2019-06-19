@@ -30,7 +30,7 @@ else
         fzf
         # fasd
         z.lua
-        gitfast gitignore github zsh-git-prompt
+        git gitfast gitignore github zsh-git-prompt
         # jira
         # docker docker-compose docker-machine
         pip python virtualenv virtualenvwrapper pyenv
