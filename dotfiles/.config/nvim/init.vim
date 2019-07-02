@@ -748,8 +748,8 @@ endfunction
 augroup Terminal
   au!
   au TermOpen *  call TerminalSet()
-  au WinEnter term://* startinsert
-  " this breaks some extensions (go-run)
+  au BufWinEnter,WinEnter term://* startinsert
+  au BufLeave term://* stopinsert
 augroup END
 tnoremap <silent> <a-\> <c-\><c-n>:TmuxNavigatePrevious<cr>
 tnoremap <silent> <a-h> <c-\><c-N>:TmuxNavigateLeft<cr>
