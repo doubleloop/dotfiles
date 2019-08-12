@@ -275,6 +275,7 @@ let g:neomake_virtualtext_current_error = 0
 let g:neomake_verbose = 0
 let g:neomake_rust_cargo_command = ['test', '--no-run']
 let g:neomake_c_enabled_makers = ['clangcheck']
+let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_haskell_ghc_mod_args = '-g-Wall'
 
 " Snippets
@@ -688,7 +689,7 @@ augroup filetype_settings
   au FileType python
     \  let b:delimitMate_nesting_quotes = ['"']
     \| let b:delimitMate_smart_quotes = '\%([a-eg-qs-zA-Z_]\|[^[:punct:][:space:]fr]\|\%(\\\\\)*\\\)\%#\|\%#\%(\w\|[^[:space:][:punct:]]\)'
-    \| nmap <buffer> <F5> ctral
+    \| nmap <buffer> <F5> ctril
     \| vmap <buffer> <F5> <Plug>(iron-send-motion)
     \| nmap <buffer> <F8> <Plug>(iron-interrupt)
   au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
@@ -759,9 +760,9 @@ tnoremap <silent> <a-l> <c-\><c-N>:TmuxNavigateRight<cr>
 " tnoremap <silent> <c-[> <c-\><c-n>0k
 tnoremap <pageup> <c-\><c-n><pageup>
 tnoremap <pagedown> <c-\><c-n><pagedown>
-nnoremap <silent> <leader>tb :botright term://zsh<cr>
-nnoremap <silent> <leader>tv :vsplit term://zsh<cr>
-nnoremap <silent> <leader>ts :split term://zsh<cr>
+" nnoremap <silent> <leader>tb :botright split term://zsh<cr>
+" nnoremap <silent> <leader>tv :vsplit term://zsh<cr>
+" nnoremap <silent> <leader>ts :bel split term://zsh<cr>
 " https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
 let g:terminal_color_0  = '#2e3436'
 let g:terminal_color_1  = '#cc0000'
