@@ -18,6 +18,7 @@ else
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-unimpaired'
   Plug '907th/vim-auto-save'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
@@ -45,10 +46,9 @@ else
   Plug 'crusoexia/vim-monokai'
   call plug#end()
 
-  nnoremap <leader>gs :Gstatus<cr>
-  nnoremap <leader>gd :Gdiff<cr>
-  nnoremap <leader>gb :Gblame<cr>
-  nnoremap <leader>gw :Gwrite
+  let g:gitgutter_map_keys = 0
+  nmap [c <Plug>GitGutterPrevHunkzt
+  nmap ]c <Plug>GitGutterNextHunkzt
   let g:auto_save = 1
   let g:auto_save_in_insert_mode = 0
   let g:auto_save_silent = 1
@@ -110,7 +110,6 @@ set fillchars=vert:│
 set diffopt+=vertical
 silent! set diffopt+=indent-heuristic,algorithm:patience
 set colorcolumn=
-set virtualedit=block
 set showtabline=0
 set ruler
 set autoread
@@ -161,20 +160,22 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 cnoremap <c-a> <home>
 
-nmap n nzt
-nmap N Nzt
-nmap * *zt
-nmap # #zt
-nmap g* g*zt
-nmap g# g#zt
-nmap <c-]> <c-]>zt
-nmap <c-t> <c-t>zt
-nmap <c-i> <c-i>zt
-nmap <c-o> <c-o>zt
-nmap gd gdzt
+nnoremap n nzt
+nnoremap N Nzt
+nnoremap * *zt
+nnoremap # #zt
+nnoremap g* g*zt
+nnoremap g# g#zt
+nnoremap <c-]> <c-]>zt
+nnoremap <c-t> <c-t>zt
+nnoremap <c-i> <c-i>zt
+nnoremap <c-o> <c-o>zt
+nnoremap gd gdzt
+nnoremap G Gzz
 
 noremap <leader>ds :windo diffthis<cr>
 noremap <leader>de :windo diffoff<cr>
+noremap <leader>dd :Gdiffsplit<cr>
 nnoremap <leader>z :let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
 nnoremap <leader>e :e $MYVIMRC<cr>
 
