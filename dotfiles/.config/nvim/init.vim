@@ -5,15 +5,15 @@ let g:python3_host_prog = $PYTHON3_NVIM_VIRTUALENV
 let mapleader=","
 " Plugins {{{
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-  function! PlugInstall()
+  function! PrepareVim()
     silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
       \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     source $MYVIMRC
     PlugInstall --sync
     source $MYVIMRC
   endfunc
-  command! Prep :call PlugInstall()
-endif
+  command! Prep :call PrepareVim()
+else
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'wikitopian/hardmode'
 Plug 'takac/vim-hardtime'
@@ -368,8 +368,6 @@ if executable('qutebrowser')
   let g:markdown_composer_browser = "qutebrowser --target window"
 endif
 
-
-
 Plug 'elzr/vim-json',                 { 'for' : 'json' }
 Plug 'stephpy/vim-yaml',              { 'for' : 'vim' }
 Plug 'glench/vim-jinja2-syntax',      { 'for' : 'jinja' }
@@ -423,6 +421,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'crusoexia/vim-monokai'
 call plug#end()
 " }}}
+endif
 
 " Basic Settings {{{
 
@@ -589,20 +588,6 @@ command! SyntaxStack call SynStackFun()
 command! FgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "fg")
 command! BgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "bg")
 
-" https://github.com/clvv/fasd/wiki/Vim-Integration
-command! -nargs=* J :call J(<f-args>)
-function! J(...)
-  let cmd = 'fasd -d -e printf'
-  for arg in a:000
-  let cmd = cmd . ' ' . arg
-  endfor
-  let path = system(cmd)
-  if isdirectory(path)
-  echo path
-  exec 'cd' fnameescape(path)
-  endif
-endfunctio
-
 " build_go_files is a custom function that builds or compiles the test file.
 " It calls :GoBuild if its a Go file, or :GoTestCompile if it's a test file
 function! s:build_go_files()
@@ -625,7 +610,7 @@ lua << EOF
     }
 EOF
 endfunction
-call ConfigIron()
+silent! call ConfigIron()
 
 " }}}
 
