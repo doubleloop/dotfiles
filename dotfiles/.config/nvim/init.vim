@@ -131,18 +131,18 @@ Plug 'tyru/open-browser.vim'
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
-Plug 'scrooloose/nerdcommenter'
-let g:NERDSpaceDelims = 1
-let g:NERDCompactSexyComs = 1
-let g:NERDDefaultAlign = 'left'
-let g:NERDCommentEmptyLines = 1
-let g:NERDTrimTrailingWhitespace = 1
-let g:NERDCreateDefaultMappings = 0
-let g:NERDAltDelims_c = 1
-nmap <c-_>    <Plug>NERDCommenterToggle
-nmap <c-g>cc  <Plug>NERDCommenterAppend
-xmap <c-g>cc  <Plug>NERDCommenterSexy
-xmap <c-g>cu  <Plug>NERDComUncommentLine
+" Plug 'scrooloose/nerdcommenter'
+" let g:NERDSpaceDelims = 1
+" let g:NERDCompactSexyComs = 1
+" let g:NERDDefaultAlign = 'left'
+" let g:NERDCommentEmptyLines = 1
+" let g:NERDTrimTrailingWhitespace = 1
+" let g:NERDCreateDefaultMappings = 0
+" let g:NERDAltDelims_c = 1
+" nmap <c-_>    <Plug>NERDCommenterToggle
+" nmap <c-g>cc  <Plug>NERDCommenterAppend
+" xmap <c-g>cc  <Plug>NERDCommenterSexy
+" xmap <c-g>cu  <Plug>NERDComUncommentLine
 
 Plug 'airblade/vim-gitgutter' " show git changes
 Plug 'kshenoy/vim-signature'  " show marks
