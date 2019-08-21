@@ -26,10 +26,6 @@ Plug 'tpope/vim-surround'  " Must have surround functionality
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'  " git integration
-nnoremap <leader>gs :Gstatus<cr>
-nnoremap <leader>gd :Gdiff<cr>
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gw :Gwrite
 Plug 'tpope/vim-rhubarb'   " gihtub Gitbrowse
 Plug 'tommcdo/vim-fubitive'  " bitbucket Gbrowse
 Plug 'tpope/vim-unimpaired'  " Handy bracket mappings
