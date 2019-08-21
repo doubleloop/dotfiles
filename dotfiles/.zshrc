@@ -171,3 +171,6 @@ path+=(/usr/local/sbin /usr/sbin /sbin)
 # prevent duplications on path (TMUX)
 # typeset -aU path
 # }}}
+
+# https://serverfault.com/a/803321
+export LIBVIRT_DEFAULT_URI=qemu:///system
