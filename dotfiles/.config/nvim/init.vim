@@ -199,6 +199,7 @@ nmap g? <Plug>(swap-interactive)
 xmap g? <Plug>(swap-interactive)
 
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+let g:vimwiki_list = [{'path': '~/workspace/vimwiki'}]
 " Changes Vim working directory to project root
 " Plug 'airblade/vim-rooter'
 " let g:rooter_silent_chdir = 1
@@ -447,7 +448,6 @@ set diffopt+=vertical,indent-heuristic,algorithm:patience
 
 " set colorcolumn=80
 set colorcolumn=
-set virtualedit=block
 
 set showtabline=0 " do not disply tab on the top os the screen
 set ruler     " disply line/col in status bar
@@ -489,6 +489,7 @@ set spelllang=en_us
 " tab completion in comand mode
 set wildmode=longest:full,full
 set wildmenu
+set wildoptions=pum,tagfile
 set wildignore+=*/.git/*,*.pyc,*.swp,*.o
 set wildignorecase
 set path+=**
