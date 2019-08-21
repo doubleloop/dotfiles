@@ -145,6 +145,10 @@ vmap gx <Plug>(openbrowser-smart-search)
 " xmap <c-g>cu  <Plug>NERDComUncommentLine
 
 Plug 'airblade/vim-gitgutter' " show git changes
+let g:gitgutter_map_keys = 0
+nmap [c <Plug>GitGutterPrevHunkzt
+nmap ]c <Plug>GitGutterNextHunkzt
+
 Plug 'kshenoy/vim-signature'  " show marks
 
 " Nice left panel with tree structured files
@@ -546,24 +550,24 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 cnoremap <c-a> <home>
 
-nnoremap <silent> <leader><leader> :nohlsearch<c-r>=has('diff')?'<bar>diffupdate':''<cr><cr><c-l>
+" nnoremap <silent> <leader><leader> :nohlsearch<c-r>=has('diff')?'<bar>diffupdate':''<cr><cr><c-l>
 
-nmap n nzt
-nmap N Nzt
-nmap * *zt
-nmap # #zt
-nmap g* g*zt
-nmap g# g#zt
-nmap <c-]> <c-]>zt
-nmap <c-t> <c-t>zt
-nmap <c-i> <c-i>zt
-nmap <c-o> <c-o>zt
-nmap gd gdzt
-nmap [c <Plug>GitGutterPrevHunkzt
-nmap ]c <Plug>GitGutterNextHunkzt
+nnoremap n nzt
+nnoremap N Nzt
+nnoremap * *zt
+nnoremap # #zt
+nnoremap g* g*zt
+nnoremap g# g#zt
+nnoremap <c-]> <c-]>zt
+nnoremap <c-t> <c-t>zt
+nnoremap <c-i> <c-i>zt
+nnoremap <c-o> <c-o>zt
+nnoremap gd gdzt
+nnoremap G Gzz
 
 noremap <leader>ds :windo diffthis<cr>
 noremap <leader>de :windo diffoff<cr>
+noremap <leader>dd :Gdiffsplit<cr>
 nnoremap <leader>z :let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
 nnoremap <leader>e :e $MYVIMRC<cr>
 " nnoremap <leader>e :e <c-R>=expand("%:p:h") . '/'<cr>
