@@ -38,7 +38,7 @@ else
         golang
         rust cargo
         # rbenv
-        # nvm
+        zsh-nvm zsh-better-npm-completion
         # cabal stack
         zsh-completions ripgrep fd
         zsh-autosuggestions
@@ -57,6 +57,7 @@ export WORKON_HOME=$HOME/.virtualenvs
 # git-prompt compiled in haskell is 4 times faster than standard python one
 [ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
     GIT_PROMPT_EXECUTABLE="haskell"
+export NVM_LAZY_LOAD=true
 # z.lua settings
 export _ZL_DATA=$HOME/.zlua/data
 # required for zsh-completions
