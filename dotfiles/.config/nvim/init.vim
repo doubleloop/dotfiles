@@ -749,28 +749,27 @@ tnoremap <pagedown> <c-\><c-n><pagedown>
 " nnoremap <silent> <leader>tb :botright split term://zsh<cr>
 " nnoremap <silent> <leader>tv :vsplit term://zsh<cr>
 " nnoremap <silent> <leader>ts :bel split term://zsh<cr>
+
 " https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
-let g:terminal_color_0  = '#2e3436'
-let g:terminal_color_1  = '#cc0000'
-let g:terminal_color_2  = '#4e9a06'
-let g:terminal_color_3  = '#c4a000'
-let g:terminal_color_4  = '#3465a4'
-let g:terminal_color_5  = '#75507b'
-let g:terminal_color_6  = '#0b939b'
-let g:terminal_color_7  = '#d3d7cf'
-let g:terminal_color_8  = '#555753'
-let g:terminal_color_9  = '#ef2929'
-let g:terminal_color_10 = '#8ae234'
-let g:terminal_color_11 = '#fce94f'
-let g:terminal_color_12 = '#729fcf'
-let g:terminal_color_13 = '#ad7fa8'
-let g:terminal_color_14 = '#00f5e9'
-let g:terminal_color_15 = '#eeeeec'
+let g:terminal_color_0  = '#272822'
+let g:terminal_color_1  = '#f92672'
+let g:terminal_color_2  = '#a6e22e'
+let g:terminal_color_3  = '#f4bf75'
+let g:terminal_color_4  = '#66d9ef'
+let g:terminal_color_5  = '#ae81ff'
+let g:terminal_color_6  = '#a1efe4'
+let g:terminal_color_7  = '#f8f8f2'
+let g:terminal_color_8  = '#666666'
+let g:terminal_color_9  = '#ff3334'
+let g:terminal_color_10 = '#9ec400'
+let g:terminal_color_11 = '#e7c547'
+let g:terminal_color_12 = '#7aa6da'
+let g:terminal_color_13 = '#b77ee0'
+let g:terminal_color_14 = '#54ced6'
+let g:terminal_color_15 = '#ffffff'
 " }}}
 
 " Colors {{{
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 set background=dark
 
@@ -793,5 +792,3 @@ endfunction
 au ColorScheme * call ColorCustomizations()
 
 silent! colorscheme monokai
-syntax enable
-" }}}

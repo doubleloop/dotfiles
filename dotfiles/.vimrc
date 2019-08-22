@@ -238,6 +238,7 @@ function! ColorCustomizations()
   hi diffSubname    guifg=White   ctermfg=White
 endfunction
 au ColorScheme * call ColorCustomizations()
+let g:terminal_ansi_colors = ["#272822", "#f92672", "#a6e22e", "#f4bf75", "#66d9ef", "#ae81ff", "#a1efe4", "#f8f8f2", "#666666", "#ff3334", "#9ec400", "#e7c547", "#7aa6da", "#b77ee0", "#54ced6", "#ffffff"]
 
 silent! colorscheme monokai
 syntax enable
