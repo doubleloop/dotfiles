@@ -792,3 +792,4 @@ endfunction
 au ColorScheme * call ColorCustomizations()
 
 silent! colorscheme monokai
+" }}}
