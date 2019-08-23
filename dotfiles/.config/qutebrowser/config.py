@@ -257,6 +257,9 @@ c.url.searchengines = {
 # Type: Bool
 c.window.hide_decoration = True
 
+# enable pdfjs
+c.content.pdfjs = True
+
 # This setting can be used to map keys to other keys. When the key used
 # as dictionary-key is pressed, the binding for the key used as
 # dictionary-value is invoked instead. This is useful for global
@@ -285,6 +288,7 @@ config.bind('dd', 'download-delete')
 config.bind('do', 'download-open')
 config.bind('t', 'open -t')
 config.bind('x', 'tab-close')
+config.bind('gw', 'set-cmd-text -s :tab-give ')
 
 # Bindings for command mode
 config.bind('<Alt+n>', 'completion-item-focus --history next', mode='command')
