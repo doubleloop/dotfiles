@@ -145,6 +145,10 @@ set showcmd
 set signcolumn=yes
 set shortmess+=cW
 set background=dark
+set guioptions-=T
+set guioptions-=m
+set guioptions-=r
+set belloff=all
 nnoremap <c-w>c :tabedit %<cr>
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
