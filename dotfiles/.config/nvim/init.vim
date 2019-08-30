@@ -306,8 +306,13 @@ let g:jedi#completions_enabled = 0
 let g:jedi#show_call_signatures = 1
 let g:jedi#goto_command = "<c-]>"
 Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
-Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
+" Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
+" let g:nvim_ipy_perform_mappings = 0
 Plug 'BurningEther/iron.nvim',      { 'do': ':UpdateRemotePlugins' }
+" let g:iron_map_defaults = 0
+nmap <F5> <Plug>(iron-send-line)
+vmap <F5> <Plug>(iron-visual-send)
+nmap <F8> <Plug>(iron-interrupt)
 
 " C/C++
 " switch to/from heade file with :A
@@ -673,9 +678,6 @@ augroup filetype_settings
   au FileType python
     \  let b:delimitMate_nesting_quotes = ['"']
     \| let b:delimitMate_smart_quotes = '\%([a-eg-qs-zA-Z_]\|[^[:punct:][:space:]fr]\|\%(\\\\\)*\\\)\%#\|\%#\%(\w\|[^[:space:][:punct:]]\)'
-    \| nmap <buffer> <F5> ctril
-    \| vmap <buffer> <F5> <Plug>(iron-send-motion)
-    \| nmap <buffer> <F8> <Plug>(iron-interrupt)
   au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
   au FileType help setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
@@ -701,7 +703,7 @@ augroup end
 
 augroup particular_file_settings
   au!
-  autocmd BufRead */.zshrc set fdm=marker
+  au BufRead */.zshrc set fdm=marker
 augroup end
 
 " Remove trailing whitespace on file save
