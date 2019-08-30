@@ -57,9 +57,6 @@ cnoremap <silent> <a-k> <c-c>:TmuxNavigateUp<cr>
 cnoremap <silent> <a-l> <c-c>:TmuxNavigateRight<cr>
 cnoremap <silent> <a-\> <c-c>:TmuxNavigatePrevious<cr>
 
-" allow to open file:line from terminal
-Plug 'bogado/file-line'
-
 " Auto save on every escape
 Plug '907th/vim-auto-save'
 let g:auto_save = 1
@@ -357,6 +354,7 @@ let g:racer_experimental_completer = 1
 " Plug 'vim-ruby/vim-ruby',            { 'for': 'ruby' }
 
 Plug 'plasticboy/vim-markdown',       { 'for' : 'markdown' }
+let g:vim_markdown_folding_disabled = 1
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
     !cargo build --release
