@@ -124,10 +124,6 @@ Plug 'vim-scripts/ReplaceWithRegister' " gr gx
 Plug 'christoomey/vim-sort-motion'     " gs
 Plug 'AndrewRadev/splitjoin.vim'       " gJ gS
 
-Plug 'tyru/open-browser.vim'
-nmap gx <Plug>(openbrowser-smart-search)
-vmap gx <Plug>(openbrowser-smart-search)
-
 " Plug 'scrooloose/nerdcommenter'
 " let g:NERDSpaceDelims = 1
 " let g:NERDCompactSexyComs = 1
@@ -145,6 +141,7 @@ Plug 'airblade/vim-gitgutter' " show git changes
 let g:gitgutter_map_keys = 0
 nmap [c <Plug>GitGutterPrevHunkzt
 nmap ]c <Plug>GitGutterNextHunkzt
+nmap <leader>hp <Plug>GitGutterPreviewHunk
 
 Plug 'kshenoy/vim-signature'  " show marks
 
@@ -704,6 +701,12 @@ augroup end
 augroup particular_file_settings
   au!
   au BufRead */.zshrc set fdm=marker
+augroup end
+
+augroup nosmartcase_cmd
+  au!
+  au CmdlineEnter * set nosmartcase
+  au CmdlineLeave * set smartcase
 augroup end
 
 " Remove trailing whitespace on file save
