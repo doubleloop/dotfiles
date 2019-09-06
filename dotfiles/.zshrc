@@ -166,7 +166,8 @@ setopt HIST_EXPIRE_DUPS_FIRST
 # }}}
 
 ### path {{{
-path=(~/.local/bin $path)
+path=(~/.local/bin ~/.cargo/bin $path)
+
 # add sudo bin so that zsh-syntax-hilighting works on sudo commands
 path+=(/usr/local/sbin /usr/sbin /sbin)
 # prevent duplications on path (TMUX)
