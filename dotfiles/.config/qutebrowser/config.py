@@ -249,7 +249,11 @@ c.url.searchengines = {
     'y': 'http://www.youtube.com/results?search_query={}',
     'gr': 'https://www.goodreads.com/search?q={}',
     'a': 'https://allegro.pl/listing?string={}',
-    'deb': 'https://packages.debian.org/search?suite=bullseye&section=all&arch=any&searchon=names&keywords={}'
+    'deb': 'https://packages.debian.org/search?suite=bullseye&section=all&arch=any&searchon=names&keywords={}',
+    'k': 'https://keras.io/search.html?q={}',
+    'py': 'https://docs.python.org/3/search.html?q={}',
+    'pypi': 'https://pypi.org/search/?q={}',
+    'c': 'https://www.cht.sh/{}'
 }
 
 # Hide the window decoration.  This setting requires a restart on
