@@ -119,7 +119,7 @@ Plug 'mattn/vim-textobj-url' " u
 Plug 'bps/vim-textobj-python', {'for': ['python', 'python3']}
 Plug 'wellle/targets.vim'
 
-Plug 'vim-scripts/ReplaceWithRegister' " gr gx
+Plug 'vim-scripts/ReplaceWithRegister' " gr
 Plug 'christoomey/vim-sort-motion'     " gs
 Plug 'AndrewRadev/splitjoin.vim'       " gJ gS
 
@@ -324,9 +324,9 @@ Plug 'rust-lang/rust.vim',            { 'for': 'rust' }
 Plug 'racer-rust/vim-racer',          { 'for': 'rust' }
 let g:racer_experimental_completer = 1
 
-" Plug 'vim-ruby/vim-ruby',            { 'for': 'ruby' }
+Plug 'vim-ruby/vim-ruby',             { 'for': 'ruby' }
 
-Plug 'plasticboy/vim-markdown',       { 'for' : 'markdown' }
+Plug 'plasticboy/vim-markdown',       { 'for': 'markdown' }
 let g:vim_markdown_folding_disabled = 1
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
@@ -339,15 +339,15 @@ if executable('qutebrowser')
   let g:markdown_composer_browser = "qutebrowser --target window"
 endif
 
-Plug 'elzr/vim-json',                 { 'for' : 'json' }
-Plug 'stephpy/vim-yaml',              { 'for' : 'vim' }
-Plug 'glench/vim-jinja2-syntax',      { 'for' : 'jinja' }
-Plug 'mfukar/robotframework-vim',     { 'for' : 'robot' }
-Plug 'roalddevries/yaml.vim',         { 'for' : 'yaml' }
-Plug 'ekalinin/dockerfile.vim',       { 'for' : 'Dockerfile' }
-Plug 'momota/junos.vim',              { 'for' : 'junos' }
+Plug 'elzr/vim-json',                 { 'for': 'json' }
+Plug 'stephpy/vim-yaml',              { 'for': 'vim' }
+Plug 'glench/vim-jinja2-syntax',      { 'for': 'jinja' }
+Plug 'mfukar/robotframework-vim',     { 'for': 'robot' }
+Plug 'roalddevries/yaml.vim',         { 'for': 'yaml' }
+Plug 'ekalinin/dockerfile.vim',       { 'for': 'Dockerfile' }
+Plug 'momota/junos.vim',              { 'for': 'junos' }
 Plug 'let-def/vimbufsync'
-Plug 'the-lambda-church/coquille',    { 'branch' : 'pathogen-bundle' }
+Plug 'the-lambda-church/coquille',    { 'branch': 'pathogen-bundle' }
 
 " Autocompletion engine
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -371,7 +371,7 @@ Plug 'zchee/deoplete-jedi',           { 'for': ['python', 'python3']}
 let g:deoplete#sources#jedi#server_timeout = 60 " timeout for numpy cache
 Plug 'zchee/deoplete-go',             { 'for': 'go' }
 Plug 'zchee/deoplete-zsh',            { 'for': 'zsh' }
-Plug 'Shougo/deoplete-clangx',         { 'for': ['c', 'cpp']}
+Plug 'Shougo/deoplete-clangx',        { 'for': ['c', 'cpp']}
 let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-8/lib/libclang.so'
 let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-8/lib/clang/'
 let g:deoplete#sources#clang#sort_algo = 'priority'
@@ -416,7 +416,7 @@ set diffopt+=vertical,indent-heuristic,algorithm:patience
 set colorcolumn=
 
 set showtabline=0 " do not disply tab on the top os the screen
-set ruler     " disply line/col in status bar
+set ruler         " disply line/col in status bar
 set autoread
 
 set startofline   " scrolling puts cursor on first non blank character
@@ -433,7 +433,7 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4  " Indentation amount for < and > commands.
 set shiftround
-set expandtab   " Insert spaces when TAB is pressed.
+set expandtab     " Insert spaces when TAB is pressed.
 set smartindent
 
 set nosplitbelow
