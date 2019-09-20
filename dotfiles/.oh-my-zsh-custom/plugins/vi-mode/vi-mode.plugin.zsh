@@ -7,7 +7,7 @@ zle -N zle-keymap-select
 bindkey -v
 
 function reset-prompt-accept-line() {
-   echo -ne "\e[2 q";
+   printf "\x1b[2 q\x1b]112\x07"
    zle accept-line
 }
 zle -N reset-prompt-accept-line

@@ -38,8 +38,8 @@ prompt_symbol() {
    if (( RET_CODE == 0 )); then sym_color=white; else sym_color=red; fi
    _prompt_section "$ " $sym_color "\n"
 }
-_insert_mode_prompt() { printf '\e[5 q\e]112\a' }
-_normal_mode_prompt() { printf '\e[2 q\e]112\a' }
+_insert_mode_prompt() { printf "\x1b[5 q\x1b]112\x07" }
+_normal_mode_prompt() { printf "\x1b[2 q\x1b]112\x07" }
 prompt_vi() {
    if [ -z $DISABLE_PROMPT_SWITCH ]; then
       if [ "$KEYMAP" = "vicmd" ]; then
