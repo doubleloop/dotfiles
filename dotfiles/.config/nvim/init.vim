@@ -20,7 +20,6 @@ Plug 'takac/vim-hardtime'
 let g:hardtime_default_on=0
 let g:hardtime_allow_different_key = 1
 
-Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-repeat'    " Fix '.' key on some plugins
 Plug 'tpope/vim-surround'  " Must have surround functionality
 Plug 'tpope/vim-commentary'
@@ -57,11 +56,11 @@ cnoremap <silent> <a-k> <c-c>:TmuxNavigateUp<cr>
 cnoremap <silent> <a-l> <c-c>:TmuxNavigateRight<cr>
 cnoremap <silent> <a-\> <c-c>:TmuxNavigatePrevious<cr>
 
-" Auto save on every escape
 Plug '907th/vim-auto-save'
 let g:auto_save = 1
 let g:auto_save_in_insert_mode = 0
 let g:auto_save_silent = 1
+let g:auto_save_events = ["CursorHold", "FocusLost", "BufHidden", "ExitPre"]
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -124,30 +123,17 @@ Plug 'vim-scripts/ReplaceWithRegister' " gr gx
 Plug 'christoomey/vim-sort-motion'     " gs
 Plug 'AndrewRadev/splitjoin.vim'       " gJ gS
 
-" Plug 'scrooloose/nerdcommenter'
-" let g:NERDSpaceDelims = 1
-" let g:NERDCompactSexyComs = 1
-" let g:NERDDefaultAlign = 'left'
-" let g:NERDCommentEmptyLines = 1
-" let g:NERDTrimTrailingWhitespace = 1
-" let g:NERDCreateDefaultMappings = 0
-" let g:NERDAltDelims_c = 1
-" nmap <c-_>    <Plug>NERDCommenterToggle
-" nmap <c-g>cc  <Plug>NERDCommenterAppend
-" xmap <c-g>cc  <Plug>NERDCommenterSexy
-" xmap <c-g>cu  <Plug>NERDComUncommentLine
-
 Plug 'airblade/vim-gitgutter' " show git changes
 let g:gitgutter_map_keys = 0
-nmap [c <Plug>GitGutterPrevHunkzt
-nmap ]c <Plug>GitGutterNextHunkzt
-nmap <leader>hp <Plug>GitGutterPreviewHunk
+nmap [c <Plug>(GitGutterPrevHunkzt)
+nmap ]c <Plug>(GitGutterNextHunkzt)
+nmap <leader>hp <Plug>(GitGutterPreviewHunk)
 
 Plug 'kshenoy/vim-signature'  " show marks
 
 " Nice left panel with tree structured files
 Plug 'scrooloose/nerdtree'
-let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeQuitOnOpen = 0
 let g:NERDTreeHighlightCursorline=1
 let g:NERDTreeWinSize=50
 function! ToggleNerd()
@@ -182,8 +168,6 @@ let g:session_directory="~/.local/share/nvim/sessions"
 nnoremap <leader>so :SessionOpen<cr>
 
 Plug 'moll/vim-bbye'
-map <leader>Bd :Bdelete<cr>
-map <leader>BD :bdelete<cr>
 
 Plug 'machakann/vim-swap'
 let g:swap_no_default_key_mappings = 1
@@ -200,14 +184,9 @@ let g:vimwiki_list = [{'path': '~/workspace/vimwiki'}]
 " let g:rooter_patterns = ['.vim_root']
 " let g:rooter_manual_only = 1
 
-" Plug 'embear/vim-localvimrc'
-
 " Eclipse like autoopening of quotes/parenthesis
 Plug 'raimondi/delimitmate'
 let g:delimitMate_expand_cr = 1
-
-" Hilight/remove trailing whitespaces
-" Plug 'ntpeters/vim-better-whitespace'
 
 " Plug 'kien/rainbow_parentheses.vim'
 Plug 'RRethy/vim-illuminate'
@@ -268,20 +247,11 @@ nnoremap <leader>u :UndotreeToggle<cr>
 Plug 'neomake/neomake'      " async linter
 let g:neomake_virtualtext_current_error = 0
 let g:neomake_verbose = 0
+let g:neomake_highlight_columns = 0
 let g:neomake_rust_cargo_command = ['test', '--no-run']
 let g:neomake_c_enabled_makers = ['clangcheck']
 let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_haskell_ghc_mod_args = '-g-Wall'
-
-" Snippets
-if has('python')
-  Plug 'SirVer/ultisnips'
-  let g:UltiSnipsEditSplit="vertical"
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-  Plug 'honza/vim-snippets'
-endif
 
 " Autoformat
 Plug 'sbdchd/neoformat'
@@ -299,14 +269,15 @@ nnoremap <leader>o :Neoformat<cr>
 " Python
 Plug 'Vimjas/vim-python-pep8-indent', { 'for': ['python', 'python3']}
 Plug 'davidhalter/jedi-vim',          { 'for': ['python', 'python3']}
+let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled = 0
-let g:jedi#show_call_signatures = 1
+let g:jedi#show_call_signatures = 2
 let g:jedi#goto_command = "<c-]>"
 Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
 " Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
 " let g:nvim_ipy_perform_mappings = 0
 Plug 'BurningEther/iron.nvim',      { 'do': ':UpdateRemotePlugins' }
-" let g:iron_map_defaults = 0
+let g:iron_map_defaults = 0
 nmap <F5> <Plug>(iron-send-line)
 vmap <F5> <Plug>(iron-visual-send)
 nmap <F8> <Plug>(iron-interrupt)
@@ -385,43 +356,39 @@ let g:deoplete#enable_smart_case = 1
 let g:deoplete#ignore_sources = {}
 let g:deoplete#ignore_sources.python = ['around']
 let g:deoplete#ignore_sources.c = ['around', 'buffer', 'tag']
-" timeout for numpy cache
-let g:deoplete#sources#jedi#server_timeout=60
 
-" this conflicts with delimitmate expand_cr
-" inoremap <silent> <cr> <c-r>=<SID>my_cr_function()<cr>
-" function! s:my_cr_function()
-"   return deoplete#mappings#close_popup() . "\<cr>"
-" endfunction
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+imap <expr><TAB>
+      \ neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+smap <expr><TAB>
+      \ neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
 Plug 'zchee/deoplete-jedi',           { 'for': ['python', 'python3']}
+let g:deoplete#sources#jedi#server_timeout = 60 " timeout for numpy cache
 Plug 'zchee/deoplete-go',             { 'for': 'go' }
 Plug 'zchee/deoplete-zsh',            { 'for': 'zsh' }
 Plug 'Shougo/deoplete-clangx',         { 'for': ['c', 'cpp']}
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-6.0/lib/libclang.so'
-let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-6.0/lib/clang/'
+let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-8/lib/libclang.so'
+let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-8/lib/clang/'
 let g:deoplete#sources#clang#sort_algo = 'priority'
 Plug 'Shougo/neco-vim',               { 'for': 'vim' }
 Plug 'eagletmt/neco-ghc',             { 'for': 'haskell' }
 
 
-Plug 'vim-airline/vim-airline'
-let g:airline_powerline_fonts = 1
-let g:airline_exclude_preview = 1
-let g:airline_detect_spell=0
-let g:airline_detect_spelllang=0
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-let g:airline_section_y=""
-let g:airline_section_z='%3P %4l,%3v'
-let g:airline_left_sep=''
-let g:airline_right_sep=''
-let g:airline#extensions#tagbar#enabled = 0
-Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
+Plug 'itchyny/lightline.vim'
+let g:lightline = { 'colorscheme': 'wombat' }
 
 Plug 'crusoexia/vim-monokai'
+let g:monokai_term_italic = 1
+let g:monokai_gui_italic = 1
 call plug#end()
-" }}}
 endif
+" }}}
 
 " Basic Settings {{{
 
@@ -517,6 +484,8 @@ set updatetime=1000
 
 set shortmess+=cW
 
+set conceallevel=0
+
 " }}}
 
 " Key Mappings {{{
@@ -559,8 +528,8 @@ nnoremap g* g*zt
 nnoremap g# g#zt
 nnoremap <c-]> <c-]>zt
 nnoremap <c-t> <c-t>zt
-nnoremap <c-i> <c-i>zt
-nnoremap <c-o> <c-o>zt
+" nnoremap <c-i> <c-i>zt
+" nnoremap <c-o> <c-o>zt
 nnoremap gd gdzt
 nnoremap G Gzz
 
@@ -656,7 +625,7 @@ augroup filetype_settings
     \| nmap <buffer> <leader>hl :Neomake hlint<cr>
   au FileType c,cpp
     \  setl fdm=syntax cms=//%s
-    \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/7/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
+    \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/9/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/9/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
     \| setl tags+=~/.tags/c.tags
     \| nmap <buffer> <c-\>s :cs find s <c-R>=expand("<cword>")<cr><cr>
     \| nmap <buffer> <c-\>g :cs find g <c-R>=expand("<cword>")<cr><cr>
@@ -709,14 +678,8 @@ augroup nosmartcase_cmd
   au CmdlineLeave * set smartcase
 augroup end
 
-" Remove trailing whitespace on file save
-" augroup prewrite
-"   au!
-"   au BufWritePre * :%s/\s\+$//e
-" augroup end
-
 " run lint on save
-silent! call neomake#configure#automake('rw', 750)
+silent! call neomake#configure#automake('rn')
 
 " smart number toggling
 augroup smartnumbers
@@ -740,7 +703,7 @@ augroup Terminal
   au TermOpen *  call TerminalSet()
   au BufWinEnter,WinEnter term://* startinsert
   au BufLeave term://* stopinsert
-augroup END
+augroup end
 tnoremap <silent> <a-\> <c-\><c-n>:TmuxNavigatePrevious<cr>
 tnoremap <silent> <a-h> <c-\><c-N>:TmuxNavigateLeft<cr>
 tnoremap <silent> <a-j> <c-\><c-N>:TmuxNavigateDown<cr>
@@ -774,7 +737,6 @@ let g:terminal_color_15 = '#ffffff'
 
 " Colors {{{
 set termguicolors
-set background=dark
 
 hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
 function! ColorCustomizations()
