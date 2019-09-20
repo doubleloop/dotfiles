@@ -40,6 +40,7 @@ else
         # rbenv
         zsh-nvm zsh-better-npm-completion
         # cabal stack
+        gcloud
         zsh-completions ripgrep fd
         zsh-autosuggestions
         fast-syntax-highlighting
@@ -159,8 +160,6 @@ setopt HIST_EXPIRE_DUPS_FIRST
 [ -f ~/.aliases ] && . ~/.aliases
 [ -f ~/.gvm/scripts/gvm ] && . ~/.gvm/scripts/gvm
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
-[ -f /usr/lib/google-cloud-sdk/completion.zsh.inc ] && \
-    . /usr/lib/google-cloud-sdk/completion.zsh.inc
 # all config that should not be tracked in git should go to zshlocalrc
 [ -f ~/.zshlocalrc ] && . ~/.zshlocalrc
 # }}}
