@@ -581,6 +581,27 @@ EOF
 endfunction
 silent! call ConfigIron()
 
+" toggle xyz.py with test_xyz.py (in subdirectory of current root)
+function! PytestFileToggle() abort
+  let l:file = expand('%:t')
+  if empty(file)
+    return
+  elseif l:file =~# '^test_.\+\.py$'
+    let l:alt_file = substitute(l:file, '^test_', '', '')
+  elseif l:file =~# '^.\+.py$'
+    let l:alt_file = 'test_' . l:file
+  else
+    return
+  endif
+  if bufexists(alt_file)
+    execute 'b ' . l:alt_file
+  elseif filewritable('**/' . l:alt_file)
+    execute 'e **/' . l:alt_file
+  else
+    execute 'e ' . expand('%:p:h') . '/' . l:alt_file
+  endif
+endfunction
+
 " }}}
 
 " Auto commands {{{
@@ -644,6 +665,7 @@ augroup filetype_settings
   au FileType python
     \  let b:delimitMate_nesting_quotes = ['"']
     \| let b:delimitMate_smart_quotes = '\%([a-eg-qs-zA-Z_]\|[^[:punct:][:space:]fr]\|\%(\\\\\)*\\\)\%#\|\%#\%(\w\|[^[:space:][:punct:]]\)'
+  au FileType python command! -bang A call PytestFileToggle()
   au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
   au FileType help setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
