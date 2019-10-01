@@ -70,6 +70,7 @@ nnoremap <leader>p :FzfFiles<cr>
 nnoremap <leader>P :FzfCommands<cr>
 nnoremap <leader>b :FzfBuffer<cr>
 nnoremap <leader>m :FZFMru<cr>
+nnoremap <a-e> :FzfBTags<cr>
 
 Plug 'mileszs/ack.vim'
 if executable('rg')
@@ -134,8 +135,9 @@ Plug 'kshenoy/vim-signature'  " show marks
 " Nice left panel with tree structured files
 Plug 'scrooloose/nerdtree'
 let g:NERDTreeQuitOnOpen = 0
-let g:NERDTreeHighlightCursorline=1
-let g:NERDTreeWinSize=50
+let g:NERDTreeHighlightCursorline = 0
+let g:NERDTreeWinSize = 40
+let g:NERDTreeMinimalUI = 1
 function! ToggleNerd()
   if exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
     exec ':NERDTreeToggle'
@@ -193,9 +195,9 @@ Plug 'RRethy/vim-illuminate'
 
 " Panel with tags
 Plug 'majutsushi/tagbar'
-let g:tagbar_autoclose=1
-let g:tagbar_sort = 0
-nnoremap <a-e> :TagbarToggle<cr>
+let g:tagbar_autoclose = 0
+let g:tagbar_iconchars = ['▸', '▾']
+nnoremap <a-2> :TagbarToggle<cr>
 let g:tagbar_type_haskell = {
     \ 'ctagsbin'  : 'hasktags',
     \ 'ctagsargs' : '-x -c -o-',
@@ -687,6 +689,7 @@ augroup filetype_settings
     \| vmap <buffer> <silent> <c-p> :CoqUndo<cr>
     \| imap <buffer> <silent> <c-n> <c-\><c-o>:CoqNext<cr>
     \| imap <buffer> <silent> <c-p> <c-\><c-o>:CoqUndo<cr>
+  au FileType nerdtree,tagbar setl nonu signcolumn=no
 augroup end
 
 augroup particular_file_settings
