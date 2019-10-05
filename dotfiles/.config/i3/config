@@ -17,7 +17,7 @@ set $right l
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:System San Francisco Display, fontawesome 12
+font pango:System San Francisco Display, fontawesome 13
 new_window 1pixel
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
@@ -36,14 +36,14 @@ floating_modifier $mod
 
 # start a terminal
 # bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec tilix
+bindsym $mod+Return exec alacritty
 
 # kill focused window
 bindsym $mod+ctrl+q kill
 
 # start dmenu (a program launcher)
-# bindsym $mod+d exec dmenu_run
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+bindsym $mod+d exec dmenu_run
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+$left focus left
@@ -99,7 +99,7 @@ set $ws5 "5"
 set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
-set $ws9 "9"
+set $ws9 "9 "
 set $ws10 "10 "
 
 bindsym $mod+n workspace next_on_output
@@ -132,8 +132,9 @@ bindsym $mod+ctrl+9 move container to workspace $ws9; workspace $ws9
 bindsym $mod+ctrl+0 move container to workspace $ws10; workspace $ws10
 
 # for_window [class="keepassxc"] floating enable
-# assign [class="Tilix"] $ws2
+assign [class="qutebrowser"] $ws1
 assign [class="Alacritty"] $ws2
+assign [class="Riot"] $ws9
 assign [class="Google Play Music Desktop Player"] $ws10
 assign [class ="qemu-system-x86_64"] $ws5
 for_window [class="qemu-system-x86_64"] floating enable
@@ -181,13 +182,13 @@ bar {
 }
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+# bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
@@ -195,22 +196,32 @@ bindsym XF86AudioPause exec playerctl stop
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-bindsym XF86Display exec --no-startup-id ~/bin/monitor
+bindsym XF86Display exec --no-startup-id  xrandr --output LVDS-0 --primary --auto
+bindsym $mod+F7 exec --no-startup-id  xrandr --output LVDS-0 --primary --auto
 
 bindsym XF86ScreenSaver exec --no-startup-id i3lock -e -c 000000
 bindsym $mod+b exec --no-startup-id i3lock -e -c 000000
 exec xautolock -time 10 -locker 'i3lock -e -c 000000' -detectsleep
 
-bindsym --release Print exec scrot -m ~/Pictures/screenshots/%s_%H%M_%d.%m.%Y_$wx$h.png
-bindsym --release Shift+Print exec scrot -s ~/Pictures/screenshots/%s_%H%M_%d%m%Y_$wx$h.png
-bindsym --release $mod+Shift+Print exec scrot -u -d 4 ~/Pictures/screenshots/%s_%H%M_%d%m%Y_$wx$h.png
+bindsym --release Print exec scrot -z -m ~/media/pictures/screenshots/%Y-%m-%d-%H:%M:%s.png
+bindsym --release Shift+Print exec scrot -z -s ~/media/pictures/screenshots/%Y-%m-%d-%H:%M:%s.png
+bindsym --release $mod+Shift+Print exec scrot -z -u -d 4 ~/media/pictures/screenshots/%Y-%m-%d-%H:%M:%s.png
 
 # this sometimes crashes on my system..
-exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
-exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
+# exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
+# exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
 
-exec_always feh --bg-scale ~/dropbox/private/backups/profile/jawsk1111.jpg
-exec dropbox start
-exec keepassxc
+exec_always feh --bg-scale ~/dropbox/backups/profile/jawsk1111.jpg
+
+exec i3-msg workspace $ws2
 exec alacritty
+exec qutebrowser
+exec riot
+exec gpm
+exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
+exec --no-startup-id redshift
+exec --no-startup-id blueman-applet
+exec --no-startup-id xss-lock -l -- i3lock -e -c 000000
+exec --no-startup-id volumeicon
+exec --no-startup-id cbatticon -n -i symbolic

@@ -31,11 +31,11 @@ markup=none
 # Date Time
 #
 [time]
-command=date '+%A, %d %b %H:%M'
-min_width=xxxxxxxxxxxxxxxxxxxx
+command=date '+%A, W%V %d %b    %H:%M'
+min_width=xxxxxxxxxxxx, W99 99 xxx    99:99
 interval=5
 # separator=false
-align=left
+align=right
 
 # [wifi]
 # instance=wlp3s0
@@ -44,47 +44,48 @@ align=left
 
 [cpu_usage]
 label=
-interval=10
+interval=2
 min_width= 100.00%
 separator=false
-align=center
+align=left
 
 [memory]
 label=
-interval=30
+interval=2
 separator=false
-align=center
+align=left
+min_width= 999.9G
 
-[wifi]
-instance=wlp3s0
-label=
-interval=10
-align=center
+# [wifi]
+# instance=wlp3s0
+# label=
+# interval=10
+# align=center
 # separator=false
 
 #[load_average]
 #interval=10
 
-[volume]
-label=
-instance=Master
-#instance=PCM
-interval=1
-signal=10
-min_width=xxxxxxxx
-align=center
+#[volume]
+#label=
+#instance=Master
+##instance=PCM
+#interval=1
+#signal=10
+#min_width=xxxxxxxx
+#align=center
 
 # Battery indicator
 # The battery instance defaults to 0.
-[battery]
-label=
-#instance=1
-interval=30
-align=center
-min_width=xxxxxxxxxx
+#[battery]
+#label=
+##instance=1
+#interval=30
+#align=center
+#min_width=xxxxxxxxxx
 
 # OpenVPN support
 #
 # Support multiple VPN, with colors.
-#[openvpn]
-#interval=20
+# [openvpn]
+# interval=20
