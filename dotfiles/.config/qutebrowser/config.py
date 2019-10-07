@@ -74,6 +74,12 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 # Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
+# Allow pdf.js to view PDF files in the browser. Note that the files can
+# still be downloaded by clicking the download button in the pdf.js
+# viewer.
+# Type: Bool
+c.content.pdfjs = False
+
 # Allow websites to register protocol handlers via
 # `navigator.registerProtocolHandler`.
 # Type: BoolAsk
@@ -238,7 +244,7 @@ c.tabs.indicator.width = 0
 # `:open google qutebrowser`.
 # Type: Dict
 c.url.searchengines = {
-    'DEFAULT': 'https://duckduckgo.com/?q={}',
+    'DEFAULT': 'https://www.google.com/search?q={}',
     'd': 'https://duckduckgo.com/?q={}',
     'g': 'https://www.google.com/search?q={}',
     'gh': 'https://github.com/search?q={}',
@@ -261,9 +267,6 @@ c.url.searchengines = {
 # Type: Bool
 c.window.hide_decoration = True
 
-# enable pdfjs
-c.content.pdfjs = True
-
 # This setting can be used to map keys to other keys. When the key used
 # as dictionary-key is pressed, the binding for the key used as
 # dictionary-value is invoked instead. This is useful for global
@@ -281,19 +284,18 @@ config.bind('<Alt+p>', 'tab-prev')
 config.bind('<Alt+q>', 'tab-focus last')
 config.bind('<Ctrl+6>', 'tab-focus last')
 config.bind('<Ctrl+r>', 'reload')
-config.bind('<Ctrl+w>', None)
+config.unbind('<Ctrl+w>')
 config.bind('B', 'set-cmd-text -s :bookmark-load -t')
 config.bind('J', 'tab-prev')
 config.bind('K', 'tab-next')
 config.bind('b', 'set-cmd-text -s :bookmark-load')
-config.bind('d', None)
+config.unbind('d')
 config.bind('dc', 'download-clear')
 config.bind('dd', 'download-delete')
 config.bind('do', 'download-open')
 config.bind('t', 'open -t')
 config.bind('x', 'tab-close')
 config.bind('gw', 'set-cmd-text -s :tab-give ')
-
 # Bindings for command mode
 config.bind('<Alt+n>', 'completion-item-focus --history next', mode='command')
 config.bind('<Alt+p>', 'completion-item-focus --history prev', mode='command')
