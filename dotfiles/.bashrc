@@ -74,6 +74,7 @@ GIT_PROMPT_THEME=Custom
 [ -f ~/.bash-git-prompt/gitprompt.sh ] && \
     unset __GIT_PROMPT_DIR && \
     source ~/.bash-git-prompt/gitprompt.sh
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+set -o vi
+[ -f /usr/share/doc/fzf/examples/key-bindings.bash ] && source "/usr/share/doc/fzf/examples/key-bindings.bash"
 [ -f ~/.aliases ] && source ~/.aliases
 [ -f ~/.config/nvim/nvim.sh ] && source ~/.config/nvim/nvim.sh
