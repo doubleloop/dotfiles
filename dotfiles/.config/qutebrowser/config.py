@@ -259,7 +259,8 @@ c.url.searchengines = {
     'k': 'https://keras.io/search.html?q={}',
     'py': 'https://docs.python.org/3/search.html?q={}',
     'pypi': 'https://pypi.org/search/?q={}',
-    'c': 'https://www.cht.sh/{}'
+    'c': 'https://www.cht.sh/{}',
+    'l': 'https://www.last.fm/search?q={}'
 }
 
 # Hide the window decoration.  This setting requires a restart on
