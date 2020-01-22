@@ -1,73 +1,11 @@
 # doubleloop prompt configuration
-
-# function inspired by spaceship-zsh-theme version
-# Draw prompt section (bold is used as default)
-# USAGE:
-#   _prompt_section <content> <color> [prefix] [suffix]
-PROMPT_OPENED=false # Internal variable for checking if prompt is opened
-_prompt_section() {
-   local color prefix content suffix
-   [[ -n $1 ]] && content="$1"    || return
-   [[ -n $2 ]] && color="%F{$2}"  || color="%f"
-   if (( $# >= 3 )); then prefix="$3"; else prefix=" "; fi
-   if (( $# >= 4 )); then suffix="$4"; else suffix=""; fi
-
-   echo -n "%{%B%}" # set bold
-   if [[ $PROMPT_OPENED == true ]]; then
-      echo -n "$prefix"
-   fi
-   PROMPT_OPENED=true
-   echo -n "%{%b%}" # unset bold
-
-   echo -n "%{%B$color%}" # set color
-   echo -n "$content"     # section content
-   echo -n "%{%b%f%}"     # unset color
-
-   echo -n "%{%B%}" # reset bold, if it was diabled before
-   echo -n "$suffix"
-   echo -n "%{%b%}" # unset bold
+precmd() {
+    print -P "%B%F{green}%n@%m %F{yellow}%~"\
+             "%F{blue}$(virtualenv_prompt_info 2>/dev/null)"\
+             "%F{white}$(git_super_status 2>/dev/null)%E"
+    _setcursorshape 2> /dev/null
 }
-
-prompt_user()  { _prompt_section "%n" green }
-prompt_host()  { _prompt_section "@%m" green "" }
-prompt_dir()   { _prompt_section "%~ " yellow }
-prompt_pyenv() { _prompt_section "$(virtualenv_prompt_info)" blue  }
-prompt_git()   { _prompt_section "$(git_super_status)" white }
-prompt_symbol() {
-   local sym_color
-   if (( RET_CODE == 0 )); then sym_color=white; else sym_color=red; fi
-   _prompt_section "$ " $sym_color "\n"
-}
-_insert_mode_prompt() { printf "\x1b[5 q\x1b]112\x07" }
-_normal_mode_prompt() { printf "\x1b[2 q\x1b]112\x07" }
-prompt_vi() {
-   if [ -z $DISABLE_PROMPT_SWITCH ]; then
-      if [ "$KEYMAP" = "vicmd" ]; then
-         _normal_mode_prompt
-      else
-         _insert_mode_prompt
-      fi
-   fi
-}
-# just in case
-fix_prompt() {
-    DISABLE_PROMPT_SWITCH=1
-    _normal_mode_prompt
-}
-
-drow_prompt() {
-   RET_CODE=$?
-   prompt_user
-   prompt_host
-   prompt_dir
-   prompt_pyenv
-   prompt_git
-   prompt_vi
-   prompt_symbol
-}
-
-PROMPT='$(drow_prompt)'
-unset RPS1
+PS1="%B%(?..%F{red})$%b%f "
 
 # colored man, based on zsh plugin
 # http://www.tuxarena.com/2012/04/tutorial-colored-man-pages-how-it-works/

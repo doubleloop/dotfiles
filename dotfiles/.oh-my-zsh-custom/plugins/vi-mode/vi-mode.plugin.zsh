@@ -1,14 +1,34 @@
-# Updates editor information when the keymap changes.
-function zle-keymap-select() {
-  zle reset-prompt
+bindkey -v
+KEYTIMEOUT=10
+
+_insertmode_cursor() { printf "\x1b[5 q\x1b]112\x07" }
+_normalmode_cursor() { printf "\x1b[2 q\x1b]112\x07" }
+
+_setcursorshape() {
+    if [ -z $DISABLE_PROMPT_SWITCH ]; then
+        if [ "$KEYMAP" = "vicmd" ]; then
+            _normalmode_cursor
+        else
+            _insertmode_cursor
+        fi
+    fi
+}
+
+# just in case
+fix-prompt() {
+    DISABLE_PROMPT_SWITCH=1
+    _normalmode_cursor
+}
+
+zle-keymap-select() {
+    _setcursorshape
+    zle reset-prompt
 }
 zle -N zle-keymap-select
 
-bindkey -v
-
 function reset-prompt-accept-line() {
-   printf "\x1b[2 q\x1b]112\x07"
-   zle accept-line
+    _normalmode_cursor
+    zle accept-line
 }
 zle -N reset-prompt-accept-line
 bindkey '^M' reset-prompt-accept-line

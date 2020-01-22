@@ -68,9 +68,6 @@ autoload -U compinit && compinit
 source $ZSH/oh-my-zsh.sh
 
 ### Postload plugins settings ### {{{
-# vi-mode settings
-KEYTIMEOUT=10
-
 # disable widgets on paste (slow when pasting large text buffers)
 # https://github.com/zsh-users/zsh-autosuggestions/issues/141#issuecomment-210615799
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
