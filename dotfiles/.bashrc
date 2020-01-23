@@ -31,7 +31,6 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 shopt -s globstar
 
-export LESS='-MRiS#8j.5'
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 [ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ] && \
     export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"

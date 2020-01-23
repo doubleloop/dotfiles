@@ -110,7 +110,6 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export TMPDIR=/tmp
 _exists vim && export EDITOR=vim
-export LESS='-MRiS#8j.5'
 # make less hilight source code http://superuser.com/a/71593/240371
 [ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ] && \
     export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"

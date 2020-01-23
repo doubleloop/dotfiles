@@ -1,2 +1,5 @@
 h left-scroll
 l right-scroll
+
+#env
+LESS = -gcMRiSj.3 --shift 8 --mouse --wheel-lines=8
