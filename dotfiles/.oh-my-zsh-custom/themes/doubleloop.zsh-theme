@@ -1,11 +1,14 @@
-# doubleloop prompt configuration
+# prompt configuration
+
 precmd() {
-    print -P "%B%F{green}%n@%m %F{yellow}%~"\
-             "%F{blue}$(virtualenv_prompt_info 2>/dev/null)"\
-             "%F{white}$(git_super_status 2>/dev/null)%E"
-    _setcursorshape 2> /dev/null
+    (( ${+functions[setcursorshape]} )) && setcursorshape
+    gs=${+functions[git_super_status]+$(git_super_status)}
+    vs=${+functions[virtualenv_prompt_info]+$(virtualenv_prompt_info)}
+    gs=${gs:+" %F{white}$gs"}
+    vs=${vs:+" %F{blue}$vs"}
+    print -P "%B%F{green}%n@%m %F{yellow}%~${vs}${gs}%b%f"
 }
-PS1="%B%(?..%F{red})$%b%f "
+PS1="%B%(?.%f.%F{red})$%b%f "
 
 # colored man, based on zsh plugin
 # http://www.tuxarena.com/2012/04/tutorial-colored-man-pages-how-it-works/

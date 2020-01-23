@@ -4,7 +4,7 @@ KEYTIMEOUT=10
 _insertmode_cursor() { printf "\x1b[5 q\x1b]112\x07" }
 _normalmode_cursor() { printf "\x1b[2 q\x1b]112\x07" }
 
-_setcursorshape() {
+setcursorshape() {
     if [ -z $DISABLE_PROMPT_SWITCH ]; then
         if [ "$KEYMAP" = "vicmd" ]; then
             _normalmode_cursor
@@ -21,7 +21,7 @@ fix-prompt() {
 }
 
 zle-keymap-select() {
-    _setcursorshape
+    setcursorshape
     zle reset-prompt
 }
 zle -N zle-keymap-select
