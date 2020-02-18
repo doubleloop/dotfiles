@@ -1,5 +1,19 @@
+#command
 h left-scroll
 l right-scroll
+#line-edit
+^P up
+^N down
+^W word-backspace
+^A home
+^E end
 
 #env
 LESS = -gcMRiSj.3 --shift 8 --mouse --wheel-lines=8
+LESS_TERMCAP_mb = \e[01;38;5;75m
+LESS_TERMCAP_md = \e[01;38;5;75m
+LESS_TERMCAP_me = \e[0m
+LESS_TERMCAP_so = \e[1;7m
+LESS_TERMCAP_se = \e[0m
+LESS_TERMCAP_us = \e[04;38;5;200m
+LESS_TERMCAP_ue = \e[0m
