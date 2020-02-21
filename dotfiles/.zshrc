@@ -23,25 +23,23 @@ if [ -f ~/.zsh_plugins ]; then
 else
     # Add wisely, as too many plugins slow down shell startup
     plugins=(
-        alias-tips common-aliases debian
         tmux
         vi-mode
+        alias-tips common-aliases debian
         extract
         fzf
-        # fasd
         z.lua
-        git gitfast gitignore github zsh-git-prompt
+        git gitignore zsh-git-prompt
         # jira
-        # docker docker-compose docker-machine
-        pip python virtualenv virtualenvwrapper pyenv
+        pip python virtualenv virtualenvwrapper
+        # pyenv
         # django
         golang
-        rust cargo
-        # rbenv
         zsh-nvm zsh-better-npm-completion
         # cabal stack
+        rust
         gcloud
-        zsh-completions ripgrep fd
+        custom-completions
         zsh-autosuggestions
         fast-syntax-highlighting
     )
@@ -61,11 +59,11 @@ export WORKON_HOME=$HOME/.virtualenvs
 export NVM_LAZY_LOAD=true
 # z.lua settings
 export _ZL_DATA=$HOME/.zlua/data
-# required for zsh-completions
-autoload -U compinit && compinit
 # }}}
 
 source $ZSH/oh-my-zsh.sh
+# required for *-completions
+autoload -U compinit && compinit
 
 ### Postload plugins settings ### {{{
 # disable widgets on paste (slow when pasting large text buffers)
