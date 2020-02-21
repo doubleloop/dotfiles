@@ -14,16 +14,36 @@
     submodule = log
     algorithm = patience
 [merge]
-    tool = pycharm
+    tool = meld
     conflictstyle = diff3
 [mergetool]
     keepBackup = false
+[mergetool "nvim"]
+    cmd = nvim -f -c "Gdiffsplit!" "$MERGED"
 [mergetool "pycharm"]
     cmd = /usr/local/bin/charm merge "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
-[mergetool "nfugitive"]
-    cmd = nvim -f -c "Gdiff" "$MERGED"
 [push]
     default = simple
     recurseSubmodules = check
 [status]
     submodulesummary = 1
+[alias]
+    st  = status
+    cl  = lone --recurse-submodules
+    si  = submodule init
+    su  = submodule update
+    ds  = diff --staged
+    co  = checkout
+    cm  = checkout master
+    rb  = rebase
+    rbi = rebase --interactive
+    rba = rebase --abort
+    rbc = rebase --continue
+    rbm = rebase master
+    rh  = reset
+    bd  = branch -d
+    bD  = branch -D
+    lg  = log --stat --topo-order
+    lgp = log --stat --topo-order -p
+    lo  = log --topo-order --pretty='%Cgreen%><(12,trunc)%ar %C(bold blue)%<(8,trunc)%an%Creset %C(auto)%h%Creset %s %C(auto)%d%Creset'
+    lol = log --topo-order --pretty='%Cgreen%ai %C(bold blue)%<(20,trunc)%an%Creset %C(auto)%h%Creset %s %C(auto)%d%Creset'

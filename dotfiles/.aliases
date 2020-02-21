@@ -19,10 +19,10 @@ alias qb='qutebrowser'
 alias qbw='qutebrowser --target window'
 alias fd=fdfind
 
-alias glg='git log --stat --topo-order'
-alias glgp='git log --stat --topo-order -p'
-alias glo="git log  --topo-order --pretty='%Cgreen%><(12,trunc)%ar %C(bold blue)%<(8,trunc)%an%Creset %C(auto)%h%Creset %s %C(auto)%d%Creset'"
-alias glol="git log --topo-order --pretty='%Cgreen%ai %C(bold blue)%<(20,trunc)%an%Creset %C(auto)%h%Creset %s %C(auto)%d%Creset'"
+alias glg='git lg'
+alias glgp='git lgp'
+alias glo="git lo"
+alias glol="git lol"
 
 # remove conflicting aliases
 unalias ag &>/dev/null
