@@ -1,4 +1,4 @@
-export FZF_COMPLETION_OPTS='-1 -0 --ansi'
+export FZF_COMPLETION_OPTS='-1 -0 --ansi --no-info'
 
 _fzf_complete_la() {
     _fzf_complete "--multi" "$@" < <(
@@ -31,7 +31,7 @@ _eval_git_relative() {
 
 _fzf_complete_ga() {
     _is_git_repo &&
-    FZF_COMPLETION_OPTS='-0 --ansi' _fzf_complete "--multi -n 2 " "$@" < <(
+    FZF_COMPLETION_OPTS='-0 --ansi --no-info' _fzf_complete "--multi -n 2 " "$@" < <(
         git -c color.status=always status --short
     )
 }
