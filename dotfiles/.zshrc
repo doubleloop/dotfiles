@@ -59,6 +59,8 @@ export WORKON_HOME=$HOME/.virtualenvs
 export NVM_LAZY_LOAD=true
 # z.lua settings
 export _ZL_DATA=$HOME/.zlua/data
+# fzf
+export DISABLE_FZF_AUTO_COMPLETION="true"
 # }}}
 
 source $ZSH/oh-my-zsh.sh
@@ -90,7 +92,7 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(reset-prompt-accept-line)
 
 # fzf
-export FZF_DEFAULT_OPTS='--cycle --filepath-word -e'
+export FZF_DEFAULT_OPTS='--cycle --filepath-word -e --bind tab:down,btab:up,ctrl-space:toggle'
 if _exists fdfind; then
     export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --follow --exclude .git'
 	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
