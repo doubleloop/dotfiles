@@ -35,7 +35,7 @@ else
         # pyenv
         # django
         golang
-        zsh-nvm zsh-better-npm-completion
+        zsh-nvm nvm zsh-better-npm-completion
         # cabal stack
         rust
         gcloud
@@ -48,6 +48,7 @@ fi
 
 ### Preload plugins settings ### {{{
 ZSH_TMUX_AUTOSTART="true"
+ZSH_TMUX_AUTOSTART_ONCE="false"
 ZSH_TMUX_AUTOCONNECT="false"
 ZSH_TMUX_AUTOQUIT="false"
 # virtualenvwrapper settings
@@ -77,7 +78,7 @@ zstyle ':bracketed-paste-magic' active-widgets '.self-*'
 zle_highlight+=(paste:none)
 
 # alias-tips settings
-export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi please help"
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="_ ll vi please help g"
 export ZSH_PLUGINS_ALIAS_TIPS_EXPAND=1
 
 # autosuggestions settings
