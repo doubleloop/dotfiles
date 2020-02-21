@@ -17,6 +17,18 @@ _is_git_repo() {
     git rev-parse --is-inside-work-tree > /dev/null 2>&1
 }
 
+_eval_git_relative() {
+    local root="$(git root)"
+    if [[ -z root ]]; then
+        eval "${1}"
+    else
+        root="${root}/"
+        eval "${1}" | while read -r line; do
+            realpath --relative-to="$PWD" "${root}${line}"
+        done
+    fi
+}
+
 _fzf_complete_ga() {
     _is_git_repo &&
     FZF_COMPLETION_OPTS='-0 --ansi' _fzf_complete "--multi -n 2 " "$@" < <(
@@ -27,25 +39,25 @@ _fzf_complete_ga_post() { awk '{print $2}'; }
 
 _fzf_complete_gru() {
     _is_git_repo && _fzf_complete "--multi" "$@" < <(
-        git diff --name-only --cached
+        _eval_git_relative "git diff --name-only --cached"
     )
 }
 
 _fzf_complete_grs() {
     _is_git_repo && _fzf_complete "--multi" "$@" < <(
-        git diff --name-only --diff-filter=M
+        _eval_git_relative "git diff --name-only --diff-filter=M"
     )
 }
 
 _fzf_complete_gd() {
     _is_git_repo && _fzf_complete "--multi" "$@" < <(
-        git diff --name-only --diff-filter=M
+        _eval_git_relative "git diff --name-only --diff-filter=M"
     )
 }
 
 _fzf_complete_gds() {
     _is_git_repo && _fzf_complete "--multi" "$@" < <(
-        git diff --staged --name-only --diff-filter=M
+        _eval_git_relative "git diff --staged --name-only --diff-filter=M"
     )
 }
 
