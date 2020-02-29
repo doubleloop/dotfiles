@@ -39,6 +39,7 @@ else
         # cabal stack
         rust
         gcloud
+        fzf-tab
         custom-completions
         zsh-autosuggestions
         fast-syntax-highlighting
@@ -60,8 +61,7 @@ export WORKON_HOME=$HOME/.virtualenvs
 export NVM_LAZY_LOAD=true
 # z.lua settings
 export _ZL_DATA=$HOME/.zlua/data
-# fzf
-export DISABLE_FZF_AUTO_COMPLETION="true"
+export _ZL_HYPHEN=1
 # }}}
 
 source $ZSH/oh-my-zsh.sh
@@ -103,6 +103,14 @@ elif _exists rg; then
 elif _exists ag; then
     export FZF_DEFAULT_COMMAND='ag -f --hidden --ignore .git -g "" 2>/dev/null'
 	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
+
+FZF_TAB_QUERY=(input)
+FZF_TAB_OPTS+=(--no-info --filepath-word --bind=tab:down,btab:up,ctrl-j:down)
+if (( $+functions[_try_custom_completion] )); then
+    custom-fzf-tab-complete() { _try_custom_completion || fzf-tab-complete }
+    zle -N custom-fzf-tab-complete
+    bindkey '^I' custom-fzf-tab-complete
 fi
 # }}}
 
