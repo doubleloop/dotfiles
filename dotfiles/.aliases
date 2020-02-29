@@ -9,8 +9,6 @@ zssh() { ssh "$@" -t zsh; }
 alias o="xdg-open"
 alias vi=vim
 alias mr='mr -j30'
-alias j='z -I'
-alias jj='z -I -t .'
 alias gdb='gdb -q'
 alias rmf='rm -rf'
 alias pp='ipython3'
@@ -24,13 +22,25 @@ alias glg='git lg'
 alias glgp='git lgp'
 alias glo="git lo"
 alias glol="git lol"
-alias -g H='--help'
-alias -g HL='--help | less'
-alias -g V='--version'
 cless() { pygmentize -f 256 -O style=monokai "$1" | less; }
 alias ag='ag --pager less'
-alias -g GL='| ag --pager less'
 alias rg='rg -n --color always'
+[[ -n "$ZSH_VERSION" ]] && {
+    alias -g H='--help'
+    alias -g HL='--help | less'
+    alias -g V='--version'
+    alias -g GL='| ag --pager less'
+    alias history='fc -ilD 1 | less +G'
+
+    j() {
+        if (( $# == 0 )); then
+            _zlua -I -t .
+        else
+            _zlua -I -t $@
+        fi
+    }
+    alias jb='_zlua -b'
+}
 
 # https://github.com/hut/dotfiles/blob/master/bin/objdump-to-shellcode
 objdump2shellcode() {
