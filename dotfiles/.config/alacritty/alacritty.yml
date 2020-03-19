@@ -548,6 +548,7 @@ key_bindings:
   #- { key: Paste,                    action: Paste                      }
   #- { key: Copy,                     action: Copy                       }
   #- { key: L,         mods: Control, action: ClearLogNotice             }
+  - { key: L,         mods: Control, action: None                       }
   #- { key: L,         mods: Control, chars: "\x0c"                      }
   #- { key: PageUp,    mods: Shift,   action: ScrollPageUp,   mode: ~Alt }
   #- { key: PageDown,  mods: Shift,   action: ScrollPageDown, mode: ~Alt }
@@ -557,9 +558,10 @@ key_bindings:
   # Vi Mode
   #- { key: Space,  mods: Shift|Control, mode: Vi, action: ScrollToBottom          }
   #- { key: Space,  mods: Shift|Control,           action: ToggleViMode            }
+  - { key: Space,  mods: Shift|Control,           action: None                    }
   #- { key: Escape,                      mode: Vi, action: ClearSelection          }
-  #- { key: I,                           mode: Vi, action: ScrollToBottom          }
-  #- { key: I,                           mode: Vi, action: ToggleViMode            }
+  - { key: Q,                           mode: Vi, action: ScrollToBottom          }
+  - { key: Q,                           mode: Vi, action: ToggleViMode            }
   #- { key: Y,      mods: Control,       mode: Vi, action: ScrollLineUp            }
   #- { key: E,      mods: Control,       mode: Vi, action: ScrollLineDown          }
   #- { key: G,                           mode: Vi, action: ScrollToTop             }
@@ -597,14 +599,14 @@ key_bindings:
   #- { key: Key5,   mods: Shift,         mode: Vi, action: Bracket                 }
 
   # (Windows, Linux, and BSD only)
-  - { key: V,        mods: Control|Shift, action: Paste            }
-  - { key: C,        mods: Control|Shift, action: Copy             }
-  - { key: Insert,   mods: Shift,         action: PasteSelection   }
-  - { key: Key0,     mods: Control,       action: ResetFontSize    }
-  - { key: Equals,   mods: Control,       action: IncreaseFontSize }
-  - { key: Add,      mods: Control,       action: IncreaseFontSize }
-  - { key: Subtract, mods: Control,       action: DecreaseFontSize }
-  - { key: Minus,    mods: Control,       action: DecreaseFontSize }
+  #- { key: V,        mods: Control|Shift, action: Paste            }
+  #- { key: C,        mods: Control|Shift, action: Copy             }
+  #- { key: Insert,   mods: Shift,         action: PasteSelection   }
+  #- { key: Key0,     mods: Control,       action: ResetFontSize    }
+  #- { key: Equals,   mods: Control,       action: IncreaseFontSize }
+  #- { key: Add,      mods: Control,       action: IncreaseFontSize }
+  #- { key: Subtract, mods: Control,       action: DecreaseFontSize }
+  #- { key: Minus,    mods: Control,       action: DecreaseFontSize }
 
   # (Windows only)
   #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
