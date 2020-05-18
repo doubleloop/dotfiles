@@ -62,7 +62,11 @@ let g:auto_save_in_insert_mode = 0
 let g:auto_save_silent = 1
 let g:auto_save_events = ["CursorHold", "FocusLost", "BufHidden", "ExitPre"]
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+if !empty(glob('/usr/share/doc/fzf/examples/fzf.vim'))
+  source /usr/share/doc/fzf/examples/fzf.vim
+else
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+endif
 Plug 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
 Plug 'pbogut/fzf-mru.vim'
@@ -70,6 +74,7 @@ nnoremap <leader>p :FzfFiles<cr>
 nnoremap <leader>P :FzfCommands<cr>
 nnoremap <leader>b :FzfBuffer<cr>
 nnoremap <leader>m :FZFMru<cr>
+nnoremap <leader>l :FzfBLines<cr>
 nnoremap <a-e> :FzfBTags<cr>
 
 Plug 'mileszs/ack.vim'
@@ -77,22 +82,11 @@ if executable('rg')
   let g:ackprg = 'rg --vimgrep'
   set grepprg=rg\ --vimgrep
   set grepformat=%f:%l:%c:%m
-  cnoreabbrev Rg Ack
 elseif executable('ag')
   let g:ackprg = 'ag --vimgrep'
   set grepprg=ag\ --vimgrep
   set grepformat=%f:%l:%c:%m
-  cnoreabbrev Ag Ack
 endif
-
-Plug 'easymotion/vim-easymotion'
-let g:EasyMotion_do_mapping = 0
-let g:EasyMotion_smartcase = 1
-nmap t  <Plug>(easymotion-s2)
-vmap tk <Plug>(easymotion-k)
-vmap tj <Plug>(easymotion-j)
-vmap th <Plug>(easymotion-linebackward)
-vmap tl <Plug>(easymotion-lineforward)
 
 Plug 'rhysd/vim-grammarous'
 
@@ -189,6 +183,7 @@ let g:delimitMate_expand_cr = 1
 
 " Plug 'kien/rainbow_parentheses.vim'
 Plug 'RRethy/vim-illuminate'
+let g:Illuminate_delay = 500
 
 " Panel with tags
 Plug 'majutsushi/tagbar'
@@ -334,9 +329,6 @@ function! BuildComposer(info)
 endfunction
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 let g:markdown_composer_open_browser = 0
-if executable('qutebrowser')
-  let g:markdown_composer_browser = "qutebrowser --target window"
-endif
 
 Plug 'elzr/vim-json',                 { 'for': 'json' }
 Plug 'stephpy/vim-yaml',              { 'for': 'vim' }
@@ -386,6 +378,11 @@ Plug 'crusoexia/vim-monokai'
 let g:monokai_term_italic = 1
 let g:monokai_gui_italic = 1
 call plug#end()
+
+call deoplete#custom#option('smart_case', v:true)
+call deoplete#custom#option('ignore_sources', {'python': ['around']})
+call deoplete#custom#option('ignore_sources', {'c': ['around', 'buffer', 'tag']})
+
 endif
 " }}}
 
@@ -474,14 +471,14 @@ endif
 set completeopt=menuone,longest
 
 set noshowmode
-set showcmd
+set noshowcmd
 
 set signcolumn=yes
 
 " mainly for tagbar hilight
-set updatetime=1000
+set updatetime=500
 
-set shortmess+=cW
+set shortmess+=W
 
 set conceallevel=0
 
@@ -529,7 +526,7 @@ nnoremap <c-]> <c-]>zt
 nnoremap <c-t> <c-t>zt
 " nnoremap <c-i> <c-i>zt
 " nnoremap <c-o> <c-o>zt
-nnoremap gd gdzt
+" nnoremap gd gdzt
 nnoremap G Gzz
 
 noremap <leader>ds :windo diffthis<cr>
@@ -540,7 +537,9 @@ nnoremap <leader>e :e $MYVIMRC<cr>
 " nnoremap <leader>e :e <c-R>=expand("%:p:h") . '/'<cr>
 
 nnoremap <silent> <leader>q :botright copen 10<cr>
-nnoremap <silent> <leader>l :botright lopen 10<cr>
+" nnoremap <silent> <leader>l :botright lopen 10<cr>
+
+nmap <leader>W :%s/\s\+$//e<cr>
 
 " }}}
 
@@ -692,6 +691,7 @@ augroup end
 augroup particular_file_settings
   au!
   au BufRead */.zshrc set fdm=marker
+  au BufRead */.aliases set filetype=sh
 augroup end
 
 augroup nosmartcase_cmd
@@ -740,24 +740,6 @@ tnoremap <pagedown> <c-\><c-n><pagedown>
 " nnoremap <silent> <leader>tb :botright split term://zsh<cr>
 " nnoremap <silent> <leader>tv :vsplit term://zsh<cr>
 " nnoremap <silent> <leader>ts :bel split term://zsh<cr>
-
-" https://github.com/neovim/neovim/issues/2897#issuecomment-115464516
-let g:terminal_color_0  = '#272822'
-let g:terminal_color_1  = '#f92672'
-let g:terminal_color_2  = '#a6e22e'
-let g:terminal_color_3  = '#f4bf75'
-let g:terminal_color_4  = '#66d9ef'
-let g:terminal_color_5  = '#ae81ff'
-let g:terminal_color_6  = '#a1efe4'
-let g:terminal_color_7  = '#f8f8f2'
-let g:terminal_color_8  = '#666666'
-let g:terminal_color_9  = '#ff3334'
-let g:terminal_color_10 = '#9ec400'
-let g:terminal_color_11 = '#e7c547'
-let g:terminal_color_12 = '#7aa6da'
-let g:terminal_color_13 = '#b77ee0'
-let g:terminal_color_14 = '#54ced6'
-let g:terminal_color_15 = '#ffffff'
 " }}}
 
 " Colors {{{
@@ -771,7 +753,7 @@ function! ColorCustomizations()
   hi DiffText       guifg=#FD9720  guibg=#3d1c25
 
   hi diffAdded      guifg=#A6E22D ctermfg=DarkGreen
-  hi diffRemoved    guifg=#66d9ef ctermfg=DarkRed
+  hi diffRemoved    guifg=#F92772 ctermfg=DarkRed
   hi diffFile       guifg=#66D9EF ctermfg=White
   hi diffIndexLine  guifg=#66D9EF ctermfg=White
   hi diffLine       guifg=#66D9EF ctermfg=White
