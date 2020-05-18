@@ -94,9 +94,6 @@ vmap tj <Plug>(easymotion-j)
 vmap th <Plug>(easymotion-linebackward)
 vmap tl <Plug>(easymotion-lineforward)
 
-" Hilight the yanked region for a moment
-Plug 'machakann/vim-highlightedyank'
-
 Plug 'rhysd/vim-grammarous'
 
 " Mirroring files on various remote hosts
@@ -714,6 +711,9 @@ augroup smartnumbers
   au WinEnter,BufNewFile,BufReadPost * if empty(&buftype) | setl rnu | endif
   au WinLeave   * if empty(&buftype) | set rnu< | endif
 augroup end
+
+" Hilight the yanked region for a moment
+au TextYankPost * silent lua require('vim.highlight').on_yank()
 
 " terminal
 function! TerminalSet()
