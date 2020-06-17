@@ -102,7 +102,7 @@ let g:zoomwintab_remap = 0
 nnoremap <silent> <c-w>z :ZoomWinTabToggle<cr>
 vnoremap <silent> <c-w>z <c-\><c-n>:ZoomWinTabToggle<cr>gv
 
-Plug 'Shougo/vinarise.vim' " hex editor
+" Plug 'Shougo/vinarise.vim' " hex editor
 
 " Various text objects
 Plug 'kana/vim-textobj-user'
@@ -120,8 +120,6 @@ let g:gitgutter_map_keys = 0
 nmap [c <Plug>(GitGutterPrevHunkzt)
 nmap ]c <Plug>(GitGutterNextHunkzt)
 nmap <a-g> <Plug>(GitGutterPreviewHunk)
-
-Plug 'kshenoy/vim-signature'  " show marks
 
 " Nice left panel with tree structured files
 Plug 'scrooloose/nerdtree'
@@ -268,11 +266,6 @@ endfunction
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 let g:markdown_composer_open_browser = 0
 
-Plug 'stephpy/vim-yaml',              { 'for': 'vim' }
-Plug 'glench/vim-jinja2-syntax',      { 'for': 'jinja' }
-Plug 'mfukar/robotframework-vim',     { 'for': 'robot' }
-Plug 'roalddevries/yaml.vim',         { 'for': 'yaml' }
-Plug 'ekalinin/dockerfile.vim',       { 'for': 'Dockerfile' }
 Plug 'momota/junos.vim',              { 'for': 'junos' }
 Plug 'let-def/vimbufsync'
 Plug 'the-lambda-church/coquille',    { 'branch': 'pathogen-bundle' }
