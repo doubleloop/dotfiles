@@ -238,35 +238,8 @@ let g:tagbar_type_rust = {
 Plug 'mbbill/undotree'
 nnoremap <leader>u :UndotreeToggle<cr>
 
-Plug 'neomake/neomake'      " async linter
-let g:neomake_virtualtext_current_error = 0
-let g:neomake_verbose = 0
-let g:neomake_highlight_columns = 0
-let g:neomake_rust_cargo_command = ['test', '--no-run']
-let g:neomake_c_enabled_makers = ['clangcheck']
-let g:neomake_python_enabled_makers = ['flake8']
-let g:neomake_haskell_ghc_mod_args = '-g-Wall'
-
-" Autoformat
-Plug 'sbdchd/neoformat'
-let g:neoformat_basic_format_trim = 1
-let g:neoformat_basic_format_retab = 1
-let g:neoformat_only_msg_on_error = 1
-let g:neoformat_run_all_formatters = 1
-let g:neoformat_enabled_python = ['yapf', 'isort']
-let g:neoformat_enabled_go = ['goimports']
-let g:neoformat_enabled_c = ['clangformat']
-let g:neoformat_enabled_haskell = ['hindent']
-let g:neoformat_enabled_javascript = ['jsbeautify']
-nnoremap <leader>o :Neoformat<cr>
-
 " Python
 Plug 'Vimjas/vim-python-pep8-indent', { 'for': ['python', 'python3']}
-Plug 'davidhalter/jedi-vim',          { 'for': ['python', 'python3']}
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#show_call_signatures = 2
-let g:jedi#goto_command = "<c-]>"
 Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
 " Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
 " let g:nvim_ipy_perform_mappings = 0
@@ -281,44 +254,9 @@ nmap <F8> <Plug>(iron-interrupt)
 Plug 'vim-scripts/a.vim',             { 'for': ['c', 'cpp']}
 Plug 'justinmk/vim-syntax-extra'
 
-" Haskell
-Plug 'Shougo/vimproc.vim',            { 'do' : 'make'}
-Plug 'neovimhaskell/haskell-vim',     { 'for': 'haskell' }
-Plug 'eagletmt/ghcmod-vim',           { 'for': 'haskell' }
-let g:necoghc_use_stack = 1
-let g:necoghc_enable_detailed_browse = 1
-Plug 'Twinside/vim-hoogle',           { 'for': 'haskell' }
-let g:hoogle_search_jump_back = 0
-Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
-let g:hlintRefactor#disableDefaultKeybindings = 1
-
-Plug 'fatih/vim-go',                  { 'for': 'go' }
-let g:go_fmt_autosave = 0
-let g:go_term_mode = 'split'
-let g:go_term_enabled = 1
-let g:go_fmt_command = "goimports"
-let g:go_autodetect_gopath = 1
-let g:go_list_type = 'quickfix'
-let g:go_bin_path = $HOME.'/.local/bin'
-" let g:go_auto_type_info = 1
-" let g:go_auto_sameids = 1
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_generate_tags = 1
-Plug 'jalvesaq/Nvim-R',               { 'for': 'r' }
-Plug 'pangloss/vim-javascript',       { 'for': 'javascript' }
 Plug 'lervag/vimtex',                 { 'for': 'tex' }
 let g:tex_flavor='latex'
 let g:vimtex_compiler_progname = 'nvr'
-
-Plug 'rust-lang/rust.vim',            { 'for': 'rust' }
-Plug 'racer-rust/vim-racer',          { 'for': 'rust' }
-let g:racer_experimental_completer = 1
-
-Plug 'vim-ruby/vim-ruby',             { 'for': 'ruby' }
 
 Plug 'plasticboy/vim-markdown',       { 'for': 'markdown' }
 let g:vim_markdown_folding_disabled = 1
@@ -330,7 +268,6 @@ endfunction
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 let g:markdown_composer_open_browser = 0
 
-Plug 'elzr/vim-json',                 { 'for': 'json' }
 Plug 'stephpy/vim-yaml',              { 'for': 'vim' }
 Plug 'glench/vim-jinja2-syntax',      { 'for': 'jinja' }
 Plug 'mfukar/robotframework-vim',     { 'for': 'robot' }
@@ -341,12 +278,29 @@ Plug 'let-def/vimbufsync'
 Plug 'the-lambda-church/coquille',    { 'branch': 'pathogen-bundle' }
 
 " Autocompletion engine
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#ignore_sources = {}
-let g:deoplete#ignore_sources.python = ['around']
-let g:deoplete#ignore_sources.c = ['around', 'buffer', 'tag']
+Plug 'haorenW1025/completion-nvim'
+let g:completion_enable_snippet = 'Neosnippet'
+let g:completion_sorting = "length"
+let g:completion_enable_auto_hover = 1
+let g:completion_trigger_on_delete = 1
+let g:completion_chain_complete_list = {
+  \ 'python': {
+  \   'string': [
+  \     {'mode': 'c-n'}
+  \   ],
+  \   'default': [
+  \     {'complete_items': ['lsp']},
+  \     {'complete_items': ['snippet']}
+  \   ]
+  \ },
+  \ 'default': [
+  \   {'complete_items': ['lsp']},
+  \   {'complete_items': ['snippet']},
+  \   {'mode': '<c-n>'},
+  \ ]}
+imap <c-j> <cmd>lua require'source'.nextCompletion()<cr>
+imap <c-k> <cmd>lua require'source'.prevCompletion()<cr>
+let g:completion_auto_change_source = 1
 
 Plug 'Shougo/neosnippet.vim'
 Plug 'Shougo/neosnippet-snippets'
@@ -358,31 +312,22 @@ smap <expr><TAB>
       \ neosnippet#expandable_or_jumpable() ?
       \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-Plug 'zchee/deoplete-jedi',           { 'for': ['python', 'python3']}
-let g:deoplete#sources#jedi#server_timeout = 60 " timeout for numpy cache
-Plug 'zchee/deoplete-go',             { 'for': 'go' }
-Plug 'zchee/deoplete-zsh',            { 'for': 'zsh' }
-Plug 'Shougo/deoplete-clangx',        { 'for': ['c', 'cpp']}
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-8/lib/libclang.so'
-let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-8/lib/clang/'
-let g:deoplete#sources#clang#sort_algo = 'priority'
-Plug 'Shougo/neco-vim',               { 'for': 'vim' }
-Plug 'eagletmt/neco-ghc',             { 'for': 'haskell' }
+Plug 'neovim/nvim-lsp'
+Plug 'haorenW1025/diagnostic-nvim'
+let g:diagnostic_insert_delay = 1
 
+Plug 'nvim-treesitter/nvim-treesitter'
 
 Plug 'ryanoasis/vim-devicons'
 Plug 'itchyny/lightline.vim'
 let g:lightline = { 'colorscheme': 'wombat' }
 
+Plug 'norcalli/nvim-colorizer.lua'
+
 Plug 'crusoexia/vim-monokai'
 let g:monokai_term_italic = 1
 let g:monokai_gui_italic = 1
 call plug#end()
-
-call deoplete#custom#option('smart_case', v:true)
-call deoplete#custom#option('ignore_sources', {'python': ['around']})
-call deoplete#custom#option('ignore_sources', {'c': ['around', 'buffer', 'tag']})
-
 endif
 " }}}
 
@@ -456,19 +401,7 @@ set wildignore+=*/.git/*,*.pyc,*.swp,*.o
 set wildignorecase
 set path+=**
 
-if has('cscope') && executable('cscope')
-  set cscopetag cscopeverbose
-  if has('quickfix')
-    set cscopequickfix=s-,c-,d-,i-,t-,e-
-  endif
-  if filereadable("cscope.out")
-    silent cs add cscope.out
-  elseif $CSCOPE_DB != ""
-    silent cs add $CSCOPE_DB
-  endif
-endif
-
-set completeopt=menuone,longest
+set completeopt=menuone,noinsert,noselect
 
 set noshowmode
 set noshowcmd
@@ -478,7 +411,7 @@ set signcolumn=yes
 " mainly for tagbar hilight
 set updatetime=500
 
-set shortmess+=W
+set shortmess+=Wc
 
 set conceallevel=0
 
@@ -566,19 +499,6 @@ function! s:build_go_files()
   endif
 endfunction
 
-function! ConfigIron()
-lua << EOF
-    iron = require("iron")
-    iron.core.set_config {
-        preferred = {
-            python = "ipython"
-        },
-        repl_open_cmd = "vsplit"
-    }
-EOF
-endfunction
-silent! call ConfigIron()
-
 " toggle xyz.py with test_xyz.py (in subdirectory of current root)
 function! PytestFileToggle() abort
   let l:file = expand('%:t')
@@ -630,34 +550,10 @@ augroup filetype_settings
   au FileType haskell
     \  setl tags+=codex.tags;/
     \| setl ts=2 sts=2 sw=2
-    \| nmap <buffer> <leader>hc :GhcModCheckAndLintAsync<cr>
-    \| nmap <buffer> <leader>hr :call ApplyOneSuggestion()<cr>
-    \| nmap <buffer> <leader>hR :call ApplyAllSuggestions()<cr>
-    \| nmap <buffer> <leader>ht :GhcModType<cr>
-    \| nmap <buffer> <leader>hT :GhcModTypeInsert<cr>
-    \| nmap <buffer> <leader>hh :Hoogle<cr>
-    \| nmap <buffer> <leader>hH :Hoogle
-    \| nmap <buffer> <leader>hi :HoogleInfo<cr>
-    \| nmap <buffer> <leader>hI :HoogleInfo
-    \| nmap <buffer> <leader><leader> :GhcModTypeClear<cr>:nohl<cr>
-    \| nmap <buffer> <leader>hc :GhcModCheckAndLintAsync<cr>
-    \| nmap <buffer> <leader>hl :Neomake hlint<cr>
   au FileType c,cpp
     \  setl fdm=syntax cms=//%s
     \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/9/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/9/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
     \| setl tags+=~/.tags/c.tags
-    \| nmap <buffer> <c-\>s :cs find s <c-R>=expand("<cword>")<cr><cr>
-    \| nmap <buffer> <c-\>g :cs find g <c-R>=expand("<cword>")<cr><cr>
-    \| nmap <buffer> <c-\>c :cs find c <c-R>=expand("<cword>")<cr><cr>
-    \| nmap <buffer> <c-\>t :cs find t <c-R>=expand("<cword>")<cr><cr>
-    \| nmap <buffer> <c-\>e :cs find e <c-R>=expand("<cword>")<cr><cr>
-    \| nmap <buffer> <c-\>f :cs find f <c-R>=expand("<cfile>")<cr><cr>
-    \| nmap <buffer> <c-\>i :cs find i ^<c-R>=expand("<cfile>")<cr>$<cr>
-    \| nmap <buffer> <c-\>d :cs find d <c-R>=expand("<cword>")<cr><cr>
-  au FileType rust
-    \  setl tags=./rusty-tags.vi;/,$RUST_SRC_PATH/rusty-tags.vi
-    \| nmap K <Plug>(rust-doc)
-    \| nmap gd <Plug>(rust-def)
   au FileType sql setl cms=--%s ts=2 sts=2 sw=2
   " au FileType asm setl
   au FileType python
@@ -668,11 +564,6 @@ augroup filetype_settings
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
   au FileType help setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
   au FileType cmake setl cms=#%s
-  au FileType tex
-    \  if !exists('g:deoplete#omni#input_patterns')
-    \|   let g:deoplete#omni#input_patterns = {}
-    \| endif
-    \| let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
   au FileType vifm setl syntax=vim cms=\"%s
   au FileType coq
     \  setl cms=(*%s*) ts=2 sts=2 sw=2
@@ -700,9 +591,6 @@ augroup nosmartcase_cmd
   au CmdlineLeave * set smartcase
 augroup end
 
-" run lint on save
-silent! call neomake#configure#automake('rn')
-
 " smart number toggling
 augroup smartnumbers
   au!
@@ -713,7 +601,7 @@ augroup smartnumbers
 augroup end
 
 " Hilight the yanked region for a moment
-au TextYankPost * silent lua require('vim.highlight').on_yank()
+au TextYankPost * silent! lua return (not vim.v.event.visual) and require'vim.highlight'.on_yank()
 
 " terminal
 function! TerminalSet()
@@ -765,3 +653,54 @@ au ColorScheme * call ColorCustomizations()
 
 silent! colorscheme monokai
 " }}}
+
+" LSP {{{
+" call lsp#set_log_level("debug")
+call sign_define("LspDiagnosticsErrorSign", {"text" : "✖", "texthl" : "LspDiagnosticsErrorSign"})
+call sign_define("LspDiagnosticsWarningSign", {"text" : "⚠", "texthl" : "LspDiagnosticsWarningSign"})
+call sign_define("LspDiagnosticInformationSign", {"text" : "ℹ", "texthl" : "LspDiagnosticsInformationSign"})
+call sign_define("LspDiagnosticHintSign", {"text" : "💡", "texthl" : "LspDiagnosticsHintSign"})
+
+exec 'hi LspDiagnosticsError ' .
+        \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'gui') .
+        \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
+exec 'hi LspDiagnosticsErrorSign ' .
+        \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'gui') .
+        \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
+        \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
+        \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+exec 'hi LspDiagnosticsWarningSign ctermfg=208 guifg=#FD9720' .
+        \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
+        \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+hi link LspDiagnosticInformationSign LspDiagnosticsWarningSign
+hi link LspDiagnosticHintSign LspDiagnosticsWarningSign
+hi link LspReferenceText CursorLine
+hi LspDiagnosticsUnderline cterm=None gui=None
+
+nnoremap <silent><a-d> <cmd>lua vim.lsp.util.show_line_diagnostics()<cr>
+
+augroup LSP
+  au!
+  au Filetype rust,python,c,cpp,lua,tex,sh,bash
+    \  setl omnifunc=v:lua.vim.lsp.omnifunc
+    \| nnoremap <silent><c-t> <c-o>zt
+    \| inoremap <silent><a-s>     <cmd>lua vim.lsp.buf.signature_help()<cr>
+    \| nnoremap <silent>K         <cmd>lua vim.lsp.buf.hover()<cr>
+    \| nnoremap <silent><leader>n <cmd>lua vim.lsp.buf.references()<cr>
+    \| nnoremap <silent><leader>r <cmd>lua vim.lsp.buf.rename()<cr>
+    \| nnoremap <silent><leader>= <cmd>lua vim.lsp.buf.formatting()<cr>
+    \| vnoremap <silent><leader>= <esc><cmd>lua vim.lsp.buf.range_formatting()<cr>
+    \| nnoremap <silent>g0 <cmd>lua vim.lsp.buf.document_symbol()<cr>
+  au Filetype python,lua
+    \ nnoremap <silent><c-]> <cmd>lua vim.lsp.buf.definition()<cr>zt
+  au Filetype c,cpp,rust
+    \  nnoremap <silent>gd <cmd>lua vim.lsp.buf.declaration()<cr>zt
+    \| nnoremap <silent><c-]> <cmd>lua vim.lsp.buf.definition()<cr>zt
+    \| nnoremap <silent>gD <cmd>lua vim.lsp.buf.implementation()<cr>zt
+  " au CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+  " au CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
+  " au CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+augroup end
+" }}}
+
+lua require('linit')
