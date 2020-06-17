@@ -71,7 +71,7 @@ Plug 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
 Plug 'pbogut/fzf-mru.vim'
 nnoremap <leader>p :FzfFiles<cr>
-nnoremap <leader>P :FzfCommands<cr>
+nnoremap <leader>: :FzfCommands<cr>
 nnoremap <leader>b :FzfBuffer<cr>
 nnoremap <leader>m :FZFMru<cr>
 nnoremap <leader>l :FzfBLines<cr>
@@ -119,7 +119,7 @@ Plug 'airblade/vim-gitgutter' " show git changes
 let g:gitgutter_map_keys = 0
 nmap [c <Plug>(GitGutterPrevHunkzt)
 nmap ]c <Plug>(GitGutterNextHunkzt)
-nmap <leader>hp <Plug>(GitGutterPreviewHunk)
+nmap <a-g> <Plug>(GitGutterPreviewHunk)
 
 Plug 'kshenoy/vim-signature'  " show marks
 
@@ -562,7 +562,7 @@ augroup filetype_settings
   au FileType python command! -bang A call PytestFileToggle()
   au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
-  au FileType help setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
+  au FileType help,man setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
   au FileType cmake setl cms=#%s
   au FileType vifm setl syntax=vim cms=\"%s
   au FileType coq
