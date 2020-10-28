@@ -1,6 +1,5 @@
 " neovim-npython installations
-let g:python_host_prog = $PYTHON2_NVIM_VIRTUALENV
-let g:python3_host_prog = $PYTHON3_NVIM_VIRTUALENV
+let g:python3_host_prog = $PYTHON_NVIM_VIRTUALENV
 
 let mapleader=","
 " Plugins {{{
@@ -62,18 +61,20 @@ let g:auto_save_in_insert_mode = 0
 let g:auto_save_silent = 1
 let g:auto_save_events = ["CursorHold", "FocusLost", "BufHidden", "ExitPre"]
 
-if !empty(glob('/usr/share/doc/fzf/examples/fzf.vim'))
-  source /usr/share/doc/fzf/examples/fzf.vim
-else
-  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-endif
+Plug 'junegunn/fzf', { 'dir': '~/src/fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 let g:fzf_command_prefix = 'Fzf'
-Plug 'pbogut/fzf-mru.vim'
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 nnoremap <leader>p :FzfFiles<cr>
 nnoremap <leader>: :FzfCommands<cr>
 nnoremap <leader>b :FzfBuffer<cr>
-nnoremap <leader>m :FZFMru<cr>
+nnoremap <leader>m :FzfHistory<cr>
+nnoremap <leader><c-r> :FzfHistory:<cr>
+if executable('rg')
+  nnoremap <leader>/ :FzfRg<cr>
+elseif executable('ag')
+  nnoremap <leader>/ :FzfAg<cr>
+endif
 nnoremap <leader>l :FzfBLines<cr>
 nnoremap <a-e> :FzfBTags<cr>
 
@@ -121,23 +122,10 @@ nmap [c <Plug>(GitGutterPrevHunkzt)
 nmap ]c <Plug>(GitGutterNextHunkzt)
 nmap <a-g> <Plug>(GitGutterPreviewHunk)
 
-" Nice left panel with tree structured files
-Plug 'scrooloose/nerdtree'
-let g:NERDTreeQuitOnOpen = 0
-let g:NERDTreeHighlightCursorline = 0
-let g:NERDTreeWinSize = 40
-let g:NERDTreeMinimalUI = 1
-function! ToggleNerd()
-  if exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
-    exec ':NERDTreeToggle'
-  elseif filereadable(expand("%p"))
-    exec ':NERDTreeFind'
-  else
-    exec ':NERDTree'
-  endif
-endfunction
-nnoremap <a-1> <esc>:call ToggleNerd()<cr>
-Plug 'xuyuanp/nerdtree-git-plugin'
+Plug 'kyazdani42/nvim-tree.lua'
+nnoremap <a-1> :LuaTreeToggle<cr>
+let g:lua_tree_indent_markers = 1
+Plug 'stsewd/gx-extended.vim'
 
 " Help alligning text
 Plug 'godlygeek/tabular'
@@ -169,11 +157,6 @@ xmap g? <Plug>(swap-interactive)
 
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 let g:vimwiki_list = [{'path': '~/workspace/vimwiki'}]
-" Changes Vim working directory to project root
-" Plug 'airblade/vim-rooter'
-" let g:rooter_silent_chdir = 1
-" let g:rooter_patterns = ['.vim_root']
-" let g:rooter_manual_only = 1
 
 " Eclipse like autoopening of quotes/parenthesis
 Plug 'raimondi/delimitmate'
@@ -182,6 +165,7 @@ let g:delimitMate_expand_cr = 1
 " Plug 'kien/rainbow_parentheses.vim'
 Plug 'RRethy/vim-illuminate'
 let g:Illuminate_delay = 500
+let g:Illuminate_ftblacklist = ['LuaTree', 'nerdtree']
 
 " Panel with tags
 Plug 'majutsushi/tagbar'
@@ -271,10 +255,11 @@ Plug 'let-def/vimbufsync'
 Plug 'the-lambda-church/coquille',    { 'branch': 'pathogen-bundle' }
 
 " Autocompletion engine
-Plug 'haorenW1025/completion-nvim'
+Plug 'nvim-lua/completion-nvim'
 let g:completion_enable_snippet = 'Neosnippet'
 let g:completion_sorting = "length"
-let g:completion_enable_auto_hover = 1
+let g:completion_enable_auto_hover = 0
+let g:completion_enable_auto_signature = 0
 let g:completion_trigger_on_delete = 1
 let g:completion_chain_complete_list = {
   \ 'python': {
@@ -305,13 +290,13 @@ smap <expr><TAB>
       \ neosnippet#expandable_or_jumpable() ?
       \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-Plug 'neovim/nvim-lsp'
-Plug 'haorenW1025/diagnostic-nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-lua/diagnostic-nvim'
 let g:diagnostic_insert_delay = 1
 
 Plug 'nvim-treesitter/nvim-treesitter'
 
-Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'itchyny/lightline.vim'
 let g:lightline = { 'colorscheme': 'wombat' }
 
@@ -545,7 +530,7 @@ augroup filetype_settings
     \| setl ts=2 sts=2 sw=2
   au FileType c,cpp
     \  setl fdm=syntax cms=//%s
-    \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/9/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/9/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
+    \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/10/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/10/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
     \| setl tags+=~/.tags/c.tags
   au FileType sql setl cms=--%s ts=2 sts=2 sw=2
   " au FileType asm setl
@@ -594,7 +579,7 @@ augroup smartnumbers
 augroup end
 
 " Hilight the yanked region for a moment
-au TextYankPost * silent! lua return (not vim.v.event.visual) and require'vim.highlight'.on_yank()
+au TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
 
 " terminal
 function! TerminalSet()
@@ -641,6 +626,23 @@ function! ColorCustomizations()
   hi diffSubname    guifg=White   ctermfg=White
   hi CheckedByCoq   guibg=#313337
   hi SentToCoq      guibg=#313337
+
+  exec 'hi LspDiagnosticsError ' .
+          \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'gui') .
+          \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
+  exec 'hi LspDiagnosticsErrorSign ' .
+          \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'gui') .
+          \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
+          \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
+          \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+  exec 'hi LspDiagnosticsWarningSign ctermfg=208 guifg=#FD9720' .
+          \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
+          \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+  hi link LspDiagnosticInformationSign LspDiagnosticsWarningSign
+  hi link LspDiagnosticHintSign LspDiagnosticsWarningSign
+  hi link LspReferenceText CursorLine
+  hi LspDiagnosticsUnderline cterm=None gui=None
+
 endfunction
 au ColorScheme * call ColorCustomizations()
 
@@ -653,22 +655,6 @@ call sign_define("LspDiagnosticsErrorSign", {"text" : "✖", "texthl" : "LspDiag
 call sign_define("LspDiagnosticsWarningSign", {"text" : "⚠", "texthl" : "LspDiagnosticsWarningSign"})
 call sign_define("LspDiagnosticInformationSign", {"text" : "ℹ", "texthl" : "LspDiagnosticsInformationSign"})
 call sign_define("LspDiagnosticHintSign", {"text" : "💡", "texthl" : "LspDiagnosticsHintSign"})
-
-exec 'hi LspDiagnosticsError ' .
-        \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'gui') .
-        \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
-exec 'hi LspDiagnosticsErrorSign ' .
-        \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'gui') .
-        \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
-        \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
-        \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
-exec 'hi LspDiagnosticsWarningSign ctermfg=208 guifg=#FD9720' .
-        \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
-        \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
-hi link LspDiagnosticInformationSign LspDiagnosticsWarningSign
-hi link LspDiagnosticHintSign LspDiagnosticsWarningSign
-hi link LspReferenceText CursorLine
-hi LspDiagnosticsUnderline cterm=None gui=None
 
 nnoremap <silent><a-d> <cmd>lua vim.lsp.util.show_line_diagnostics()<cr>
 
