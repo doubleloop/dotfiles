@@ -20,11 +20,9 @@ else
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-unimpaired'
   Plug '907th/vim-auto-save'
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf', { 'dir': '~/src/fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
-  Plug 'pbogut/fzf-mru.vim'
   Plug 'mileszs/ack.vim'
-  Plug 'easymotion/vim-easymotion'
   Plug 'machakann/vim-highlightedyank'
   Plug 'zenbro/mirror.vim'
   Plug 'troydm/zoomwintab.vim'
@@ -32,17 +30,14 @@ else
   Plug 'kana/vim-textobj-line'
   Plug 'mattn/vim-textobj-url'
   Plug 'bps/vim-textobj-python', {'for': ['python', 'python3']}
+  Plug 'vim-scripts/ReplaceWithRegister'
+  Plug 'moll/vim-bbye'
+  Plug 'machakann/vim-swap'
   Plug 'airblade/vim-gitgutter'
   Plug 'kshenoy/vim-signature'
   Plug 'raimondi/delimitmate'
   Plug 'RRethy/vim-illuminate'
-  Plug 'sbdchd/neoformat'
-  if has('python')
-    Plug 'SirVer/ultisnips'
-    Plug 'honza/vim-snippets'
-  endif
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
+  Plug 'itchyny/lightline.vim'
   Plug 'crusoexia/vim-monokai'
   call plug#end()
 
@@ -52,18 +47,20 @@ else
   let g:auto_save = 1
   let g:auto_save_in_insert_mode = 0
   let g:auto_save_silent = 1
+  let g:auto_save_events = ["CursorHold", "FocusLost", "BufHidden", "ExitPre"]
   let g:fzf_command_prefix = 'Fzf'
   nnoremap <leader>p :FzfFiles<cr>
-  nnoremap <leader>P :FzfCommands<cr>
+  nnoremap <leader>: :FzfCommands<cr>
   nnoremap <leader>b :FzfBuffer<cr>
-  nnoremap <leader>m :FZFMru<cr>
-  let g:EasyMotion_do_mapping = 0
-  let g:EasyMotion_smartcase = 1
-  nmap t  <Plug>(easymotion-s2)
-  vmap tk <Plug>(easymotion-k)
-  vmap tj <Plug>(easymotion-j)
-  vmap th <Plug>(easymotion-linebackward)
-  vmap tl <Plug>(easymotion-lineforward)
+  nnoremap <leader>m :FzfHistory<cr>
+  nnoremap <leader><c-r> :FzfHistory:<cr>
+  if executable('rg')
+    nnoremap <leader>/ :FzfRg<cr>
+  elseif executable('ag')
+    nnoremap <leader>/ :FzfAg<cr>
+  endif
+  nnoremap <leader>l :FzfBLines<cr>
+  nnoremap <a-e> :FzfBTags<cr>
   nnoremap <leader>rr :MirrorPush<cr>
   nnoremap <leader>rd :MirrorDiff<cr>
   nnoremap <leader>rl :MirrorReload<cr>
@@ -71,27 +68,13 @@ else
   nnoremap <silent> <c-w>z :ZoomWinTabToggle<cr>
   vnoremap <silent> <c-w>z <c-\><c-n>:ZoomWinTabToggle<cr>gv
   let g:delimitMate_expand_cr = 1
-  let g:neoformat_basic_format_trim = 1
-  let g:neoformat_basic_format_retab = 1
-  let g:neoformat_only_msg_on_error = 1
-  let g:neoformat_run_all_formatters = 1
-  let g:neoformat_enabled_python = ['yapf', 'isort']
-  let g:neoformat_enabled_c = ['clangformat']
-  nnoremap <leader>o :Neoformat<cr>
-  let g:UltiSnipsEditSplit="vertical"
-  let g:UltiSnipsExpandTrigger="<tab>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-  let g:airline_powerline_fonts = 1
-  let g:airline_exclude_preview = 1
-  let g:airline_detect_spell=0
-  let g:airline_detect_spelllang=0
-  let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-  let g:airline_section_y=""
-  let g:airline_section_z='%3P %4l,%3v'
-  let g:airline_left_sep=''
-  let g:airline_right_sep=''
-  let g:airline#extensions#tagbar#enabled = 0
+  let g:swap_no_default_key_mappings = 1
+  nmap g< <Plug>(swap-prev)
+  nmap g> <Plug>(swap-next)
+  nmap g? <Plug>(swap-interactive)
+  xmap g? <Plug>(swap-interactive)
+  let g:Illuminate_delay = 500
+  let g:lightline = { 'colorscheme': 'wombat' }
 endif
 
 set nopaste
@@ -144,6 +127,7 @@ set noshowmode
 set showcmd
 set signcolumn=yes
 set shortmess+=cW
+set conceallevel=0
 set background=dark
 set guioptions-=T
 set guioptions-=m
@@ -172,8 +156,8 @@ nnoremap g* g*zt
 nnoremap g# g#zt
 nnoremap <c-]> <c-]>zt
 nnoremap <c-t> <c-t>zt
-nnoremap <c-i> <c-i>zt
-nnoremap <c-o> <c-o>zt
+" nnoremap <c-i> <c-i>zt
+" nnoremap <c-o> <c-o>zt
 nnoremap gd gdzt
 nnoremap G Gzz
 
@@ -184,7 +168,8 @@ nnoremap <leader>z :let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
 nnoremap <leader>e :e $MYVIMRC<cr>
 
 nnoremap <silent> <leader>q :botright copen 10<cr>
-nnoremap <silent> <leader>l :botright lopen 10<cr>
+" nnoremap <silent> <leader>l :botright lopen 10<cr>
+nmap <leader>W :%s/\s\+$//e<cr>
 
 augroup smartnumbers
   au!
@@ -196,7 +181,7 @@ augroup end
 
 augroup filetype_settings
   au!
-  au FileType html setl ts=2 sts=2 sw=2
+  au FileType html,xhtml,css setl ts=2 sts=2 sw=2
   au FileType yaml setl fdm=indent ts=2 sts=2 sw=2
   au FileType gitcommit setl spell comments=b:#
   au FileType vim setl fdm=marker ts=2 sts=2 sw=2
@@ -207,25 +192,27 @@ augroup filetype_settings
     \| let b:delimitMate_smart_quotes = '\%([a-eg-qs-zA-Z_]\|[^[:punct:][:space:]fr]\|\%(\\\\\)*\\\)\%#\|\%#\%(\w\|[^[:space:][:punct:]]\)'
   au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
-  au FileType help nnoremap <silent> <buffer> q :q<cr>
+  au FileType help setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
   au FileType cmake setl cms=#%s
 augroup end
 
 augroup particular_file_settings
   au!
   autocmd BufRead */.zshrc set fdm=marker
+  au BufRead */.aliases set filetype=sh
 augroup end
 
-if (v:version >= 800)
+if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
-  let &t_SI = "\<Esc>[6 q"
-  let &t_SR = "\<Esc>[4 q"
-  let &t_EI = "\<Esc>[2 q"
-  set ttimeoutlen=50
-  autocmd VimEnter * silent !echo -ne "\e[2 q"
 endif
+
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[2 q"
+silent !echo -ne "\e[2 q"
+set ttimeoutlen=50
 
 hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
 function! ColorCustomizations()
@@ -235,14 +222,13 @@ function! ColorCustomizations()
   hi DiffText       guifg=#FD9720  guibg=#3d1c25
 
   hi diffAdded      guifg=#A6E22D ctermfg=DarkGreen
-  hi diffRemoved    guifg=#66d9ef ctermfg=DarkRed
+  hi diffRemoved    guifg=#F92772 ctermfg=DarkRed
   hi diffFile       guifg=#66D9EF ctermfg=White
   hi diffIndexLine  guifg=#66D9EF ctermfg=White
   hi diffLine       guifg=#66D9EF ctermfg=White
   hi diffSubname    guifg=White   ctermfg=White
 endfunction
 au ColorScheme * call ColorCustomizations()
-let g:terminal_ansi_colors = ["#272822", "#f92672", "#a6e22e", "#f4bf75", "#66d9ef", "#ae81ff", "#a1efe4", "#f8f8f2", "#666666", "#ff3334", "#9ec400", "#e7c547", "#7aa6da", "#b77ee0", "#54ced6", "#ffffff"]
 
 silent! colorscheme monokai
 syntax enable
