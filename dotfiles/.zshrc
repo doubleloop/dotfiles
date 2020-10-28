@@ -25,7 +25,8 @@ else
     plugins=(
         tmux
         vi-mode
-        alias-tips common-aliases debian
+        # alias-tips
+        common-aliases debian
         extract
         fzf
         z.lua
@@ -34,9 +35,9 @@ else
         pip python virtualenv virtualenvwrapper
         # pyenv
         # django
+        # cabal stack
         golang
         zsh-nvm nvm zsh-better-npm-completion
-        # cabal stack
         rust
         gcloud
         fzf-tab
@@ -48,6 +49,7 @@ fi
 # }}}
 
 ### Preload plugins settings ### {{{
+export FZF_BASE="$HOME/src/fzf"
 ZSH_TMUX_AUTOSTART="true"
 ZSH_TMUX_AUTOSTART_ONCE="false"
 ZSH_TMUX_AUTOCONNECT="false"
@@ -105,7 +107,6 @@ elif _exists ag; then
 	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
-FZF_TAB_QUERY=(input)
 FZF_TAB_OPTS+=(--no-info --filepath-word --bind=tab:down,btab:up,ctrl-j:down)
 if (( $+functions[_try_custom_completion] )); then
     custom-fzf-tab-complete() { _try_custom_completion || fzf-tab-complete }
@@ -131,35 +132,35 @@ bindkey '^[[Z' reverse-menu-complete
 
 # stop ctrl-s from hanging terminal
 setopt NO_FLOW_CONTROL
-
 ## history  ##
-HISTSIZE=100000
+HISTSIZE=1000000
 # Accept history expansion (ex !$) without extra key press
 unsetopt HIST_VERIFY
-
 setopt NOBEEP
 setopt NUMERIC_GLOB_SORT
-
 # The three options:
 # INC_APPEND_HISTORY, INC_APPEND_HISTORY_TIME, SHARE_HISTORY
 # should be considered mutually exclusive (man zshoptions).
 # some older zhs do not support INC_APPEND_HISTORY_TIME
 unsetopt SHARE_HISTORY
 setopt INC_APPEND_HISTORY_TIME && unsetopt INC_APPEND_HISTORY || setopt INC_APPEND_HISTORY
-
 setopt EXTENDED_HISTORY
-setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt HIST_SAVE_NO_DUPS
 setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_FIND_NO_DUPS
+
+setopt HIST_REDUCE_BLANKS
+
+setopt HIST_IGNORE_SPACE
+setopt HIST_NO_STORE
+setopt HIST_NO_FUNCTIONS
 # }}}
 
 ### load external files ### {{{
 # Make new terminal sessions use the current directory
 [ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
-
 [ -f ~/.aliases ] && . ~/.aliases
 [ -f ~/.gvm/scripts/gvm ] && . ~/.gvm/scripts/gvm
 [ -f ~/.config/nvim/nvim.sh ] && . ~/.config/nvim/nvim.sh
@@ -173,7 +174,7 @@ path=(~/.local/bin ~/.cargo/bin $path)
 # add sudo bin so that zsh-syntax-hilighting works on sudo commands
 path+=(/usr/local/sbin /usr/sbin /sbin)
 # prevent duplications on path (TMUX)
-# typeset -aU path
+typeset -aU path
 # }}}
 
 # https://serverfault.com/a/803321
