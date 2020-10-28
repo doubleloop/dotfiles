@@ -27,10 +27,13 @@ def register(registry):
 
 # Register the shortcut if IPython is using prompt_toolkit
 registry = None
-if hasattr(ip, 'pt_app'):
-    registry = ip.pt_app.key_bindings
-elif hasattr(ip, 'pt_cli'):
-    registry = ip.pt_cli.application.key_bindings_registry
+try:
+    if hasattr(ip, 'pt_app'):
+        registry = ip.pt_app.key_bindings
+    elif hasattr(ip, 'pt_cli'):
+        registry = ip.pt_cli.application.key_bindings_registry
+except AttributeError:
+    pass
 
 if registry is not None:
     register(registry)
