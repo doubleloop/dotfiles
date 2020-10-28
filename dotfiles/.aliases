@@ -1,3 +1,4 @@
+alias ls="ls -t --color=tty"
 alias trojka='mplayer mms://stream.polskieradio.pl/program3'
 alias top='htop'
 alias zshrc="$EDITOR ~/.zshrc"
