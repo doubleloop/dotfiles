@@ -66,6 +66,14 @@ _exists atom-nightly && {
 
 alias tldr="tldr -t ocean"
 
+w3c() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: $0 CHALLENGE_NAME" >&2
+        return 1
+    fi
+    sshpass -p "$1" ssh -l "$1" w3challs
+}
+
 update() {
     sudo -v
     (cd ~/ && mr update)
@@ -73,8 +81,8 @@ update() {
                 apt dist-upgrade -y && \
                 apt autoremove --purge -y"
     sudo -k
-    flatpak update --noninteractive
-    flatpak uninstall --unused --noninteractive
+    # flatpak update --noninteractive
+    # flatpak uninstall --unused --noninteractive
 }
 
 pluglog() {
