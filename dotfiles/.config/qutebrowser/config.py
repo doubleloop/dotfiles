@@ -36,7 +36,20 @@ c.session.lazy_restore = False
 # Type: List of String
 c.qt.args = ['ppapi-widevine-path=/usr/lib/chromium/libwidevinecdmadapter.so']
 
-# Always restore open sites when qutebrowser is reopened.
+# Turn on Qt HighDPI scaling. This is equivalent to setting
+# QT_AUTO_SCREEN_SCALE_FACTOR=1 or QT_ENABLE_HIGHDPI_SCALING=1 (Qt >=
+# 5.14) in the environment. It's off by default as it can cause issues
+# with some bitmap fonts. As an alternative to this, it's possible to
+# set font sizes and the `zoom.default` setting.
+# Type: Bool
+c.qt.highdpi = True
+
+# Always restore open sites when qutebrowser is reopened. Without this
+# option set, `:wq` (`:quit --save`) needs to be used to save open tabs
+# (and restore them), while quitting qutebrowser in any other way will
+# not save/restore the session. By default, this will save to the
+# session which was last loaded. This behavior can be customized via the
+# `session.default_name` setting.
 # Type: Bool
 c.auto_save.session = True
 
@@ -45,7 +58,15 @@ c.auto_save.session = True
 # Type: Bool
 c.content.autoplay = False
 
-# Which cookies to accept.
+# Which cookies to accept. With QtWebEngine, this setting also controls
+# other features with tracking capabilities similar to those of cookies;
+# including IndexedDB, DOM storage, filesystem API, service workers, and
+# AppCache. Note that with QtWebKit, only `all` and `never` are
+# supported as per-domain values. Setting `no-3rdparty` or `no-
+# unknown-3rdparty` per-domain on QtWebKit will have the same effect as
+# `all`. If this setting is used with URL patterns, the pattern gets
+# applied to the origin/first party URL of the page making the request,
+# not the request URL.
 # Type: String
 # Valid values:
 #   - all: Accept all cookies.
@@ -53,6 +74,8 @@ c.content.autoplay = False
 #   - no-unknown-3rdparty: Accept cookies from the same origin only, unless a cookie is already set for the domain. On QtWebEngine, this is the same as no-3rdparty.
 #   - never: Don't accept cookies at all.
 c.content.cookies.accept = 'all'
+config.set('content.cookies.accept', 'all', 'chrome-devtools://*')
+config.set('content.cookies.accept', 'all', 'devtools://*')
 
 # Allow websites to request geolocations.
 # Type: BoolAsk
@@ -65,14 +88,18 @@ config.set('content.geolocation', False, '*')
 # Enable JavaScript.
 # Type: Bool
 config.set('content.javascript.enabled', True, 'file://*')
-
-# Enable JavaScript.
-# Type: Bool
+config.set('content.javascript.enabled', True, 'chrome-devtools://*')
+config.set('content.javascript.enabled', True, 'devtools://*')
 config.set('content.javascript.enabled', True, 'chrome://*/*')
-
-# Enable JavaScript.
-# Type: Bool
 config.set('content.javascript.enabled', True, 'qute://*/*')
+
+# Allow websites to show notifications.
+# Type: BoolAsk
+# Valid values:
+#   - true
+#   - false
+#   - ask
+c.content.notifications = False
 
 # Allow pdf.js to view PDF files in the browser. Note that the files can
 # still be downloaded by clicking the download button in the pdf.js
@@ -159,12 +186,13 @@ c.hints.uppercase = True
 # Type: Int
 c.messages.timeout = 5000
 
-# When to show the scrollbar.
+# When/how to show the scrollbar.
 # Type: String
 # Valid values:
 #   - always: Always show the scrollbar.
 #   - never: Never show the scrollbar.
 #   - when-searching: Show the scrollbar when searching for text in the webpage. With the QtWebKit backend, this is equal to `never`.
+#   - overlay: Show an overlay scrollbar. With Qt < 5.11 or on macOS, this is unavailable and equal to `when-searching`; with the QtWebKit backend, this is equal to `never`. Enabling/disabling overlay scrollbars requires a restart.
 c.scrolling.bar = 'always'
 
 # Enable smooth scrolling for web pages. Note smooth scrolling does not
@@ -234,14 +262,23 @@ c.tabs.mousewheel_switching = False
 # Type: Int
 c.tabs.indicator.width = 0
 
-# Search engines which can be used via the address bar. Maps a search
+# Search engines which can be used via the address bar.  Maps a search
 # engine name (such as `DEFAULT`, or `ddg`) to a URL with a `{}`
 # placeholder. The placeholder will be replaced by the search term, use
-# `{{` and `}}` for literal `{`/`}` signs. The search engine named
-# `DEFAULT` is used when `url.auto_search` is turned on and something
-# else than a URL was entered to be opened. Other search engines can be
-# used by prepending the search engine name to the search term, e.g.
-# `:open google qutebrowser`.
+# `{{` and `}}` for literal `{`/`}` braces.  The following further
+# placeholds are defined to configure how special characters in the
+# search terms are replaced by safe characters (called 'quoting'):  *
+# `{}` and `{semiquoted}` quote everything except slashes; this is the
+# most   sensible choice for almost all search engines (for the search
+# term   `slash/and&amp` this placeholder expands to `slash/and%26amp`).
+# * `{quoted}` quotes all characters (for `slash/and&amp` this
+# placeholder   expands to `slash%2Fand%26amp`). * `{unquoted}` quotes
+# nothing (for `slash/and&amp` this placeholder   expands to
+# `slash/and&amp`).  The search engine named `DEFAULT` is used when
+# `url.auto_search` is turned on and something else than a URL was
+# entered to be opened. Other search engines can be used by prepending
+# the search engine name to the search term, e.g. `:open google
+# qutebrowser`.
 # Type: Dict
 c.url.searchengines = {
     'DEFAULT': 'https://www.google.com/search?q={}',
@@ -296,9 +333,10 @@ config.unbind('d')
 config.bind('dc', 'download-clear')
 config.bind('dd', 'download-delete')
 config.bind('do', 'download-open')
+config.bind('gw', 'set-cmd-text -s :tab-give ')
 config.bind('t', 'open -t')
 config.bind('x', 'tab-close')
-config.bind('gw', 'set-cmd-text -s :tab-give ')
+
 # Bindings for command mode
 config.bind('<Alt+n>', 'completion-item-focus --history next', mode='command')
 config.bind('<Alt+p>', 'completion-item-focus --history prev', mode='command')
