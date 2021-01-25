@@ -1,0 +1,5 @@
+set selection-clipboard clipboard
+set adjust-open width
+set window-width 800
+set window-height 1000
+set window-title-basename
