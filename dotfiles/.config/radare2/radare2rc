@@ -1,1 +1,4 @@
 eco monokai
+
+e stack.size = 256
+e scr.prompt.vi = true
