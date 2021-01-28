@@ -94,7 +94,7 @@ Plug 'rhysd/vim-grammarous'
 " Mirroring files on various remote hosts
 Plug 'zenbro/mirror.vim'
 " push/pull to remote host (mirror plugin)
-nnoremap <leader>rr :MirrorPush<cr>
+nnoremap <leader>rr :w<cr>:MirrorPush<cr>
 nnoremap <leader>rd :MirrorDiff<cr>
 nnoremap <leader>rl :MirrorReload<cr>
 
@@ -108,12 +108,8 @@ vnoremap <silent> <c-w>z <c-\><c-n>:ZoomWinTabToggle<cr>gv
 " Various text objects
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-line' " l
-Plug 'mattn/vim-textobj-url' " u
-Plug 'bps/vim-textobj-python', {'for': ['python', 'python3']}
-Plug 'wellle/targets.vim'
 
 Plug 'vim-scripts/ReplaceWithRegister' " gr
-Plug 'christoomey/vim-sort-motion'     " gs
 Plug 'AndrewRadev/splitjoin.vim'       " gJ gS
 
 Plug 'airblade/vim-gitgutter' " show git changes
@@ -123,7 +119,7 @@ nmap ]c <Plug>(GitGutterNextHunkzt)
 nmap <a-g> <Plug>(GitGutterPreviewHunk)
 
 Plug 'kyazdani42/nvim-tree.lua'
-nnoremap <a-1> :LuaTreeToggle<cr>
+nnoremap <a-1> :NvimTreeToggle<cr>
 let g:lua_tree_indent_markers = 1
 Plug 'stsewd/gx-extended.vim'
 
@@ -148,13 +144,6 @@ nnoremap <leader>so :SessionOpen<cr>
 
 Plug 'moll/vim-bbye'
 
-Plug 'machakann/vim-swap'
-let g:swap_no_default_key_mappings = 1
-nmap g< <Plug>(swap-prev)
-nmap g> <Plug>(swap-next)
-nmap g? <Plug>(swap-interactive)
-xmap g? <Plug>(swap-interactive)
-
 Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 let g:vimwiki_list = [{'path': '~/workspace/vimwiki'}]
 
@@ -170,6 +159,7 @@ let g:Illuminate_ftblacklist = ['LuaTree', 'nerdtree']
 " Panel with tags
 Plug 'majutsushi/tagbar'
 let g:tagbar_autoclose = 0
+let g:tagbar_sort = 0
 let g:tagbar_iconchars = ['▸', '▾']
 nnoremap <a-2> :TagbarToggle<cr>
 let g:tagbar_type_haskell = {
@@ -220,6 +210,10 @@ let g:tagbar_type_rust = {
 Plug 'mbbill/undotree'
 nnoremap <leader>u :UndotreeToggle<cr>
 
+Plug 'sbdchd/neoformat'
+let g:neoformat_enabled_python = ['yapf', 'isort']
+let g:neoformat_run_all_formatters = 1
+
 " Python
 Plug 'Vimjas/vim-python-pep8-indent', { 'for': ['python', 'python3']}
 Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
@@ -230,15 +224,6 @@ let g:iron_map_defaults = 0
 nmap <F5> <Plug>(iron-send-line)
 vmap <F5> <Plug>(iron-visual-send)
 nmap <F8> <Plug>(iron-interrupt)
-
-" C/C++
-" switch to/from heade file with :A
-Plug 'vim-scripts/a.vim',             { 'for': ['c', 'cpp']}
-Plug 'justinmk/vim-syntax-extra'
-
-Plug 'lervag/vimtex',                 { 'for': 'tex' }
-let g:tex_flavor='latex'
-let g:vimtex_compiler_progname = 'nvr'
 
 Plug 'plasticboy/vim-markdown',       { 'for': 'markdown' }
 let g:vim_markdown_folding_disabled = 1
@@ -254,47 +239,13 @@ Plug 'momota/junos.vim',              { 'for': 'junos' }
 Plug 'let-def/vimbufsync'
 Plug 'the-lambda-church/coquille',    { 'branch': 'pathogen-bundle' }
 
-" Autocompletion engine
-Plug 'nvim-lua/completion-nvim'
-let g:completion_enable_snippet = 'Neosnippet'
-let g:completion_sorting = "length"
-let g:completion_enable_auto_hover = 0
-let g:completion_enable_auto_signature = 0
-let g:completion_trigger_on_delete = 1
-let g:completion_chain_complete_list = {
-  \ 'python': {
-  \   'string': [
-  \     {'mode': 'c-n'}
-  \   ],
-  \   'default': [
-  \     {'complete_items': ['lsp']},
-  \     {'complete_items': ['snippet']}
-  \   ]
-  \ },
-  \ 'default': [
-  \   {'complete_items': ['lsp']},
-  \   {'complete_items': ['snippet']},
-  \   {'mode': '<c-n>'},
-  \ ]}
-imap <c-j> <cmd>lua require'source'.nextCompletion()<cr>
-imap <c-k> <cmd>lua require'source'.prevCompletion()<cr>
-let g:completion_auto_change_source = 1
-
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
-imap <expr><TAB>
-      \ neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-smap <expr><TAB>
-      \ neosnippet#expandable_or_jumpable() ?
-      \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/diagnostic-nvim'
-let g:diagnostic_insert_delay = 1
 
 Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'itchyny/lightline.vim'
@@ -322,8 +273,10 @@ set number
 set norelativenumber
 set textwidth=0
 set nowrap
-set nofoldenable
-set foldmethod=syntax
+" works with some bugs
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
+set foldlevelstart=99
 set foldnestmax=10
 
 set nolist
@@ -427,6 +380,8 @@ cnoremap <c-a> <home>
 
 " nnoremap <silent> <leader><leader> :nohlsearch<c-r>=has('diff')?'<bar>diffupdate':''<cr><cr><c-l>
 
+" fix treesitter
+nnoremap <leader><leader> <cmd>write <bar> edit <bar> TSBufEnable highlight<cr>
 nnoremap n nzt
 nnoremap N Nzt
 nnoremap * *zt
@@ -439,6 +394,9 @@ nnoremap <c-t> <c-t>zt
 " nnoremap <c-o> <c-o>zt
 " nnoremap gd gdzt
 nnoremap G Gzz
+
+inoremap <expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-Tab>"
 
 noremap <leader>ds :windo diffthis<cr>
 noremap <leader>de :windo diffoff<cr>
@@ -529,7 +487,8 @@ augroup filetype_settings
     \  setl tags+=codex.tags;/
     \| setl ts=2 sts=2 sw=2
   au FileType c,cpp
-    \  setl fdm=syntax cms=//%s
+    \  setl cms=//%s
+    \| setl ts=2 sts=2 sw=2
     \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/10/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/10/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
     \| setl tags+=~/.tags/c.tags
   au FileType sql setl cms=--%s ts=2 sts=2 sw=2
@@ -542,6 +501,7 @@ augroup filetype_settings
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
   au FileType help,man setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
   au FileType cmake setl cms=#%s
+  au FileType tex setl ts=2 sts=2 sw=2 spell wrap
   au FileType vifm setl syntax=vim cms=\"%s
   au FileType coq
     \  setl cms=(*%s*) ts=2 sts=2 sw=2
@@ -627,21 +587,28 @@ function! ColorCustomizations()
   hi CheckedByCoq   guibg=#313337
   hi SentToCoq      guibg=#313337
 
-  exec 'hi LspDiagnosticsError ' .
-          \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'gui') .
-          \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
-  exec 'hi LspDiagnosticsErrorSign ' .
-          \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'gui') .
+  " underline color support is not yet working in allacritty
+  " if it will then uncomment this
+  " hi SpellBad gui=undercurl guisp=#e73c50 guifg=None
+  hi SpellBad gui=undercurl guisp=#e73c50 guifg=#e73c50
+
+  exec 'hi LspDiagnosticsSignError ' .
+          \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'sp', 'gui') .
           \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
           \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
           \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
-  exec 'hi LspDiagnosticsWarningSign ctermfg=208 guifg=#FD9720' .
+  exec 'hi LspDiagnosticsSignWarning ctermfg=208 guifg=#FD9720' .
           \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
           \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
-  hi link LspDiagnosticInformationSign LspDiagnosticsWarningSign
-  hi link LspDiagnosticHintSign LspDiagnosticsWarningSign
+  hi link LspDiagnosticsSignInformation LspDiagnosticsSignWarning
+  exec 'hi LspDiagnosticsSignHint ctermfg=208 guifg=#E6DB74' .
+          \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
+          \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+
+  " used by document_highlight
   hi link LspReferenceText CursorLine
-  hi LspDiagnosticsUnderline cterm=None gui=None
+  hi link LspReferenceWrite CursorLine
+  hi link LspReferenceRead CursorLine
 
 endfunction
 au ColorScheme * call ColorCustomizations()
@@ -651,17 +618,20 @@ silent! colorscheme monokai
 
 " LSP {{{
 " call lsp#set_log_level("debug")
-call sign_define("LspDiagnosticsErrorSign", {"text" : "✖", "texthl" : "LspDiagnosticsErrorSign"})
-call sign_define("LspDiagnosticsWarningSign", {"text" : "⚠", "texthl" : "LspDiagnosticsWarningSign"})
-call sign_define("LspDiagnosticInformationSign", {"text" : "ℹ", "texthl" : "LspDiagnosticsInformationSign"})
-call sign_define("LspDiagnosticHintSign", {"text" : "💡", "texthl" : "LspDiagnosticsHintSign"})
 
-nnoremap <silent><a-d> <cmd>lua vim.lsp.util.show_line_diagnostics()<cr>
+sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError linehl= numhl=
+sign define LspDiagnosticsSignWarning text=⚠ texthl=LspDiagnosticsSignWarning linehl= numhl=
+sign define LspDiagnosticsSignInformation text=ℹ texthl=LspDiagnosticsSignInformation linehl= numhl=
+sign define LspDiagnosticsSignHint text=💡 texthl=LspDiagnosticsSignHint linehl= numhl=
+nnoremap <silent><a-d> <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>
+nnoremap <silent>dn <cmd>lua vim.lsp.diagnostic.goto_next()<cr>
+nnoremap <silent>dp <cmd>lua vim.lsp.diagnostic.goto_prev()<cr>
 
 augroup LSP
   au!
-  au Filetype rust,python,c,cpp,lua,tex,sh,bash
+  au Filetype rust,python,c,cpp,lua,tex,bib,sh,bash
     \  setl omnifunc=v:lua.vim.lsp.omnifunc
+    \| inoremap <expr> <c-n> pumvisible() ? '<c-n>' : ''
     \| nnoremap <silent><c-t> <c-o>zt
     \| inoremap <silent><a-s>     <cmd>lua vim.lsp.buf.signature_help()<cr>
     \| nnoremap <silent>K         <cmd>lua vim.lsp.buf.hover()<cr>
@@ -669,13 +639,12 @@ augroup LSP
     \| nnoremap <silent><leader>r <cmd>lua vim.lsp.buf.rename()<cr>
     \| nnoremap <silent><leader>= <cmd>lua vim.lsp.buf.formatting()<cr>
     \| vnoremap <silent><leader>= <esc><cmd>lua vim.lsp.buf.range_formatting()<cr>
-    \| nnoremap <silent>g0 <cmd>lua vim.lsp.buf.document_symbol()<cr>
+    \| nnoremap <silent><c-]>     <cmd>lua vim.lsp.buf.definition()<cr>zt
   au Filetype python,lua
-    \ nnoremap <silent><c-]> <cmd>lua vim.lsp.buf.definition()<cr>zt
+    \| nnoremap <silent><leader>= <cmd>Neoformat<cr>
   au Filetype c,cpp,rust
-    \  nnoremap <silent>gd <cmd>lua vim.lsp.buf.declaration()<cr>zt
-    \| nnoremap <silent><c-]> <cmd>lua vim.lsp.buf.definition()<cr>zt
-    \| nnoremap <silent>gD <cmd>lua vim.lsp.buf.implementation()<cr>zt
+    \  nnoremap <silent>gd        <cmd>lua vim.lsp.buf.declaration()<cr>
+    \| cnoreabbrev A ClangdSwitchSourceHeader
   " au CursorHold <buffer> lua vim.lsp.buf.document_highlight()
   " au CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
   " au CursorMoved <buffer> lua vim.lsp.buf.clear_references()
