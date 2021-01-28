@@ -284,6 +284,7 @@ c.url.searchengines = {
     'DEFAULT': 'https://www.google.com/search?q={}',
     'd': 'https://duckduckgo.com/?q={}',
     'g': 'https://www.google.com/search?q={}',
+    'gs': 'https://scholar.google.com/scholar?hl=en&q={}',
     'gh': 'https://github.com/search?q={}',
     'i': 'https://www.google.com/search?tbm=isch&q={}',
     'im': 'http://www.imdb.com/find?s=all&q={}',
