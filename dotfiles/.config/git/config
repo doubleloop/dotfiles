@@ -20,6 +20,9 @@
     keepBackup = false
 [mergetool "nvim"]
     cmd = nvim -f -c "Gdiffsplit!" "$MERGED"
+[mergetool "smerge"]
+    cmd = smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"
+    trustExitCode = true
 [mergetool "pycharm"]
     cmd = /usr/local/bin/charm merge "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 [push]
