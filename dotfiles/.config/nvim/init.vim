@@ -1,5 +1,5 @@
 " neovim-npython installations
-let g:python3_host_prog = $PYTHON_NVIM_VIRTUALENV
+let g:python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 
 let mapleader=","
 " Plugins {{{
