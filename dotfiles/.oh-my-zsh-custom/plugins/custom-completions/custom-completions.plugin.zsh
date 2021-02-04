@@ -99,3 +99,11 @@ _fzf_complete_man_func() {
 }
 _fzf_complete_man() { local instant_accept=1; _fzf_custom_complete "+m -n 1" "$@" }
 _fzf_complete_man_post() { awk '{print $1}' }
+
+# some experimental fzf-tab stuff
+
+# I do not use this because I wrap _zlua with my own function
+# but just in case
+zstyle ':fzf-tab:complete:_zlua:*' query-string input
+
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
