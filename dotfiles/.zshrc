@@ -91,8 +91,7 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
     vi-forward-blank-word vi-forward-blank-word-end
     forward-char vi-forward-char
 )
-# defined in my custom vi-mode plugin
-ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(reset-prompt-accept-line)
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
 # fzf
 export FZF_DEFAULT_OPTS='--cycle --filepath-word -e --bind tab:down,btab:up,ctrl-space:toggle'
@@ -118,7 +117,6 @@ fi
 ### env settings ### {{{
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-export TMPDIR=/tmp
 if _exists nvim; then
     export EDITOR=nvim
     alias vim=nvim
