@@ -42,15 +42,15 @@ set keymap vi-command
 
 set bell-style none
 set colored-completion-prefix On
-set colored-stats on
+set colored-stats On
 set completion-ignore-case On
 set editing-mode vi
-set input-meta on
+set input-meta On
 set keyseq-timeout 10
 set mark-symlinked-directories On
 set menu-complete-display-prefix On
-set output-meta on
+set output-meta On
 set show-all-if-ambiguous On
-set visible-stats on
+set visible-stats On
 # lnav
 set enable-bracketed-paste Off
