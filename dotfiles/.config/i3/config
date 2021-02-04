@@ -17,7 +17,7 @@ set $right l
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:System San Francisco Display, fontawesome 13
+font pango:System San Francisco Display, fontawesome 9
 new_window 1pixel
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
@@ -134,8 +134,9 @@ bindsym $mod+ctrl+0 move container to workspace $ws10; workspace $ws10
 # for_window [class="keepassxc"] floating enable
 assign [class="qutebrowser"] $ws1
 assign [class="Alacritty"] $ws2
-assign [class="Riot"] $ws9
-assign [class="Google Play Music Desktop Player"] $ws10
+assign [class="Element"] $ws9
+# https://github.com/i3/i3/issues/2060
+for_window [class="Spotify"] move to workspace $ws10
 assign [class ="qemu-system-x86_64"] $ws5
 for_window [class="qemu-system-x86_64"] floating enable
 
@@ -196,9 +197,6 @@ bindsym XF86AudioPause exec playerctl stop
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
-bindsym XF86Display exec --no-startup-id  xrandr --output LVDS-0 --primary --auto
-bindsym $mod+F7 exec --no-startup-id  xrandr --output LVDS-0 --primary --auto
-
 bindsym XF86ScreenSaver exec --no-startup-id i3lock -e -c 000000
 bindsym $mod+b exec --no-startup-id i3lock -e -c 000000
 exec xautolock -time 10 -locker 'i3lock -e -c 000000' -detectsleep
@@ -216,7 +214,7 @@ exec_always feh --bg-scale ~/dropbox/backups/profile/jawsk1111.jpg
 exec i3-msg workspace $ws2
 exec alacritty
 exec qutebrowser
-exec riot
+exec element-desktop
 exec gpm
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
