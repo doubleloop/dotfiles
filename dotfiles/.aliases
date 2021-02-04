@@ -1,4 +1,11 @@
-alias ls="ls -t --color=tty"
+if _exists exa; then
+    alias ls="exa"
+    alias l="exa -lgF"
+    alias ll="exa -lgF"
+    alias la="exa -lgFa"
+else
+    alias ls="ls -t --color=tty"
+fi
 alias trojka='mpv mms://stream.polskieradio.pl/program3'
 alias nowyswiat='mpv https://stream.rcs.revma.com/ypqt40u0x1zuv'
 alias top='htop'
