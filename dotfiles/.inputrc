@@ -52,3 +52,5 @@ set menu-complete-display-prefix On
 set output-meta on
 set show-all-if-ambiguous On
 set visible-stats on
+# lnav
+set enable-bracketed-paste Off
