@@ -6,6 +6,6 @@ precmd() {
     vs=${+functions[virtualenv_prompt_info]+$(virtualenv_prompt_info)}
     gs=${gs:+" %F{white}$gs"}
     vs=${vs:+" %F{blue}$vs"}
-    print -P "%B%F{green}%n@%m %F{yellow}%~${vs}${gs}%b%f"
+    print -P "%B%F{green}%n@%m %F{yellow}%50<...<%~%<<${vs}${gs}%b%f"
 }
 PS1="%B%(?.%f.%F{red})$%b%f "
