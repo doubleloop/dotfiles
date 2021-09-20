@@ -3,17 +3,17 @@ let g:python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 
 let mapleader=","
 " Plugins {{{
-if empty(glob('~/.config/nvim/autoload/plug.vim'))
+if !filereadable(stdpath('data').'/site/autoload/plug.vim')
+  silent! exe '!curl -fLo '.stdpath('data').'/site/autoload/plug.vim --create-dirs '.
+      \'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   function! PrepareVim()
-    silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     source $MYVIMRC
     PlugInstall --sync
     source $MYVIMRC
   endfunc
   command! Prep :call PrepareVim()
 else
-call plug#begin('~/.local/share/nvim/plugged')
+call plug#begin(stdpath('data').'/plugged')
 Plug 'wikitopian/hardmode'
 Plug 'takac/vim-hardtime'
 let g:hardtime_default_on=0
@@ -21,7 +21,7 @@ let g:hardtime_allow_different_key = 1
 
 Plug 'tpope/vim-repeat'    " Fix '.' key on some plugins
 Plug 'tpope/vim-surround'  " Must have surround functionality
-Plug 'tpope/vim-commentary'
+Plug 'terrortylor/nvim-comment'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'  " git integration
 Plug 'tpope/vim-rhubarb'   " gihtub Gitbrowse
@@ -55,11 +55,10 @@ cnoremap <silent> <a-k> <c-c>:TmuxNavigateUp<cr>
 cnoremap <silent> <a-l> <c-c>:TmuxNavigateRight<cr>
 cnoremap <silent> <a-\> <c-c>:TmuxNavigatePrevious<cr>
 
-Plug '907th/vim-auto-save'
-let g:auto_save = 1
-let g:auto_save_in_insert_mode = 0
-let g:auto_save_silent = 1
-let g:auto_save_events = ["CursorHold", "FocusLost", "BufHidden", "ExitPre"]
+Plug 'Pocco81/AutoSave.nvim'
+
+Plug 'folke/which-key.nvim'
+Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
 
 Plug 'junegunn/fzf', { 'dir': '~/src/fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
@@ -77,6 +76,7 @@ elseif executable('ag')
 endif
 nnoremap <leader>l :FzfBLines<cr>
 nnoremap <a-e> :FzfBTags<cr>
+Plug 'ojroques/nvim-lspfuzzy'
 
 Plug 'mileszs/ack.vim'
 if executable('rg')
@@ -89,7 +89,8 @@ elseif executable('ag')
   set grepformat=%f:%l:%c:%m
 endif
 
-Plug 'rhysd/vim-grammarous'
+Plug 'vigoux/LanguageTool.nvim'
+let g:languagetool_server_jar='$HOME/.local/share/languagetool/languagetool-server.jar'
 
 " Mirroring files on various remote hosts
 Plug 'zenbro/mirror.vim'
@@ -112,15 +113,12 @@ Plug 'kana/vim-textobj-line' " l
 Plug 'vim-scripts/ReplaceWithRegister' " gr
 Plug 'AndrewRadev/splitjoin.vim'       " gJ gS
 
-Plug 'airblade/vim-gitgutter' " show git changes
-let g:gitgutter_map_keys = 0
-nmap [c <Plug>(GitGutterPrevHunkzt)
-nmap ]c <Plug>(GitGutterNextHunkzt)
-nmap <a-g> <Plug>(GitGutterPreviewHunk)
+Plug 'lewis6991/gitsigns.nvim'
 
 Plug 'kyazdani42/nvim-tree.lua'
 nnoremap <a-1> :NvimTreeToggle<cr>
-let g:lua_tree_indent_markers = 1
+let g:nvim_tree_indent_markers = 1
+let g:nvim_tree_follow = 1
 Plug 'stsewd/gx-extended.vim'
 
 " Help alligning text
@@ -128,19 +126,7 @@ Plug 'godlygeek/tabular'
 " Plug 'dhruvasagar/vim-table-mode'
 
 " Improved sessions
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-session'
-let g:session_autosave='yes'
-let g:session_autoload='no'
-let g:session_default_overwrite=1
-let g:session_autosave_periodic='1'
-let g:session_autosave_silent=1
-let g:session_default_to_last=1
-let g:session_command_aliases=1
-let g:session_persist_colors=0
-let g:session_persist_font=0
-let g:session_directory="~/.local/share/nvim/sessions"
-nnoremap <leader>so :SessionOpen<cr>
+Plug 'rmagatti/auto-session'
 
 Plug 'moll/vim-bbye'
 
@@ -148,8 +134,8 @@ Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 let g:vimwiki_list = [{'path': '~/workspace/vimwiki'}]
 
 " Eclipse like autoopening of quotes/parenthesis
-Plug 'raimondi/delimitmate'
-let g:delimitMate_expand_cr = 1
+Plug 'windwp/nvim-autopairs'
+Plug 'windwp/nvim-ts-autotag' " html tags autoclose
 
 " Plug 'kien/rainbow_parentheses.vim'
 Plug 'RRethy/vim-illuminate'
@@ -210,13 +196,11 @@ let g:tagbar_type_rust = {
 Plug 'mbbill/undotree'
 nnoremap <leader>u :UndotreeToggle<cr>
 
-Plug 'sbdchd/neoformat'
-let g:neoformat_enabled_python = ['yapf', 'isort']
-let g:neoformat_run_all_formatters = 1
+Plug 'mhartington/formatter.nvim'
 
 " Python
 Plug 'Vimjas/vim-python-pep8-indent', { 'for': ['python', 'python3']}
-Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
+" Plug 'tmhedberg/SimpylFold',          { 'for': ['python', 'python3']}
 " Plug 'bfredl/nvim-ipy',             { 'do': ':UpdateRemotePlugins' }
 " let g:nvim_ipy_perform_mappings = 0
 Plug 'BurningEther/iron.nvim',      { 'do': ':UpdateRemotePlugins' }
@@ -225,8 +209,6 @@ nmap <F5> <Plug>(iron-send-line)
 vmap <F5> <Plug>(iron-visual-send)
 nmap <F8> <Plug>(iron-interrupt)
 
-Plug 'plasticboy/vim-markdown',       { 'for': 'markdown' }
-let g:vim_markdown_folding_disabled = 1
 function! BuildComposer(info)
   if a:info.status != 'unchanged' || a:info.force
     !cargo build --release
@@ -244,18 +226,16 @@ Plug 'honza/vim-snippets'
 
 Plug 'neovim/nvim-lspconfig'
 
-Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'itchyny/lightline.vim'
-let g:lightline = { 'colorscheme': 'wombat' }
+Plug 'hoob3rt/lualine.nvim'
 
 Plug 'norcalli/nvim-colorizer.lua'
 
-Plug 'crusoexia/vim-monokai'
-let g:monokai_term_italic = 1
-let g:monokai_gui_italic = 1
+Plug 'tanvirtin/monokai.nvim'
+
 call plug#end()
 endif
 " }}}
@@ -465,24 +445,7 @@ augroup filetype_settings
   au FileType yaml setl fdm=indent ts=2 sts=2 sw=2
   au FileType gitcommit setl spell comments=b:#
   au FileType vim setl fdm=marker ts=2 sts=2 sw=2
-  au FileType go
-    \  setl noet ts=4 sts=4 sw=4
-    \| nmap <buffer> <c-g> :GoDeclsDir<cr>
-    \| imap <buffer> <c-g> <esc>:<c-u>GoDeclsDir<cr>
-    \| nmap <buffer> <leader>gb :<c-u>call <SID>build_go_files()<cr>
-    \| nmap <buffer> <leader>gt  <Plug>(go-test)
-    \| nmap <buffer> <leader>gr  <Plug>(go-run)
-    \| nmap <buffer> <Leader>gd <Plug>(go-doc)
-    \| nmap <buffer> <Leader>gc <Plug>(go-coverage-toggle)
-    \| nmap <buffer> <Leader>gi <Plug>(go-info)
-    \| nmap <buffer> <Leader>gl <Plug>(go-metalinter)
-    \| nmap <buffer> <leader>gn <Plug>(go-referrers)
-    \| nmap <buffer> <Leader>gv <Plug>(go-def-vertical)
-    \| nmap <buffer> <Leader>gs <Plug>(go-def-split)
-  au FileType go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-  au FileType go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-  au FileType go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-  au FileType go command! -bang AT call go#alternate#Switch(<bang>0, 'tabe')
+  au FileType go setl noet ts=4 sts=4 sw=4
   au FileType haskell
     \  setl tags+=codex.tags;/
     \| setl ts=2 sts=2 sw=2
@@ -493,11 +456,8 @@ augroup filetype_settings
     \| setl tags+=~/.tags/c.tags
   au FileType sql setl cms=--%s ts=2 sts=2 sw=2
   " au FileType asm setl
-  au FileType python
-    \  let b:delimitMate_nesting_quotes = ['"']
-    \| let b:delimitMate_smart_quotes = '\%([a-eg-qs-zA-Z_]\|[^[:punct:][:space:]fr]\|\%(\\\\\)*\\\)\%#\|\%#\%(\w\|[^[:space:][:punct:]]\)'
   au FileType python command! -bang A call PytestFileToggle()
-  au FileType markdown setl spell | let b:delimitMate_nesting_quotes = ['`']
+  au FileType markdown setl spell
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
   au FileType help,man setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
   au FileType cmake setl cms=#%s
@@ -573,10 +533,10 @@ set termguicolors
 
 hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
 function! ColorCustomizations()
-  hi DiffAdd        guifg=#A6E22D  guibg=#2D2E27
-  hi DiffChange     guifg=#d7d7ff  guibg=bg
-  hi DiffDelete     guifg=#575b61  guibg=#2D2E27
-  hi DiffText       guifg=#FD9720  guibg=#3d1c25
+  hi DiffAdd        guibg=#3d5213
+  hi DiffDelete     guifg=#575b61  guibg=#2d2e27
+  hi DiffText       guibg=#523f16
+  hi DiffChange     guibg=#2d2e27
 
   hi diffAdded      guifg=#A6E22D ctermfg=DarkGreen
   hi diffRemoved    guifg=#F92772 ctermfg=DarkRed
@@ -592,23 +552,35 @@ function! ColorCustomizations()
   " hi SpellBad gui=undercurl guisp=#e73c50 guifg=None
   hi SpellBad gui=undercurl guisp=#e73c50 guifg=#e73c50
 
+  let l:sign_column_guibg = synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui')
+  let l:sign_column_ctermbg = synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+  let l:spell_bad_guifg = synIDattr(synIDtrans(hlID('SpellBad')), 'sp', 'gui')
+  let l:spell_bad_ctermfg = synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
+
   exec 'hi LspDiagnosticsSignError ' .
-          \' guifg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'sp', 'gui') .
-          \' ctermfg=' . synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
-          \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
-          \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+          \' guifg='    . l:sign_column_guibg
+          \' ctermfg='  . l:sign_column_ctermbg
+          \' guibg='    . l:sign_column_guibg .
+          \' ctermbg='  . l:sign_column_ctermbg
   exec 'hi LspDiagnosticsSignWarning ctermfg=208 guifg=#FD9720' .
-          \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
-          \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+          \' guibg='    . l:sign_column_guibg .
+          \' ctermbg='  . l:sign_column_ctermbg
   hi link LspDiagnosticsSignInformation LspDiagnosticsSignWarning
   exec 'hi LspDiagnosticsSignHint ctermfg=208 guifg=#E6DB74' .
-          \' guibg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui') .
-          \' ctermbg=' . synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
+          \' guibg='    . l:sign_column_guibg .
+          \' ctermbg='  . l:sign_column_ctermbg
 
   " used by document_highlight
   hi link LspReferenceText CursorLine
   hi link LspReferenceWrite CursorLine
   hi link LspReferenceRead CursorLine
+
+  exec 'hi GitSignsAdd guifg=#A6E22D ctermfg=DarkGreen' .
+        \' guibg='.l:sign_column_guibg .' ctermbg='.l:sign_column_ctermbg
+  exec 'hi GitSignsChange guifg=#FD9720 ctermfg=208'.
+        \' guibg='.l:sign_column_guibg .' ctermbg='.l:sign_column_ctermbg
+  exec 'hi GitSignsDelete guifg=#F92772 ctermfg=DarkRed' .
+        \' guibg='.l:sign_column_guibg .' ctermbg='.l:sign_column_ctermbg
 
 endfunction
 au ColorScheme * call ColorCustomizations()
@@ -640,14 +612,19 @@ augroup LSP
     \| nnoremap <silent><leader>= <cmd>lua vim.lsp.buf.formatting()<cr>
     \| vnoremap <silent><leader>= <esc><cmd>lua vim.lsp.buf.range_formatting()<cr>
     \| nnoremap <silent><c-]>     <cmd>lua vim.lsp.buf.definition()<cr>zt
+    \| nnoremap <silent><leader>. <cmd>lua vim.lsp.buf.code_action()<cr>
+    \| vnoremap <silent><leader>. <cmd>lua vim.lsp.buf.range_code_action()<cr>
   au Filetype python,lua
-    \| nnoremap <silent><leader>= <cmd>Neoformat<cr>
-  au Filetype c,cpp,rust
+    \  nnoremap <silent><leader>= <cmd>Format<cr>
+  au Filetype c,cpp,rust,go
     \  nnoremap <silent>gd        <cmd>lua vim.lsp.buf.declaration()<cr>
-    \| cnoreabbrev A ClangdSwitchSourceHeader
+  au Filetype c,cpp
+    \ cnoreabbrev A ClangdSwitchSourceHeader
   " au CursorHold <buffer> lua vim.lsp.buf.document_highlight()
   " au CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
   " au CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+  nnoremap <silent><c-n> <cmd>lua require"illuminate".next_reference{wrap=true}<cr>
+  nnoremap <silent><c-p> <cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>
 augroup end
 " }}}
 
