@@ -33,11 +33,11 @@ else
         git gitignore zsh-git-prompt
         # jira
         pip python virtualenv virtualenvwrapper
-        # pyenv
+        pyenv
         # django
         # cabal stack
         golang
-        zsh-nvm nvm zsh-better-npm-completion
+        nvm zsh-better-npm-completion
         rust
         gcloud
         fzf-tab
@@ -60,7 +60,8 @@ export WORKON_HOME=$HOME/.virtualenvs
 # git-prompt compiled in haskell is 4 times faster than standard python one
 [ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
     GIT_PROMPT_EXECUTABLE="haskell"
-export NVM_LAZY_LOAD=true
+export NVM_LAZY=1
+export NVM_LAZY_CMD=(vim pyright)
 # z.lua settings
 export _ZL_DATA=$HOME/.zlua/data
 export _ZL_HYPHEN=1
@@ -92,6 +93,7 @@ ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS=(
     forward-char vi-forward-char
 )
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 # fzf
 export FZF_DEFAULT_OPTS='--cycle --filepath-word -e --bind tab:down,btab:up,ctrl-space:toggle'
@@ -162,8 +164,8 @@ setopt HIST_NO_FUNCTIONS
 # }}}
 
 ### load external files ### {{{
-# Make new terminal sessions use the current directory
-[ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
+# Make new terminal sessions use the current directory in tilix
+[ -n "$TILIX_ID" ] && [ -f /etc/profile.d/vte.sh ] && . /etc/profile.d/vte.sh
 [ -f ~/.aliases ] && . ~/.aliases
 [ -f ~/.gvm/scripts/gvm ] && . ~/.gvm/scripts/gvm
 # all config that should not be tracked in git should go to zshlocalrc
