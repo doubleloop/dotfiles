@@ -3,15 +3,17 @@ let g:python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 
 let mapleader=","
 " Plugins {{{
-if !filereadable(stdpath('data').'/site/autoload/plug.vim')
-  silent! exe '!curl -fLo '.stdpath('data').'/site/autoload/plug.vim --create-dirs '.
-      \'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  function! PrepareVim()
-    source $MYVIMRC
-    PlugInstall --sync
-    source $MYVIMRC
-  endfunc
-  command! Prep :call PrepareVim()
+" if !filereadable(stdpath('data').'/site/autoload/plug.vim')
+"   silent! exe '!curl -fLo '.stdpath('data').'/site/autoload/plug.vim --create-dirs '.
+"       \'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+"   function! PrepareVim()
+"     source $MYVIMRC
+"     PlugInstall --sync
+"     source $MYVIMRC
+"   endfunc
+"   command! Prep :call PrepareVim()
+if 1
+lua require('plugins')
 else
 call plug#begin(stdpath('data').'/plugged')
 Plug 'wikitopian/hardmode'
@@ -515,11 +517,6 @@ augroup Terminal
   au BufWinEnter,WinEnter term://* startinsert
   au BufLeave term://* stopinsert
 augroup end
-tnoremap <silent> <a-\> <c-\><c-n>:TmuxNavigatePrevious<cr>
-tnoremap <silent> <a-h> <c-\><c-N>:TmuxNavigateLeft<cr>
-tnoremap <silent> <a-j> <c-\><c-N>:TmuxNavigateDown<cr>
-tnoremap <silent> <a-k> <c-\><c-N>:TmuxNavigateUp<cr>
-tnoremap <silent> <a-l> <c-\><c-N>:TmuxNavigateRight<cr>
 " tnoremap <silent> <c-[> <c-\><c-n>0k
 tnoremap <pageup> <c-\><c-n><pageup>
 tnoremap <pagedown> <c-\><c-n><pagedown>
@@ -627,5 +624,3 @@ augroup LSP
   nnoremap <silent><c-p> <cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>
 augroup end
 " }}}
-
-lua require('linit')
