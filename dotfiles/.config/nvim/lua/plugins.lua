@@ -425,6 +425,7 @@ require('packer').startup(function()
                     },
                 },
             }
+            vim.cmd [[ au FileType python,lua nnoremap <buffer> <leader>= <cmd>Format<cr> ]]
         end,
     }
     use { 'Vimjas/vim-python-pep8-indent', ft = { 'python' } }
@@ -494,8 +495,11 @@ require('packer').startup(function()
 
                 -- map('n', '<a-e>', '<cmd>lua vim.lsp.buf.document_symbol()<cr>')
 
-                map('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<cr>')
-                map('v', '<leader>=', '<cmd>lua vim.lsp.buf.range_formatting()<cr>')
+                local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+                if ft ~= 'python' and ft ~= 'lua' then
+                    map('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<cr>')
+                    map('v', '<leader>=', '<cmd>lua vim.lsp.buf.range_formatting()<cr>')
+                end
             end
 
             lsp.clangd.setup {
@@ -508,10 +512,7 @@ require('packer').startup(function()
             }
 
             lsp.jedi_language_server.setup {
-                on_attach = function(client, bufnr)
-                    on_attach_defaults(client, bufnr)
-                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>Format<cr>', opts)
-                end,
+                on_attach = on_attach_defaults,
             }
             lsp.pyright.setup {
                 settings = {
@@ -581,10 +582,7 @@ require('packer').startup(function()
                         },
                     },
                 },
-                on_attach = function(client, bufnr)
-                    on_attach_defaults(client, bufnr)
-                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>Format<cr>', opts)
-                end,
+                on_attach = on_attach_defaults,
             }
         end,
     }
