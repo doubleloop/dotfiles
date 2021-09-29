@@ -528,7 +528,9 @@ tnoremap <pagedown> <c-\><c-n><pagedown>
 " Colors {{{
 set termguicolors
 
+" just in case when colorsheme is not installed
 hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
+
 function! ColorCustomizations()
   hi DiffAdd        guibg=#3d5213
   hi DiffDelete     guifg=#575b61  guibg=#2d2e27
@@ -585,42 +587,16 @@ au ColorScheme * call ColorCustomizations()
 silent! colorscheme monokai
 " }}}
 
-" LSP {{{
-" call lsp#set_log_level("debug")
-
-sign define LspDiagnosticsSignError text=✖ texthl=LspDiagnosticsSignError linehl= numhl=
-sign define LspDiagnosticsSignWarning text=⚠ texthl=LspDiagnosticsSignWarning linehl= numhl=
-sign define LspDiagnosticsSignInformation text=ℹ texthl=LspDiagnosticsSignInformation linehl= numhl=
-sign define LspDiagnosticsSignHint text=💡 texthl=LspDiagnosticsSignHint linehl= numhl=
-nnoremap <silent><a-d> <cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>
-nnoremap <silent>dn <cmd>lua vim.lsp.diagnostic.goto_next()<cr>
-nnoremap <silent>dp <cmd>lua vim.lsp.diagnostic.goto_prev()<cr>
-
-augroup LSP
-  au!
-  au Filetype rust,python,c,cpp,lua,tex,bib,sh,bash
-    \  setl omnifunc=v:lua.vim.lsp.omnifunc
-    \| inoremap <expr> <c-n> pumvisible() ? '<c-n>' : ''
-    \| nnoremap <silent><c-t> <c-o>zt
-    \| inoremap <silent><a-s>     <cmd>lua vim.lsp.buf.signature_help()<cr>
-    \| nnoremap <silent>K         <cmd>lua vim.lsp.buf.hover()<cr>
-    \| nnoremap <silent><leader>n <cmd>lua vim.lsp.buf.references()<cr>
-    \| nnoremap <silent><leader>r <cmd>lua vim.lsp.buf.rename()<cr>
-    \| nnoremap <silent><leader>= <cmd>lua vim.lsp.buf.formatting()<cr>
-    \| vnoremap <silent><leader>= <esc><cmd>lua vim.lsp.buf.range_formatting()<cr>
-    \| nnoremap <silent><c-]>     <cmd>lua vim.lsp.buf.definition()<cr>zt
-    \| nnoremap <silent><leader>. <cmd>lua vim.lsp.buf.code_action()<cr>
-    \| vnoremap <silent><leader>. <cmd>lua vim.lsp.buf.range_code_action()<cr>
-  au Filetype python,lua
-    \  nnoremap <silent><leader>= <cmd>Format<cr>
-  au Filetype c,cpp,rust,go
-    \  nnoremap <silent>gd        <cmd>lua vim.lsp.buf.declaration()<cr>
-  au Filetype c,cpp
-    \ cnoreabbrev A ClangdSwitchSourceHeader
-  " au CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-  " au CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
-  " au CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-  nnoremap <silent><c-n> <cmd>lua require"illuminate".next_reference{wrap=true}<cr>
-  nnoremap <silent><c-p> <cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>
-augroup end
+" Diagnostics {{{
+lua << EOF
+vim.diagnostic.config {
+    underline = false,
+    virtual_text = false,
+    severity_sort = true,
+}
+EOF
+sign define DiagnosticSignError text=✖ texthl=DiagnosticSignError linehl= numhl=
+sign define DiagnosticSignWarning text=⚠ texthl=DiagnosticSignWarning linehl= numhl=
+sign define DiagnosticSignInformation text=ℹ texthl=DiagnosticSignInformation linehl= numhl=
+sign define DiagnosticSignHint text=💡 texthl=DiagnosticSignHint linehl= numhl=
 " }}}

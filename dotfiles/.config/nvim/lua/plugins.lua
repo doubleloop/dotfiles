@@ -318,6 +318,19 @@ require('packer').startup(function()
         config = function()
             vim.g.Illuminate_delay = 500
             vim.g.Illuminate_ftblacklist = { 'LuaTree', 'nerdtree' }
+            local opts = { noremap = true, silent = true }
+            vim.api.nvim_set_keymap(
+                'n',
+                '<c-n>',
+                '<cmd>lua require"illuminate".next_reference{wrap=true}<cr>',
+                opts
+            )
+            vim.api.nvim_set_keymap(
+                'n',
+                '<c-p>',
+                '<cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>',
+                opts
+            )
         end,
     }
     use {
@@ -447,27 +460,59 @@ require('packer').startup(function()
         requires = 'RRethy/vim-illuminate',
         config = function()
             local lsp = require 'lspconfig'
+            local opts = { noremap = true, silent = true }
+            local function on_attach_defaults(_, bufnr)
+                vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+                vim.api.nvim_buf_set_keymap(
+                    bufnr,
+                    'i',
+                    '<c-n>',
+                    [[ pumvisible() ? '<c-n>' : '' ]],
+                    { expr = true, noremap = true }
+                )
 
-            vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-                vim.lsp.diagnostic.on_publish_diagnostics,
-                {
-                    virtual_text = false,
-                    signs = true,
-                    update_in_insert = false,
-                    underline = false,
-                }
-            )
+                local function map(m, k, v)
+                    vim.api.nvim_buf_set_keymap(bufnr, m, k, v, opts)
+                end
+                map('n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<cr>')
+                map('n', '<c-t>', '<c-o>zt')
+                map('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+                map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+                map('n', '<leader>n', '<cmd>lua vim.lsp.buf.references()<cr>')
 
-            local function on_attach_fun(client)
-                require('illuminate').on_attach(client)
+                map('n', '<c-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+                map('i', '<a-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+                map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+                map('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+
+                map('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>')
+                map('n', '<leader>.', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+
+                map('n', '<a-d>', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>')
+                map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>')
+                map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>')
+
+                -- map('n', '<a-e>', '<cmd>lua vim.lsp.buf.document_symbol()<cr>')
+
+                map('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<cr>')
+                map('v', '<leader>=', '<cmd>lua vim.lsp.buf.range_formatting()<cr>')
             end
 
             lsp.clangd.setup {
                 cmd = { 'clangd-11', '--background-index' },
-                on_attach = on_attach_fun,
+                on_attach = function(client, bufnr)
+                    on_attach_defaults(client, bufnr)
+                    require('illuminate').on_attach(client)
+                    vim.cmd [[cnoreabbrev A ClangdSwitchSourceHeader]]
+                end,
             }
 
-            lsp.jedi_language_server.setup {}
+            lsp.jedi_language_server.setup {
+                on_attach = function(client, bufnr)
+                    on_attach_defaults(client, bufnr)
+                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>Format<cr>', opts)
+                end,
+            }
             lsp.pyright.setup {
                 settings = {
                     python = {
@@ -477,12 +522,17 @@ require('packer').startup(function()
                     },
                 },
             }
-            lsp.rls.setup { on_attach = on_attach_fun }
-            lsp.gopls.setup { on_attach = on_attach_fun }
-            -- lsp.rust_analyzer.setup{on_attach=on_attach_fun}
-            -- lsp.bashls.setup{on_attach=on_attach_fun}
+            for _, server in ipairs { 'rls', 'gopls' } do
+                lsp[server].setup {
+                    on_attach = function(client, bufnr)
+                        on_attach_defaults(client, bufnr)
+                        require('illuminate').on_attach(client)
+                    end,
+                }
+            end
 
             lsp.texlab.setup {
+                on_attach = on_attach_defaults,
                 settings = {
                     latex = {
                         build = {
@@ -531,7 +581,10 @@ require('packer').startup(function()
                         },
                     },
                 },
-                on_attach = on_attach_fun,
+                on_attach = function(client, bufnr)
+                    on_attach_defaults(client, bufnr)
+                    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>=', '<cmd>Format<cr>', opts)
+                end,
             }
         end,
     }
