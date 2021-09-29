@@ -1,6 +1,28 @@
+local function bootstrap()
+    local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
+    if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+        vim.fn.system {
+            'git',
+            'clone',
+            '--depth',
+            '1',
+            'https://github.com/wbthomason/packer.nvim',
+            install_path,
+        }
+        vim.cmd 'packadd packer.nvim'
+    end
+end
+
+if not pcall(bootstrap) then
+    print 'Failed to bootstrap packer!'
+    do
+        return
+    end
+end
+
 local use = require('packer').use
 
-require('packer').startup(function()
+local function packer_startup_fun()
     use 'wbthomason/packer.nvim'
 
     use { 'wikitopian/hardmode', fn = { 'ToggleHardMode', 'HardMode', 'EasyMode' } }
@@ -309,8 +331,13 @@ require('packer').startup(function()
     }
     use {
         'windwp/nvim-ts-autotag', -- html tags autoclose
+        requires = 'nvim-treesitter/nvim-treesitter',
         config = function()
-            require('nvim-ts-autotag').setup {}
+            require('nvim-treesitter.configs').setup {
+                autotag = {
+                    enable = true,
+                },
+            }
         end,
     }
     use {
@@ -703,5 +730,21 @@ require('packer').startup(function()
             require('colorizer').setup {}
         end,
     }
-    use 'tanvirtin/monokai.nvim'
-end)
+    use {
+        'tanvirtin/monokai.nvim',
+        config = function()
+            vim.cmd [[ colorscheme monokai ]]
+        end,
+    }
+end
+
+require('packer').startup {
+    packer_startup_fun,
+    config = {
+        display = {
+            open_fn = function()
+                return require('packer.util').float { border = 'single' }
+            end,
+        },
+    },
+}

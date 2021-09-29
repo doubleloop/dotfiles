@@ -3,7 +3,7 @@ let g:python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 
 let mapleader=","
 
-" TODO: bootstrap
+" ~/.config/nvim/lua/plugins.lua
 lua require('plugins')
 
 " Basic Settings {{{
@@ -348,7 +348,6 @@ function! ColorCustomizations()
 endfunction
 au ColorScheme * call ColorCustomizations()
 
-silent! colorscheme monokai
 " }}}
 
 " Diagnostics {{{
