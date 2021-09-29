@@ -284,7 +284,7 @@ local function packer_startup_fun()
             vim.api.nvim_set_keymap('n', '<leader>S', '<cmd>SearchSession<cr>', opts)
         end,
     }
-    use 'moll/vim-bbye'
+    use 'famiu/bufdelete.nvim'
     use {
         'vimwiki/vimwiki',
         branch = 'dev',
@@ -473,7 +473,15 @@ local function packer_startup_fun()
             }
         end,
     }
-    -- use {'euclio/vim-markdown-composer', run = function('BuildComposer') }
+    use {
+        'euclio/vim-markdown-composer',
+        -- building is slow, better to call it manually when it is needed
+        -- run = 'cargo build --release'
+        config = function()
+            vim.g.markdown_composer_autostart = 0
+        end,
+    }
+
     use { 'momota/junos.vim', ft = 'junos' }
     use {
         'the-lambda-church/coquille',
@@ -481,8 +489,6 @@ local function packer_startup_fun()
         requires = 'let-def/vimbufsync',
         ft = 'coq',
     }
-    use 'SirVer/ultisnips'
-    use 'honza/vim-snippets'
     use {
         'neovim/nvim-lspconfig',
         requires = 'RRethy/vim-illuminate',
