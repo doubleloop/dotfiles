@@ -45,11 +45,11 @@ require('packer').startup(function()
             }
             local opts = { noremap = true, silent = true }
             for m, cmd in pairs(maps) do
-                vim.api.nvim_set_keymap('n', m, ':' .. cmd .. '<cr>', opts)
+                vim.api.nvim_set_keymap('n', m, '<cmd>' .. cmd .. '<cr>', opts)
                 vim.api.nvim_set_keymap('i', m, '<esc>:' .. cmd .. '<cr>', opts)
                 vim.api.nvim_set_keymap('v', m, '<esc>:' .. cmd .. '<cr>', opts)
                 vim.api.nvim_set_keymap('c', m, '<c-c>:' .. cmd .. '<cr>', opts)
-                vim.api.nvim_set_keymap('t', m, '<c-\\><c-n>:' .. cmd .. '<cr>', opts)
+                vim.api.nvim_set_keymap('t', m, '<c-\\><c-n><cmd>' .. cmd .. '<cr>', opts)
             end
         end,
     }
@@ -158,7 +158,7 @@ require('packer').startup(function()
             end
             local opts = { noremap = true, silent = false }
             for m, cmd in pairs(maps) do
-                vim.api.nvim_set_keymap('n', m, ':' .. prefix .. cmd .. '<cr>', opts)
+                vim.api.nvim_set_keymap('n', m, '<cmd>' .. prefix .. cmd .. '<cr>', opts)
             end
         end,
     }
@@ -190,9 +190,9 @@ require('packer').startup(function()
         'zenbro/mirror.vim',
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<leader>rr', ':w<cr>:MirrorPush<cr>', opts)
-            vim.api.nvim_set_keymap('n', '<leader>rd', ':MirrorDiff<cr>', opts)
-            vim.api.nvim_set_keymap('n', '<leader>rl', ':MirrorReload<cr>', opts)
+            vim.api.nvim_set_keymap('n', '<leader>rr', '<cmd>w<cr><cmd>MirrorPush<cr>', opts)
+            vim.api.nvim_set_keymap('n', '<leader>rd', '<cmd>MirrorDiff<cr>', opts)
+            vim.api.nvim_set_keymap('n', '<leader>rl', '<cmd>MirrorReload<cr>', opts)
         end,
     }
     use {
@@ -200,8 +200,8 @@ require('packer').startup(function()
         config = function()
             vim.g.zoomwintab_remap = 0
             local opts = { noremap = true, silent = true }
-            vim.api.nvim_set_keymap('n', '<c-w>z', ':ZoomWinTabToggle<cr>', opts)
-            vim.api.nvim_set_keymap('v', '<c-w>z', '<c-\\><c-n>:ZoomWinTabToggle<cr>gv', opts)
+            vim.api.nvim_set_keymap('n', '<c-w>z', '<cmd>ZoomWinTabToggle<cr>', opts)
+            vim.api.nvim_set_keymap('v', '<c-w>z', '<c-\\><c-n><cmd>ZoomWinTabToggle<cr>gv', opts)
         end,
     }
     use {
@@ -239,7 +239,7 @@ require('packer').startup(function()
                 update_focused_file = { enable = true },
             }
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<a-1>', ':NvimTreeToggle<cr>', opts)
+            vim.api.nvim_set_keymap('n', '<a-1>', '<cmd>NvimTreeToggle<cr>', opts)
         end,
     }
     -- use 'stsewd/gx-extended.vim'
@@ -259,7 +259,7 @@ require('packer').startup(function()
         config = function()
             require('session-lens').setup {}
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<leader>S', ':SearchSession<cr>', opts)
+            vim.api.nvim_set_keymap('n', '<leader>S', '<cmd>SearchSession<cr>', opts)
         end,
     }
     use 'moll/vim-bbye'
@@ -324,7 +324,7 @@ require('packer').startup(function()
         'majutsushi/tagbar',
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<a-2>', ':TagbarToggle<cr>', opts)
+            vim.api.nvim_set_keymap('n', '<a-2>', '<cmd>TagbarToggle<cr>', opts)
             vim.g.tagbar_autoclose = 0
             vim.g.tagbar_sort = 0
             vim.g.tagbar_iconchars = { '▸', '▾' }
