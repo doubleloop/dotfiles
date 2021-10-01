@@ -459,10 +459,10 @@ local function packer_startup_fun()
     use {
         'BurningEther/iron.nvim',
         config = function()
-            local opts = { noremap = true, silent = false }
+            local opts = { noremap = false, silent = false }
             vim.g.iron_map_defaults = 0
             vim.api.nvim_set_keymap('n', '<F5>', '<Plug>(iron-send-line)', opts)
-            vim.api.nvim_set_keymap('v', '<F5>', '<Plug>(iron-send-line)', opts)
+            vim.api.nvim_set_keymap('v', '<F5>', '<esc><Plug>(iron-visual-send)', opts)
             vim.api.nvim_set_keymap('n', '<F8>', '<Plug>(iron-interrupt)', opts)
 
             require('iron').core.set_config {
