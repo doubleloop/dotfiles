@@ -218,8 +218,9 @@ augroup filetype_settings
   au FileType c,cpp
     \  setl cms=//%s
     \| setl ts=2 sts=2 sw=2
-    \| setl path=.,/usr/lib/gcc/x86_64-linux-gnu/10/include,/usr/local/include,/usr/lib/gcc/x86_64-linux-gnu/10/include-fixed,/usr/include/x86_64-linux-gnu,/usr/include,**
     \| setl tags+=~/.tags/c.tags
+  au FileType c   let &l:path=luaeval('require("utils").get_gcc_include_paths()')
+  au FileType cpp let &l:path=luaeval('require("utils").get_gcc_include_paths("cpp")')
   au FileType sql setl cms=--%s ts=2 sts=2 sw=2
   " au FileType asm setl
   au FileType python command! -bang A call PytestFileToggle()
