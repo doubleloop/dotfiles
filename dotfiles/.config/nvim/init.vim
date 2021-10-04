@@ -47,12 +47,17 @@ set ignorecase
 set smartcase
 set inccommand=split
 
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4  " Indentation amount for < and > commands.
-set shiftround
-set expandtab     " Insert spaces when TAB is pressed.
+" notes:
+" * when using spaces for indentation, tabstop is not important
+" * when using tabs for indentation, set noet sw=0 ts=ident_width
+" * sts > 0 is for special cases (typically do not need to bother)
+" * :retab may be handy to convert tabs <-> spaces
+" * I use spaces for indentation most of the times thus sw value is most important
+set expandtab      " Insert spaces when TAB is pressed.
+set shiftwidth=4   " Indentation amount for < and > commands.
+set shiftround     " Does nothing when shiftwidth=0
 set smartindent
+set softtabstop=-1 " Ignore tabstop, use shiftwidth value
 
 set nosplitbelow
 set splitright    " Vertical split to right of current.
@@ -207,31 +212,27 @@ endfunction
 " Auto commands {{{
 augroup filetype_settings
   au!
-  au FileType html,xhtml,css setl ts=2 sts=2 sw=2
-  au FileType yaml setl fdm=indent ts=2 sts=2 sw=2
-  au FileType gitcommit setl spell comments=b:#
-  au FileType vim setl fdm=marker ts=2 sts=2 sw=2
-  au FileType go setl noet ts=4 sts=4 sw=4
+  au FileType html,xhtml,css,yaml setl sw=2
+  au FileType gitcommit setl spell
+  au FileType vim setl fdm=marker sw=2
+  au FileType go setl noet sw=0 ts=4
   au FileType haskell
-    \  setl tags+=codex.tags;/
-    \| setl ts=2 sts=2 sw=2
+    \  setl sw=2
+    \| setl tags+=codex.tags;/
   au FileType c,cpp
-    \  setl cms=//%s
-    \| setl ts=2 sts=2 sw=2
+    \  setl sw=2
     \| setl tags+=~/.tags/c.tags
   au FileType c   let &l:path=luaeval('require("utils").get_gcc_include_paths()')
   au FileType cpp let &l:path=luaeval('require("utils").get_gcc_include_paths("cpp")')
-  au FileType sql setl cms=--%s ts=2 sts=2 sw=2
+  au FileType sql setl cms=--%s sw=2
   " au FileType asm setl
   au FileType python command! -bang A call PytestFileToggle()
   au FileType markdown setl spell
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
   au FileType help,man setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
-  au FileType cmake setl cms=#%s
-  au FileType tex setl ts=2 sts=2 sw=2 spell wrap
+  au FileType tex setl sw=2 spell wrap
   au FileType vifm setl syntax=vim cms=\"%s
-  au FileType coq setl cms=(*%s*) ts=2 sts=2 sw=2
-  au FileType nerdtree,tagbar setl nonu signcolumn=no
+  au FileType coq setl cms=(*%s*) sw=2
 augroup end
 
 augroup particular_file_settings
