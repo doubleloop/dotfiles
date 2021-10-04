@@ -1,7 +1,6 @@
-" neovim-npython installations
-let g:python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
-
 let mapleader=","
+let g:python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
+let g:vimsyn_embed = 'l'
 
 " ~/.config/nvim/lua/plugins.lua
 lua require('plugins')
@@ -19,9 +18,8 @@ set number
 set norelativenumber
 set textwidth=0
 set nowrap
-" works with some bugs
 set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr()
+set foldexpr=nvim_treesitter#foldexpr() " works with some bugs
 set foldlevelstart=99
 set foldnestmax=10
 
@@ -95,8 +93,9 @@ set updatetime=500
 
 set shortmess+=Wc
 
-set conceallevel=0
-
+set termguicolors
+" just in case when colorsheme is not installed
+hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
 " }}}
 
 " Key Mappings {{{
@@ -129,10 +128,9 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 cnoremap <c-a> <home>
 
-" nnoremap <silent> <leader><leader> :nohlsearch<c-r>=has('diff')?'<bar>diffupdate':''<cr><cr><c-l>
-
 " fix treesitter
 nnoremap <leader><leader> <cmd>write <bar> edit <bar> TSBufEnable highlight<cr>
+
 nnoremap n nzt
 nnoremap N Nzt
 nnoremap * *zt
@@ -141,9 +139,6 @@ nnoremap g* g*zt
 nnoremap g# g#zt
 nnoremap <c-]> <c-]>zt
 nnoremap <c-t> <c-t>zt
-" nnoremap <c-i> <c-i>zt
-" nnoremap <c-o> <c-o>zt
-" nnoremap gd gdzt
 nnoremap G Gzz
 
 inoremap <expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
@@ -154,12 +149,10 @@ noremap <leader>de :windo diffoff<cr>
 noremap <leader>dd :Gdiffsplit<cr>
 nnoremap <leader>z :let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
 nnoremap <leader>e :e $MYVIMRC<cr>
-" nnoremap <leader>e :e <c-R>=expand("%:p:h") . '/'<cr>
 
 nnoremap <silent> <leader>q :botright copen 10<cr>
-" nnoremap <silent> <leader>l :botright lopen 10<cr>
 
-nmap <leader>W :%s/\s\+$//e<cr>
+nnoremap <leader>W :%s/\s\+$//e<cr>
 
 " }}}
 
@@ -260,8 +253,9 @@ augroup end
 au TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
 
 " terminal
+" TODO: when switching focus from other tmux window, terminal is is not in insert
+" mode
 function! TerminalSet()
-  " let g:last_terminal_job_id = b:terminal_job_id
   setl nonu nornu signcolumn=no
   startinsert
   nnoremap <buffer> q i
@@ -273,20 +267,8 @@ augroup Terminal
   au BufWinEnter,WinEnter term://* startinsert
   au BufLeave term://* stopinsert
 augroup end
-" tnoremap <silent> <c-[> <c-\><c-n>0k
 tnoremap <pageup> <c-\><c-n><pageup>
 tnoremap <pagedown> <c-\><c-n><pagedown>
-" nnoremap <silent> <leader>tb :botright split term://zsh<cr>
-" nnoremap <silent> <leader>tv :vsplit term://zsh<cr>
-" nnoremap <silent> <leader>ts :bel split term://zsh<cr>
-" }}}
-
-" Colors {{{
-set termguicolors
-
-" just in case when colorsheme is not installed
-" hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
-
 " }}}
 
 " Diagnostics {{{
