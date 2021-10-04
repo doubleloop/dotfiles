@@ -230,17 +230,7 @@ augroup filetype_settings
   au FileType cmake setl cms=#%s
   au FileType tex setl ts=2 sts=2 sw=2 spell wrap
   au FileType vifm setl syntax=vim cms=\"%s
-  au FileType coq
-    \  setl cms=(*%s*) ts=2 sts=2 sw=2
-    \| nmap <buffer> <silent> <leader>cc :CoqLaunch<cr>
-    \| nmap <buffer> <silent> <leader>cq :CoqKill<cr>
-    \| nmap <buffer> <silent> <F5> :CoqToCursor<cr>
-    \| nmap <buffer> <silent> <c-n> :CoqNext<cr>
-    \| nmap <buffer> <silent> <c-p> :CoqUndo<cr>
-    \| vmap <buffer> <silent> <c-n> :CoqNext<cr>
-    \| vmap <buffer> <silent> <c-p> :CoqUndo<cr>
-    \| imap <buffer> <silent> <c-n> <c-\><c-o>:CoqNext<cr>
-    \| imap <buffer> <silent> <c-p> <c-\><c-o>:CoqUndo<cr>
+  au FileType coq setl cms=(*%s*) ts=2 sts=2 sw=2
   au FileType nerdtree,tagbar setl nonu signcolumn=no
 augroup end
 

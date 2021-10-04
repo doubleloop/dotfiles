@@ -488,6 +488,20 @@ local function packer_startup_fun()
         branch = 'pathogen-bundle',
         requires = 'let-def/vimbufsync',
         ft = 'coq',
+        config = function()
+            local opts = { noremap = true, silent = true }
+            local function map(m, k, v)
+                vim.api.nvim_buf_set_keymap(0, m, k, v, opts)
+            end
+            map('n', '<leader>cc', '<cmd>CoqLaunch<cr>')
+            map('n', '<leader>cq', '<cmd>CoqKill<cr>')
+            map('n', '<leader><F5>', '<cmd>CoqToCursor<cr>')
+            for m, cmd in pairs { ['c-n'] = 'CoqNext', ['c-p'] = 'CoqUndo' } do
+                map('n', m, '<cmd>' .. cmd .. '<cr>')
+                map('v', m, '<cmd>' .. cmd .. '<cr>')
+                map('i', m, [[<c-\><c-o><cmd>]] .. cmd .. '<cr>')
+            end
+        end,
     }
     use {
         'neovim/nvim-lspconfig',
