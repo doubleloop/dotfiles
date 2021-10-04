@@ -116,9 +116,25 @@ local function packer_startup_fun()
                     },
                 },
             }
+            local maps = {
+                ['<leader>p'] = 'find_files',
+                ['<leader>:'] = 'commands',
+                ['<leader>b'] = 'buffers',
+                ['<leader>m'] = 'oldfiles',
+                ['<a-e>'] = 'tags',
+                ['<leader><c-r>'] = 'command_history',
+                ['<leader>/'] = 'live_grep',
+                ['<leader>h'] = 'help_tags',
+            }
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<leader>F', '<cmd>Telescope find_files<cr>', opts)
-            vim.api.nvim_set_keymap('n', '<leader>h', '<cmd>Telescope help_tags<cr>', opts)
+            for m, cmd in pairs(maps) do
+                vim.api.nvim_set_keymap(
+                    'n',
+                    m,
+                    "<cmd>lua require('telescope.builtin')." .. cmd .. '()<cr>',
+                    opts
+                )
+            end
         end,
     }
     use {
@@ -142,47 +158,6 @@ local function packer_startup_fun()
         end,
     }
     use 'tversteeg/registers.nvim'
-    use {
-        'junegunn/fzf.vim',
-        requires = {
-            'junegunn/fzf',
-            run = function()
-                vim.fn['fzf#install']()
-            end,
-        },
-        setup = function()
-            vim.g.fzf_command_prefix = 'Fzf'
-            vim.g.fzf_layout = { window = { width = 0.9, height = 0.8 } }
-        end,
-        config = function()
-            local prefix = vim.g.fzf_command_prefix
-            local maps = {
-                ['<leader>p'] = 'Files',
-                ['<leader>:'] = 'Commands',
-                ['<leader>b'] = 'Buffer',
-                ['<leader>m'] = 'History',
-                ['<leader><c-r>'] = 'History:',
-                ['<leader>l'] = 'BLines',
-                ['<a-e>'] = 'BTags',
-            }
-            if vim.fn.executable 'rg' then
-                maps['<leader>/'] = 'Rg'
-            elseif vim.fn.executalbe 'ag' then
-                maps['<leader>/'] = 'Ag'
-            end
-            local opts = { noremap = true, silent = false }
-            for m, cmd in pairs(maps) do
-                vim.api.nvim_set_keymap('n', m, '<cmd>' .. prefix .. cmd .. '<cr>', opts)
-            end
-        end,
-    }
-    use {
-        'ojroques/nvim-lspfuzzy',
-        after = { 'fzf.vim', 'nvim-lspconfig' },
-        config = function()
-            require('lspfuzzy').setup {}
-        end,
-    }
     use {
         'mileszs/ack.vim',
         config = function()
@@ -527,7 +502,7 @@ local function packer_startup_fun()
                 map('n', '<c-t>', '<c-o>zt')
                 map('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<cr>')
                 map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
-                map('n', '<leader>n', '<cmd>lua vim.lsp.buf.references()<cr>')
+                map('n', '<leader>n', '<cmd>lua require("telescope.builtin").lsp_references()<cr>')
 
                 map('n', '<c-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
                 map('i', '<a-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
@@ -541,7 +516,11 @@ local function packer_startup_fun()
                 map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>')
                 map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>')
 
-                -- map('n', '<a-e>', '<cmd>lua vim.lsp.buf.document_symbol()<cr>')
+                map(
+                    'n',
+                    '<a-e>',
+                    '<cmd>lua require("telescope.builtin").lsp_document_symbols()<cr>'
+                )
 
                 local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
                 if ft ~= 'python' and ft ~= 'lua' then
@@ -756,7 +735,7 @@ local function packer_startup_fun()
                     lualine_y = {},
                     lualine_z = {},
                 },
-                extensions = { 'fzf', 'nvim-tree', 'fugitive' },
+                extensions = { 'nvim-tree', 'fugitive', 'quickfix' },
             }
         end,
     }
