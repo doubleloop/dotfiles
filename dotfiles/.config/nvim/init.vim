@@ -284,60 +284,7 @@ tnoremap <pagedown> <c-\><c-n><pagedown>
 set termguicolors
 
 " just in case when colorsheme is not installed
-hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
-
-function! ColorCustomizations()
-  hi DiffAdd        guibg=#3d5213
-  hi DiffDelete     guifg=#575b61  guibg=#2d2e27
-  hi DiffText       guibg=#523f16
-  hi DiffChange     guibg=#2d2e27
-
-  hi diffAdded      guifg=#A6E22D ctermfg=DarkGreen
-  hi diffRemoved    guifg=#F92772 ctermfg=DarkRed
-  hi diffFile       guifg=#66D9EF ctermfg=White
-  hi diffIndexLine  guifg=#66D9EF ctermfg=White
-  hi diffLine       guifg=#66D9EF ctermfg=White
-  hi diffSubname    guifg=White   ctermfg=White
-  hi CheckedByCoq   guibg=#313337
-  hi SentToCoq      guibg=#313337
-
-  " underline color support is not yet working in allacritty
-  " if it will then uncomment this
-  " hi SpellBad gui=undercurl guisp=#e73c50 guifg=None
-  hi SpellBad gui=undercurl guisp=#e73c50 guifg=#e73c50
-
-  let l:sign_column_guibg = synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'gui')
-  let l:sign_column_ctermbg = synIDattr(synIDtrans(hlID('SignColumn')), 'bg', 'cterm')
-  let l:spell_bad_guifg = synIDattr(synIDtrans(hlID('SpellBad')), 'sp', 'gui')
-  let l:spell_bad_ctermfg = synIDattr(synIDtrans(hlID('SpellBad')), 'fg', 'cterm')
-
-  exec 'hi LspDiagnosticsSignError ' .
-          \' guifg='    . l:sign_column_guibg
-          \' ctermfg='  . l:sign_column_ctermbg
-          \' guibg='    . l:sign_column_guibg .
-          \' ctermbg='  . l:sign_column_ctermbg
-  exec 'hi LspDiagnosticsSignWarning ctermfg=208 guifg=#FD9720' .
-          \' guibg='    . l:sign_column_guibg .
-          \' ctermbg='  . l:sign_column_ctermbg
-  hi link LspDiagnosticsSignInformation LspDiagnosticsSignWarning
-  exec 'hi LspDiagnosticsSignHint ctermfg=208 guifg=#E6DB74' .
-          \' guibg='    . l:sign_column_guibg .
-          \' ctermbg='  . l:sign_column_ctermbg
-
-  " used by document_highlight
-  hi link LspReferenceText CursorLine
-  hi link LspReferenceWrite CursorLine
-  hi link LspReferenceRead CursorLine
-
-  exec 'hi GitSignsAdd guifg=#A6E22D ctermfg=DarkGreen' .
-        \' guibg='.l:sign_column_guibg .' ctermbg='.l:sign_column_ctermbg
-  exec 'hi GitSignsChange guifg=#FD9720 ctermfg=208'.
-        \' guibg='.l:sign_column_guibg .' ctermbg='.l:sign_column_ctermbg
-  exec 'hi GitSignsDelete guifg=#F92772 ctermfg=DarkRed' .
-        \' guibg='.l:sign_column_guibg .' ctermbg='.l:sign_column_ctermbg
-
-endfunction
-au ColorScheme * call ColorCustomizations()
+" hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg
 
 " }}}
 
@@ -350,7 +297,7 @@ vim.diagnostic.config {
 }
 EOF
 sign define DiagnosticSignError text=✖ texthl=DiagnosticSignError linehl= numhl=
-sign define DiagnosticSignWarning text=⚠ texthl=DiagnosticSignWarning linehl= numhl=
-sign define DiagnosticSignInformation text=ℹ texthl=DiagnosticSignInformation linehl= numhl=
+sign define DiagnosticSignWarn text=⚠ texthl=DiagnosticSignWarn linehl= numhl=
+sign define DiagnosticSignInfo text=ℹ texthl=DiagnosticSignInfo linehl= numhl=
 sign define DiagnosticSignHint text=💡 texthl=DiagnosticSignHint linehl= numhl=
 " }}}

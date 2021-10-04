@@ -769,7 +769,59 @@ local function packer_startup_fun()
     use {
         'tanvirtin/monokai.nvim',
         config = function()
-            vim.cmd [[ colorscheme monokai ]]
+            local monokai = require 'monokai'
+            local palette = monokai.classic
+            monokai.setup {
+                custom_hlgroups = {
+                    FoldColumn = {
+                        fg = palette.base5,
+                        bg = palette.base2,
+                    },
+                    diffFile = {
+                        fg = palette.white,
+                    },
+                    diffIndexLine = {
+                        fg = palette.white,
+                    },
+                    diffLine = {
+                        fg = palette.aqua,
+                    },
+                    diffSubname = {
+                        fg = palette.white,
+                    },
+                    DiffAdd = {
+                        bg = '#254229',
+                    },
+                    DiffDelete = {
+                        fg = palette.base5,
+                        bg = '#272d30',
+                    },
+                    DiffText = {
+                        bg = '#523f16',
+                    },
+                    DiffChange = {
+                        bg = '#303336',
+                    },
+                    GitSignsAdd = {
+                        fg = palette.green,
+                        bg = palette.base2,
+                    },
+                    GitSignsDelete = {
+                        fg = palette.pink,
+                        bg = palette.base2,
+                    },
+                    GitSignsChange = {
+                        fg = palette.orange,
+                        bg = palette.base2,
+                    },
+                    CheckedByCoq = {
+                        bg = '#313337',
+                    },
+                    SentToCoq = {
+                        bg = '#313337',
+                    },
+                },
+            }
         end,
     }
 end
