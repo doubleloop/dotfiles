@@ -29,7 +29,7 @@ local function packer_startup_fun()
     use {
         'takac/vim-hardtime',
         cmd = { 'HardTimeOn', 'HardTimeOff', 'HardTimeToggle' },
-        config = function()
+        setup = function()
             vim.g.hardtime_default_on = 0
             vim.g.hardtime_allow_different_key = 1
         end,
@@ -43,12 +43,12 @@ local function packer_startup_fun()
         end,
     }
     use 'tpope/vim-fugitive' -- git integration
-    use 'tpope/vim-rhubarb' -- gihtub Gitbrowse
-    use 'tommcdo/vim-fubitive' -- bitbucket Gbrowse
-    -- use 'tpope/vim-unimpaired'  -- Handy bracket mappings
+    use { 'tpope/vim-rhubarb', after = 'vim-fugitive' } -- gihtub Gbrowse
+    use { 'tommcdo/vim-fubitive', after = 'vim-fugitive' } -- bitbucket Gbrowse
     use {
         'tpope/vim-sleuth', -- guess ts heuristically
-        config = function()
+        cmd = { 'Sleuth' },
+        setup = function()
             vim.g.sleuth_automatic = 0
         end,
     }
@@ -123,21 +123,10 @@ local function packer_startup_fun()
     }
     use {
         'nvim-telescope/telescope-fzf-native.nvim',
-        requires = 'nvim-telescope/telescope.nvim',
+        after = 'telescope.nvim',
         run = 'make',
         config = function()
-            local telescope = require 'telescope'
-            telescope.setup {
-                extensions = {
-                    fzf = {
-                        fuzzy = true,
-                        override_generic_sorter = true,
-                        override_file_sorter = true,
-                        case_mode = 'smart_case',
-                    },
-                },
-            }
-            telescope.load_extension 'fzf'
+            require('telescope').load_extension 'fzf'
         end,
     }
     use {
@@ -154,18 +143,19 @@ local function packer_startup_fun()
     }
     use 'tversteeg/registers.nvim'
     use {
-        'junegunn/fzf',
-        run = function()
-            vim.fn['fzf#install']()
-        end,
-    }
-    use {
         'junegunn/fzf.vim',
-        requires = 'junegunn/fzf',
-        config = function()
-            local prefix = 'Fzf'
-            vim.g.fzf_command_prefix = prefix
+        requires = {
+            'junegunn/fzf',
+            run = function()
+                vim.fn['fzf#install']()
+            end,
+        },
+        setup = function()
+            vim.g.fzf_command_prefix = 'Fzf'
             vim.g.fzf_layout = { window = { width = 0.9, height = 0.8 } }
+        end,
+        config = function()
+            local prefix = vim.g.fzf_command_prefix
             local maps = {
                 ['<leader>p'] = 'Files',
                 ['<leader>:'] = 'Commands',
@@ -188,7 +178,7 @@ local function packer_startup_fun()
     }
     use {
         'ojroques/nvim-lspfuzzy',
-        requires = { 'junegunn/fzf.vim', 'neovim/nvim-lspconfig' },
+        after = { 'fzf.vim', 'nvim-lspconfig' },
         config = function()
             require('lspfuzzy').setup {}
         end,
@@ -205,12 +195,13 @@ local function packer_startup_fun()
     }
     use {
         'vigoux/LanguageTool.nvim',
-        config = function()
+        setup = function()
             vim.g.languagetool_server_jar =
                 '$HOME/.local/share/languagetool/languagetool-server.jar'
         end,
     }
     use {
+        -- todo: check out chipsenkbeil/distant.nvim
         'zenbro/mirror.vim',
         config = function()
             local opts = { noremap = true, silent = false }
@@ -221,7 +212,8 @@ local function packer_startup_fun()
     }
     use {
         'troydm/zoomwintab.vim',
-        config = function()
+        keys = '<c-w>z',
+        setup = function()
             vim.g.zoomwintab_remap = 0
             local opts = { noremap = true, silent = true }
             vim.api.nvim_set_keymap('n', '<c-w>z', '<cmd>ZoomWinTabToggle<cr>', opts)
@@ -257,10 +249,15 @@ local function packer_startup_fun()
     use {
         'kyazdani42/nvim-tree.lua',
         requires = 'kyazdani42/nvim-web-devicons',
-        config = function()
+        keys = '<a-1>',
+        setup = function()
             vim.g.nvim_tree_indent_markers = 1
+        end,
+        config = function()
             require('nvim-tree').setup {
+                hijack_cursor = true,
                 update_focused_file = { enable = true },
+                update_cwd = true,
             }
             local opts = { noremap = true, silent = false }
             vim.api.nvim_set_keymap('n', '<a-1>', '<cmd>NvimTreeToggle<cr>', opts)
@@ -297,12 +294,13 @@ local function packer_startup_fun()
     }
     use {
         'windwp/nvim-autopairs',
-        requires = 'nvim-treesitter/nvim-treesitter',
         config = function()
             local npairs = require 'nvim-autopairs'
             local Rule = require 'nvim-autopairs.rule'
 
-            npairs.setup {}
+            npairs.setup {
+                check_ts = true,
+            }
             npairs.add_rules {
                 Rule("f'", "'", 'python'),
                 Rule('f"', "'", 'python'),
@@ -322,24 +320,17 @@ local function packer_startup_fun()
             end
             vim.api.nvim_set_keymap(
                 'i',
-                '<CR>',
+                '<cr>',
                 'v:lua.MUtils.completion_confirm()',
                 { expr = true, noremap = true }
             )
-            require('nvim-treesitter.configs').setup {
-                autopairs = { enable = true },
-            }
         end,
     }
     use {
         'windwp/nvim-ts-autotag', -- html tags autoclose
-        requires = 'nvim-treesitter/nvim-treesitter',
+        after = 'nvim-treesitter',
         config = function()
-            require('nvim-treesitter.configs').setup {
-                autotag = {
-                    enable = true,
-                },
-            }
+            require('nvim-ts-autotag').setup()
         end,
     }
     use {
@@ -364,9 +355,8 @@ local function packer_startup_fun()
     }
     use {
         'majutsushi/tagbar',
-        config = function()
-            local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<a-2>', '<cmd>TagbarToggle<cr>', opts)
+        keys = '<a-2>',
+        setup = function()
             vim.g.tagbar_autoclose = 0
             vim.g.tagbar_sort = 0
             vim.g.tagbar_iconchars = { '▸', '▾' }
@@ -415,9 +405,15 @@ local function packer_startup_fun()
                 },
             }
         end,
+        config = function()
+            local opts = { noremap = true, silent = false }
+            vim.api.nvim_set_keymap('n', '<a-2>', '<cmd>TagbarToggle<cr>', opts)
+        end
+
     }
     use {
         'mhartington/formatter.nvim',
+        ft = { 'lua', 'python' },
         config = function()
             require('formatter').setup {
                 logging = false,
@@ -460,19 +456,21 @@ local function packer_startup_fun()
     use { 'Vimjas/vim-python-pep8-indent', ft = { 'python' } }
     use {
         'BurningEther/iron.nvim',
-        config = function()
-            local opts = { noremap = false, silent = false }
+        setup = function()
             vim.g.iron_map_defaults = 0
-            vim.api.nvim_set_keymap('n', '<F5>', '<Plug>(iron-send-line)', opts)
-            vim.api.nvim_set_keymap('v', '<F5>', '<esc><Plug>(iron-visual-send)', opts)
-            vim.api.nvim_set_keymap('n', '<F8>', '<Plug>(iron-interrupt)', opts)
-
+        end,
+        config = function()
             require('iron').core.set_config {
                 preferred = {
                     python = 'ipython',
                 },
                 repl_open_cmd = 'vsplit',
             }
+
+            local opts = { noremap = false, silent = false }
+            vim.api.nvim_set_keymap('n', '<F5>', '<Plug>(iron-send-line)', opts)
+            vim.api.nvim_set_keymap('v', '<F5>', '<esc><Plug>(iron-visual-send)', opts)
+            vim.api.nvim_set_keymap('n', '<F8>', '<Plug>(iron-interrupt)', opts)
         end,
     }
     use {
@@ -626,10 +624,26 @@ local function packer_startup_fun()
         run = ':TSUpdate',
         config = function()
             require('nvim-treesitter.configs').setup {
+                ensure_installed = {
+                    'python',
+                    'c',
+                    'cpp',
+                    'go',
+                    'rust',
+                    'lua',
+                    'vim',
+                    'latex',
+                    'bibtex',
+                    'javascript',
+                    'css',
+                    'html',
+                    'json',
+                    'yaml',
+                },
                 highlight = {
                     enable = true,
                 },
-                -- todo: make ctrl-k like in sublime text :D
+                -- todo: try to make ctrl-k like in sublime text :D
                 -- incremental_selection = {
                 --     enable = true,
                 --     init_selection = "gnn",
@@ -637,7 +651,6 @@ local function packer_startup_fun()
                 -- indent = {
                 --     enable = true,
                 -- },
-                autopairs = { enable = true },
             }
         end,
     }
@@ -735,7 +748,7 @@ local function packer_startup_fun()
     use {
         'norcalli/nvim-colorizer.lua',
         config = function()
-            require('colorizer').setup {}
+            require('colorizer').setup()
         end,
     }
     use {
