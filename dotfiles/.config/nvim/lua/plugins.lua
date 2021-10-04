@@ -54,24 +54,26 @@ local function packer_startup_fun()
     }
     use { 'ericpruitt/tmux.vim', ft = 'tmux' }
     use {
-        'christoomey/vim-tmux-navigator',
+        'numToStr/Navigator.nvim',
         config = function()
-            vim.g.tmux_navigator_disable_when_zoomed = 1
-            vim.g.tmux_navigator_no_mappings = 1
+            require('Navigator').setup {
+                disable_on_zoom = true,
+            }
             local maps = {
-                ['<a-h>'] = 'TmuxNavigateLeft',
-                ['<a-j>'] = 'TmuxNavigateDown',
-                ['<a-k>'] = 'TmuxNavigateUp',
-                ['<a-l>'] = 'TmuxNavigateRight',
-                ['<a-\\'] = 'TmuxNavigatePrevious',
+                ['<a-h>'] = 'left',
+                ['<a-j>'] = 'down',
+                ['<a-k>'] = 'up',
+                ['<a-l>'] = 'right',
+                ['<a-\\'] = 'previous',
             }
             local opts = { noremap = true, silent = true }
             for m, cmd in pairs(maps) do
-                vim.api.nvim_set_keymap('n', m, '<cmd>' .. cmd .. '<cr>', opts)
-                vim.api.nvim_set_keymap('i', m, '<esc>:' .. cmd .. '<cr>', opts)
-                vim.api.nvim_set_keymap('v', m, '<esc>:' .. cmd .. '<cr>', opts)
-                vim.api.nvim_set_keymap('c', m, '<c-c>:' .. cmd .. '<cr>', opts)
-                vim.api.nvim_set_keymap('t', m, '<c-\\><c-n><cmd>' .. cmd .. '<cr>', opts)
+                cmd = '<cmd>' .. "lua require('Navigator')." .. cmd .. '()<cr>'
+                vim.api.nvim_set_keymap('n', m, cmd, opts)
+                vim.api.nvim_set_keymap('i', m, '<esc>' .. cmd, opts)
+                vim.api.nvim_set_keymap('v', m, '<esc>' .. cmd, opts)
+                vim.api.nvim_set_keymap('c', m, '<c-c>' .. cmd, opts)
+                vim.api.nvim_set_keymap('t', m, '<c-\\><c-n>' .. cmd, opts)
             end
         end,
     }
