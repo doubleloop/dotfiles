@@ -266,21 +266,22 @@ local function packer_startup_fun()
     -- use 'stsewd/gx-extended.vim'
     use 'godlygeek/tabular'
     use {
-        'rmagatti/auto-session',
-        config = function()
-            require('auto-session').setup {
-                auto_save_enabled = true,
-                auto_restore_enabled = false,
-            }
-        end,
-    }
-    use {
-        'rmagatti/session-lens',
-        requires = { 'rmagatti/auto-session', 'nvim-telescope/telescope.nvim' },
-        config = function()
-            require('session-lens').setup {}
+        'xolox/vim-session',
+        requires = 'xolox/vim-misc',
+        setup = function()
+            vim.g.session_autosave = 'yes'
+            vim.g.session_autoload = 'no'
+            vim.g.session_default_overwrite = 1
+            vim.g.session_autosave_periodic = 1
+            vim.g.session_autosave_silent = 1
+            vim.g.session_default_to_last = 1
+            vim.g.session_command_aliases = 1
+            vim.g.session_persist_colors = 0
+            vim.g.session_persist_font = 0
+            vim.g.session_directory = vim.fn.stdpath 'data' .. '/sessions'
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<leader>S', '<cmd>SearchSession<cr>', opts)
+            vim.api.nvim_set_keymap('n', '<leader>so', '<cmd>SessionOpen default<cr>', opts)
+            vim.api.nvim_set_keymap('n', '<leader>S', '<cmd>SessionOpen<cr>', opts)
         end,
     }
     use 'famiu/bufdelete.nvim'
