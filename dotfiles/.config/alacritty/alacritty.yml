@@ -383,7 +383,7 @@ cursor:
     #   - ▇ Block
     #   - _ Underline
     #   - | Beam
-    shape: Beam
+    # shape: Beam
 
     # Cursor blinking state
     #
