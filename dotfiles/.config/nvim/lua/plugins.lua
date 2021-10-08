@@ -64,7 +64,7 @@ local function packer_startup_fun()
                 ['<a-j>'] = 'down',
                 ['<a-k>'] = 'up',
                 ['<a-l>'] = 'right',
-                ['<a-\\'] = 'previous',
+                ['<a-\\>'] = 'previous',
             }
             local opts = { noremap = true, silent = true }
             for m, cmd in pairs(maps) do
