@@ -498,10 +498,10 @@ local function packer_startup_fun()
                 local function map(m, k, v)
                     vim.api.nvim_buf_set_keymap(bufnr, m, k, v, opts)
                 end
-                map('n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<cr>')
-                map('n', '<c-t>', '<c-o>zt')
-                map('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-                map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+                map('n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<cr>zt')
+                map('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<cr>zt')
+                map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>zt')
+                -- map('n', '<leader>n', '<cmd>lua vim.lsp.buf.references()<cr>')
                 map('n', '<leader>n', '<cmd>lua require("telescope.builtin").lsp_references()<cr>')
 
                 map('n', '<c-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
@@ -513,8 +513,8 @@ local function packer_startup_fun()
                 map('n', '<leader>.', '<cmd>lua vim.lsp.buf.code_action()<cr>')
 
                 map('n', '<a-d>', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>')
-                map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>')
-                map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>')
+                map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>zt')
+                map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>zt')
 
                 map(
                     'n',

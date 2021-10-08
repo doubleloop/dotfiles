@@ -137,8 +137,10 @@ nnoremap * *zt
 nnoremap # #zt
 nnoremap g* g*zt
 nnoremap g# g#zt
+nnoremap gd gdzt
 nnoremap <c-]> <c-]>zt
 nnoremap <c-t> <c-t>zt
+nnoremap <c-o> <c-o>zt
 nnoremap G Gzz
 
 inoremap <expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
