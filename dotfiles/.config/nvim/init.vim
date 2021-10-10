@@ -245,22 +245,19 @@ augroup end
 au TextYankPost * silent! lua vim.highlight.on_yank { higroup = 'IncSearch', timeout = 250, on_visual = false }
 
 " terminal
-" TODO: when switching focus from other tmux window, terminal is is not in insert
-" mode
 function! TerminalSet()
   setl nonu nornu signcolumn=no
   startinsert
-  nnoremap <buffer> q i
-  vnoremap <buffer> q <Esc>i
+  nnoremap <buffer> q <insert>
+  vnoremap <buffer> q <Esc><insert>
 endfunction
 augroup Terminal
   au!
   au TermOpen *  call TerminalSet()
-  au BufWinEnter,WinEnter term://* startinsert
-  au BufLeave term://* stopinsert
+  au BufWinEnter,WinEnter,FocusGained term://* startinsert
+  au BufLeave,FocusLost term://* stopinsert
 augroup end
 tnoremap <pageup> <c-\><c-n><pageup>
-tnoremap <pagedown> <c-\><c-n><pagedown>
 " }}}
 
 " Diagnostics {{{
