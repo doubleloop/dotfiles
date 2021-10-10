@@ -15,7 +15,7 @@ set mouse=a
 
 " Line numbers
 set number
-set norelativenumber
+set relativenumber
 set textwidth=0
 set nowrap
 set foldmethod=expr
@@ -234,13 +234,11 @@ augroup nosmartcase_cmd
   au CmdlineLeave * set smartcase
 augroup end
 
-" smart number toggling
+" smart number toggling, ignore terminal
 augroup smartnumbers
   au!
-  au InsertEnter * if empty(&buftype) | setl nornu | endif
-  au InsertLeave * if empty(&buftype) | setl rnu | endif
-  au WinEnter,BufNewFile,BufReadPost * if empty(&buftype) | setl rnu | endif
-  au WinLeave   * if empty(&buftype) | set rnu< | endif
+  au InsertEnter,WinLeave * if empty(&buftype) | setl nornu | endif
+  au InsertLeave,WinEnter * if empty(&buftype) | setl rnu | endif
 augroup end
 
 " Hilight the yanked region for a moment
