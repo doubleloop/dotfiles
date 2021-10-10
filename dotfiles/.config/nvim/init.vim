@@ -125,9 +125,6 @@ cnoremap <c-n> <down>
 cnoremap <c-p> <up>
 cnoremap <c-a> <home>
 
-" fix treesitter
-nnoremap <leader><leader> <cmd>write <bar> edit <bar> TSBufEnable highlight<cr>
-
 nnoremap n nzt
 nnoremap N Nzt
 nnoremap * *zt
@@ -145,7 +142,6 @@ inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-Tab>"
 
 noremap <leader>ds <cmd>windo diffthis<cr>
 noremap <leader>de <cmd>windo diffoff<cr>
-noremap <leader>dd <cmd>Gdiffsplit<cr>
 
 nnoremap <leader>z <cmd>let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
 nnoremap <leader>e <cmd>e $MYVIMRC<cr>
@@ -248,7 +244,7 @@ augroup smartnumbers
 augroup end
 
 " Hilight the yanked region for a moment
-au TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=250, on_visual=false}
+au TextYankPost * silent! lua vim.highlight.on_yank { higroup = 'IncSearch', timeout = 250, on_visual = false }
 
 " terminal
 " TODO: when switching focus from other tmux window, terminal is is not in insert

@@ -42,7 +42,13 @@ local function packer_startup_fun()
             require('nvim_comment').setup {}
         end,
     }
-    use 'tpope/vim-fugitive' -- git integration
+    use {
+        'tpope/vim-fugitive', -- git integration
+        config = function()
+            local opts = { noremap = true, silent = false }
+            vim.api.nvim_set_keymap('n', '<leader>dd', '<cmd>Gdiffsplit<cr>', opts)
+        end,
+    }
     use { 'tpope/vim-rhubarb', after = 'vim-fugitive' } -- gihtub Gbrowse
     use { 'tommcdo/vim-fubitive', after = 'vim-fugitive' } -- bitbucket Gbrowse
     use {
@@ -310,6 +316,13 @@ local function packer_startup_fun()
         after = 'nvim-treesitter',
         config = function()
             require('nvim-ts-autotag').setup()
+            -- fix treesitter
+            vim.api.nvim_set_keymap(
+                'n',
+                '<leader><leader>',
+                '<cmd>write <bar> edit <bar> TSBufEnable highlight<cr>',
+                { noremap = true, silent = false }
+            )
         end,
     }
     use {
