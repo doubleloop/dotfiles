@@ -146,15 +146,14 @@ nnoremap G Gzz
 inoremap <expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
 inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-Tab>"
 
-noremap <leader>ds :windo diffthis<cr>
-noremap <leader>de :windo diffoff<cr>
-noremap <leader>dd :Gdiffsplit<cr>
-nnoremap <leader>z :let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
-nnoremap <leader>e :e $MYVIMRC<cr>
+noremap <leader>ds <cmd>windo diffthis<cr>
+noremap <leader>de <cmd>windo diffoff<cr>
+noremap <leader>dd <cmd>Gdiffsplit<cr>
 
-nnoremap <silent> <leader>q :botright copen 10<cr>
-
-nnoremap <leader>W :%s/\s\+$//e<cr>
+nnoremap <leader>z <cmd>let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi
+nnoremap <leader>e <cmd>e $MYVIMRC<cr>
+nnoremap <silent> <leader>q <cmd>botright copen 10<cr>
+nnoremap <leader>W <cmd>%s/\s\+$//e<cr>
 
 " }}}
 

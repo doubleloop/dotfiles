@@ -69,11 +69,9 @@ local function packer_startup_fun()
             local opts = { noremap = true, silent = true }
             for m, cmd in pairs(maps) do
                 cmd = '<cmd>' .. "lua require('Navigator')." .. cmd .. '()<cr>'
-                vim.api.nvim_set_keymap('n', m, cmd, opts)
-                vim.api.nvim_set_keymap('i', m, '<esc>' .. cmd, opts)
-                vim.api.nvim_set_keymap('v', m, '<esc>' .. cmd, opts)
-                vim.api.nvim_set_keymap('c', m, '<c-c>' .. cmd, opts)
-                vim.api.nvim_set_keymap('t', m, '<c-\\><c-n>' .. cmd, opts)
+                for _, mode in ipairs { 'n', 'i', 'v', 'c', 't' } do
+                    vim.api.nvim_set_keymap(mode, m, cmd, opts)
+                end
             end
         end,
     }
@@ -190,9 +188,12 @@ local function packer_startup_fun()
         keys = '<c-w>z',
         setup = function()
             vim.g.zoomwintab_remap = 0
+        end,
+        config = function()
             local opts = { noremap = true, silent = true }
-            vim.api.nvim_set_keymap('n', '<c-w>z', '<cmd>ZoomWinTabToggle<cr>', opts)
-            vim.api.nvim_set_keymap('v', '<c-w>z', '<c-\\><c-n><cmd>ZoomWinTabToggle<cr>gv', opts)
+            for _, mode in ipairs { 'n', 'v' } do
+                vim.api.nvim_set_keymap(mode, '<c-w>z', '<cmd>ZoomWinTabToggle<cr>', opts)
+            end
         end,
     }
     use {
@@ -254,6 +255,8 @@ local function packer_startup_fun()
             vim.g.session_persist_colors = 0
             vim.g.session_persist_font = 0
             vim.g.session_directory = vim.fn.stdpath 'data' .. '/sessions'
+        end,
+        config = function()
             local opts = { noremap = true, silent = false }
             vim.api.nvim_set_keymap('n', '<leader>so', '<cmd>SessionOpen default<cr>', opts)
             vim.api.nvim_set_keymap('n', '<leader>S', '<cmd>SessionOpen<cr>', opts)
@@ -384,8 +387,7 @@ local function packer_startup_fun()
         config = function()
             local opts = { noremap = true, silent = false }
             vim.api.nvim_set_keymap('n', '<a-2>', '<cmd>TagbarToggle<cr>', opts)
-        end
-
+        end,
     }
     use {
         'mhartington/formatter.nvim',
@@ -415,9 +417,7 @@ local function packer_startup_fun()
                             return {
                                 exe = 'stylua',
                                 args = {
-                                    '--config-path '
-                                        .. vim.fn.getenv 'HOME'
-                                        .. '/.config/stylua/stylua.toml',
+                                    '--search-parent-directories',
                                     '-',
                                 },
                                 stdin = true,
@@ -453,7 +453,7 @@ local function packer_startup_fun()
         'euclio/vim-markdown-composer',
         -- building is slow, better to call it manually when it is needed
         -- run = 'cargo build --release'
-        config = function()
+        setup = function()
             vim.g.markdown_composer_autostart = 0
         end,
     }
@@ -467,15 +467,16 @@ local function packer_startup_fun()
         config = function()
             local opts = { noremap = true, silent = true }
             local function map(m, k, v)
-                vim.api.nvim_buf_set_keymap(0, m, k, v, opts)
+                vim.api.nvim_set_keymap(m, k, v, opts)
             end
             map('n', '<leader>cc', '<cmd>CoqLaunch<cr>')
             map('n', '<leader>cq', '<cmd>CoqKill<cr>')
             map('n', '<leader><F5>', '<cmd>CoqToCursor<cr>')
             for m, cmd in pairs { ['c-n'] = 'CoqNext', ['c-p'] = 'CoqUndo' } do
-                map('n', m, '<cmd>' .. cmd .. '<cr>')
-                map('v', m, '<cmd>' .. cmd .. '<cr>')
-                map('i', m, [[<c-\><c-o><cmd>]] .. cmd .. '<cr>')
+                cmd = '<cmd>' .. cmd .. '<cr>'
+                for _, mode in ipairs { 'n', 'v' } do
+                    map(mode, m, cmd)
+                end
             end
         end,
     }
@@ -752,6 +753,13 @@ local function packer_startup_fun()
             local palette = monokai.classic
             monokai.setup {
                 custom_hlgroups = {
+                    SpellBad = {
+                        style = 'undercurl',
+                        -- underline color support is not yet implemented in allacritty
+                        -- fg = None,
+                        fg = '#e73c50',
+                        sp = '#e73c50',
+                    },
                     FoldColumn = {
                         fg = palette.base5,
                         bg = palette.base2,
@@ -801,6 +809,11 @@ local function packer_startup_fun()
                     },
                 },
             }
+
+            -- used by document_highlight
+            vim.cmd [[ hi link LspReferenceText CursorLine ]]
+            vim.cmd [[ hi link LspReferenceWrite CursorLine ]]
+            vim.cmd [[ hi link LspReferenceRead CursorLine ]]
         end,
     }
 end
