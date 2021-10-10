@@ -28,9 +28,6 @@ set listchars=extends:#,precedes:#,tab:-->,space:⋅
 set fillchars=vert:│
 set diffopt+=vertical,indent-heuristic,algorithm:patience
 
-" set colorcolumn=80
-set colorcolumn=
-
 set showtabline=0 " do not disply tab on the top os the screen
 set ruler         " disply line/col in status bar
 set autoread
@@ -207,7 +204,7 @@ endfunction
 augroup filetype_settings
   au!
   au FileType html,xhtml,css,yaml setl sw=2
-  au FileType gitcommit setl spell
+  au FileType gitcommit setl spell tw=72 cc=+1
   au FileType vim setl fdm=marker sw=2
   au FileType go setl noet sw=0 ts=4
   au FileType haskell
