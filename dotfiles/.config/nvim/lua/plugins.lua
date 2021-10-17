@@ -108,11 +108,18 @@ local function packer_startup_fun()
         },
         config = function()
             local actions = require 'telescope.actions'
+
+            local function custom_send_to_qflist(prompt_bufnr)
+                actions.send_to_qflist(prompt_bufnr)
+                vim.cmd [[botright copen]]
+            end
+
             require('telescope').setup {
                 defaults = {
                     mappings = {
                         i = {
                             ['<esc>'] = actions.close,
+                            ['<C-q>'] = custom_send_to_qflist,
                         },
                         n = {
                             ['q'] = actions.close,
@@ -439,7 +446,7 @@ local function packer_startup_fun()
                     },
                 },
             }
-            vim.cmd [[ au FileType python,lua nnoremap <buffer> <leader>= <cmd>Format<cr> ]]
+            vim.cmd [[au FileType python,lua nnoremap <buffer> <leader>= <cmd>Format<cr>]]
         end,
     }
     use { 'Vimjas/vim-python-pep8-indent', ft = { 'python' } }
