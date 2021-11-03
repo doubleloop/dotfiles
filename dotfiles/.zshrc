@@ -61,7 +61,7 @@ export WORKON_HOME=$HOME/.virtualenvs
 [ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
     GIT_PROMPT_EXECUTABLE="haskell"
 export NVM_LAZY=1
-export NVM_LAZY_CMD=(vim pyright)
+export NVM_LAZY_CMD=(vim nvim pyright)
 # z.lua settings
 export _ZL_DATA=$HOME/.zlua/data
 export _ZL_HYPHEN=1
@@ -96,7 +96,7 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 # fzf
-export FZF_DEFAULT_OPTS='--cycle --filepath-word -e --bind tab:down,btab:up,ctrl-space:toggle'
+export FZF_DEFAULT_OPTS='--cycle --filepath-word --bind=tab:down,btab:up,ctrl-space:toggle'
 if _exists fdfind; then
     export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --follow --exclude .git'
 	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -108,7 +108,6 @@ elif _exists ag; then
 	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 
-FZF_TAB_OPTS+=(--no-info --filepath-word --bind=tab:down,btab:up,ctrl-j:down)
 if (( $+functions[_try_custom_completion] )); then
     custom-fzf-tab-complete() { _try_custom_completion || fzf-tab-complete }
     zle -N custom-fzf-tab-complete
@@ -117,8 +116,6 @@ fi
 # }}}
 
 ### env settings ### {{{
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 if _exists nvim; then
     export EDITOR=nvim
     alias vim=nvim
@@ -161,6 +158,13 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_IGNORE_SPACE
 setopt HIST_NO_STORE
 setopt HIST_NO_FUNCTIONS
+
+# idea is to use treesitter to parse cmdline and check if all command_name tokens
+# are valid, filter out some commands, maybe
+# zshaddhistory() { TODO }
+
+# TODO: is it possible to use treesitter instead of zsh-syntax-highlighting?
+
 # }}}
 
 ### load external files ### {{{
