@@ -43,7 +43,7 @@ else
         fzf-tab
         custom-completions
         zsh-autosuggestions
-        fast-syntax-highlighting
+        zsh-syntax-highlighting
     )
 fi
 # }}}
