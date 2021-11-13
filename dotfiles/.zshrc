@@ -65,6 +65,7 @@ export NVM_LAZY_CMD=(vim nvim pyright)
 # z.lua settings
 export _ZL_DATA=$HOME/.zlua/data
 export _ZL_HYPHEN=1
+export ZLUA_EXEC=luajit
 # }}}
 
 source $ZSH/oh-my-zsh.sh
