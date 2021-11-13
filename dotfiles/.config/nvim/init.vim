@@ -18,6 +18,7 @@ set number
 set relativenumber
 set textwidth=0
 set nowrap
+set linebreak
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr() " works with some bugs
 set foldlevelstart=99
@@ -69,6 +70,7 @@ set noswapfile
 
 " Spelling
 set spelllang=en_us
+set spellcapcheck=''
 
 " tab completion in comand mode
 set wildmode=longest:full,full
@@ -109,6 +111,8 @@ nnoremap <c-w>c :tabedit %<cr>
 " update history on certain input events
 " note: careful, this is not cool when using macro..
 " if there was any way to make this enabled but not when recording macro..
+" TODO: check out https://github.com/neovim/neovim/pull/15407 when it is
+" merged!
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 inoremap <c-r> <c-g>u<c-r>

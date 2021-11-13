@@ -108,6 +108,7 @@ local function packer_startup_fun()
         },
         config = function()
             local actions = require 'telescope.actions'
+            local builtin = require 'telescope.builtin'
 
             local function custom_send_to_qflist(prompt_bufnr)
                 actions.send_to_qflist(prompt_bufnr)
@@ -127,8 +128,22 @@ local function packer_startup_fun()
                     },
                 },
             }
+
+            function _G.telescopecustomprojectfiles()
+                local ok = pcall(builtin.git_files, {})
+                if not ok then
+                    builtin.find_files {}
+                end
+            end
+
+            local opts = { noremap = true, silent = false }
+            vim.api.nvim_set_keymap(
+                'n',
+                '<leader>p',
+                '<cmd>call v:lua.telescopecustomprojectfiles()<cr>',
+                opts
+            )
             local maps = {
-                ['<leader>p'] = 'find_files',
                 ['<leader>:'] = 'commands',
                 ['<leader>b'] = 'buffers',
                 ['<leader>m'] = 'oldfiles',
@@ -137,7 +152,6 @@ local function packer_startup_fun()
                 ['<leader>/'] = 'live_grep',
                 ['<leader>h'] = 'help_tags',
             }
-            local opts = { noremap = true, silent = false }
             for m, cmd in pairs(maps) do
                 vim.api.nvim_set_keymap(
                     'n',
@@ -583,17 +597,13 @@ local function packer_startup_fun()
             lsp.texlab.setup {
                 on_attach = on_attach_defaults,
                 settings = {
-                    latex = {
+                    texlab = {
                         build = {
-                            args = { '-pdf', '-interaction=nonstopmode', '-synctex=1' },
-                            executable = 'latexmk',
-                            -- forwardSearchAfter = true,
                             onSave = true,
                         },
                         forwardSearch = {
                             executable = 'zathura',
                             args = { '--synctex-forward', '%l:1:%f', '%p' },
-                            -- onSave = true;
                         },
                     },
                 },
