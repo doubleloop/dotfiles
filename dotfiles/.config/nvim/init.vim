@@ -155,28 +155,7 @@ nnoremap <leader>W <cmd>%s/\s\+$//e<cr>
 " }}}
 
 " Custom misc functions {{{
-" some functions to inspect colorscheme settings
-function! SynStackFun()
-  if !exists("*synstack")
-  return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-command! SyntaxStack call SynStackFun()
-command! FgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "fg")
-command! BgColor :echo synIDattr(synIDtrans(synID(line("."), col("."), 1)), "bg")
-
-" build_go_files is a custom function that builds or compiles the test file.
-" It calls :GoBuild if its a Go file, or :GoTestCompile if it's a test file
-function! s:build_go_files()
-  let l:file = expand('%')
-  if l:file =~# '^\f\+_test\.go$'
-    call go#cmd#Test(0, 1)
-  elseif l:file =~# '^\f\+\.go$'
-    call go#cmd#Build(0)
-  endif
-endfunction
-
+"
 " toggle xyz.py with test_xyz.py (in subdirectory of current root)
 function! PytestFileToggle() abort
   let l:file = expand('%:t')
