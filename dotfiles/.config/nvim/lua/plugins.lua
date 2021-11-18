@@ -73,11 +73,13 @@ local function packer_startup_fun()
                 ['<a-\\>'] = 'previous',
             }
             local opts = { noremap = true, silent = true }
-            for m, cmd in pairs(maps) do
-                cmd = '<cmd>' .. "lua require('Navigator')." .. cmd .. '()<cr>'
-                for _, mode in ipairs { 'n', 'i', 'v', 'c', 't' } do
+            for m, f in pairs(maps) do
+                local cmd = "<cmd>lua require('Navigator')." .. f .. '()<cr>'
+                local icmd = "<cmd>stopi | lua require('Navigator')." .. f .. '()<cr>'
+                for _, mode in ipairs { 'n', 'v', 'c', 't' } do
                     vim.api.nvim_set_keymap(mode, m, cmd, opts)
                 end
+                vim.api.nvim_set_keymap('i', m, icmd, opts)
             end
         end,
     }
