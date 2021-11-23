@@ -8,6 +8,7 @@ dotfiles/.config/sublime-text-3
 dotfiles/.mrconfig
 dotfiles/.mackup.cfg
 mackupenv
+**/packer_compiled.lua
 
 **/*.pyo
 **/*.spl
