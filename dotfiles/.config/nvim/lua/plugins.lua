@@ -240,13 +240,13 @@ local function packer_startup_fun()
                     noremap = true,
                     ['n ]c'] = {
                         expr = true,
-                        "&diff ? ']c' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'",
+                        "&diff ? ']c' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<cr>'",
                     },
                     ['n [c'] = {
                         expr = true,
-                        "&diff ? '[c' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'",
+                        "&diff ? '[c' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<cr>'",
                     },
-                    ['n <a-g>'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
+                    ['n <a-g>'] = '<cmd>lua require"gitsigns".preview_hunk()<cr>',
                 },
             }
         end,
@@ -524,6 +524,7 @@ local function packer_startup_fun()
             local opts = { noremap = true, silent = true }
             local function on_attach_defaults(_, bufnr)
                 vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+                vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
                 vim.api.nvim_buf_set_keymap(
                     bufnr,
                     'i',
@@ -535,7 +536,6 @@ local function packer_startup_fun()
                 local function map(m, k, v)
                     vim.api.nvim_buf_set_keymap(bufnr, m, k, v, opts)
                 end
-                map('n', '<c-]>', '<cmd>lua vim.lsp.buf.definition()<cr>zt')
                 map('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<cr>zt')
                 map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>zt')
                 -- map('n', '<leader>n', '<cmd>lua vim.lsp.buf.references()<cr>')
@@ -652,9 +652,11 @@ local function packer_startup_fun()
         config = function()
             require('nvim-treesitter.configs').setup {
                 ensure_installed = {
+                    'bash',
                     'python',
                     'c',
                     'cpp',
+                    'cmake',
                     'go',
                     'rust',
                     'lua',
@@ -662,10 +664,15 @@ local function packer_startup_fun()
                     'latex',
                     'bibtex',
                     'javascript',
+                    'java',
                     'css',
                     'html',
                     'json',
                     'yaml',
+                    'toml',
+                    'rst',
+                    'comment',
+                    'http',
                 },
                 highlight = {
                     enable = true,
@@ -838,6 +845,15 @@ local function packer_startup_fun()
                     },
                     SentToCoq = {
                         bg = '#313337',
+                    },
+                    TSConstructor = {
+                        fg = palette.aqua,
+                    },
+                    TSConstant = {
+                        fg = palette.purple,
+                    },
+                    TSFuncBuiltin = {
+                        fg = palette.green,
                     },
                 },
             }
