@@ -2,6 +2,8 @@ let mapleader=","
 let g:python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 let g:vimsyn_embed = 'l'
 
+lua require('impatient')
+
 " ~/.config/nvim/lua/plugins.lua
 lua require('plugins')
 

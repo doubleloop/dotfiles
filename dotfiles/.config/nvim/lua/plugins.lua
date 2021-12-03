@@ -24,6 +24,7 @@ local use = require('packer').use
 
 local function packer_startup_fun()
     use 'wbthomason/packer.nvim'
+    use 'lewis6991/impatient.nvim'
 
     use { 'wikitopian/hardmode', fn = { 'ToggleHardMode', 'HardMode', 'EasyMode' } }
     use {
@@ -904,5 +905,8 @@ require('packer').startup {
                 return require('packer.util').float { border = 'single' }
             end,
         },
+        compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua'
     },
 }
+
+require('packer_compiled')
