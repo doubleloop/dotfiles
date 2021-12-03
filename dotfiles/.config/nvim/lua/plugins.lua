@@ -37,9 +37,27 @@ local function packer_startup_fun()
     use 'tpope/vim-repeat' -- Fix '.' key on some plugins
     use 'tpope/vim-surround' -- Must have surround functionality
     use {
-        'terrortylor/nvim-comment',
+        'numToStr/Comment.nvim',
+        after = 'nvim-ts-context-commentstring',
         config = function()
-            require('nvim_comment').setup {}
+            local cu = require 'Comment.utils'
+            local tcu = require 'ts_context_commentstring.utils'
+            local tci = require 'ts_context_commentstring.internal'
+            require('Comment').setup {
+                -- https://github.com/numToStr/Comment.nvim#pre-hook
+                pre_hook = function(ctx)
+                    local location = nil
+                    if ctx.ctype == cu.ctype.block then
+                        location = tcu.get_cursor_location()
+                    elseif ctx.cmotion == cu.cmotion.v or ctx.cmotion == cu.cmotion.V then
+                        location = tcu.get_visual_start_location()
+                    end
+                    return tci.calculate_commentstring {
+                        key = ctx.ctype == cu.ctype.line and '__default' or '__multiline',
+                        location = location,
+                    }
+                end,
+            }
         end,
     }
     use {
@@ -690,7 +708,7 @@ local function packer_startup_fun()
     }
     use {
         'nvim-treesitter/nvim-treesitter-textobjects',
-        requires = 'nvim-treesitter/nvim-treesitter',
+        after = 'nvim-treesitter',
         config = function()
             require('nvim-treesitter.configs').setup {
                 textobjects = {
@@ -736,7 +754,7 @@ local function packer_startup_fun()
     }
     use {
         'nvim-treesitter/playground',
-        requires = 'nvim-treesitter/nvim-treesitter',
+        after = 'nvim-treesitter',
         config = function()
             require('nvim-treesitter.configs').setup {
                 playground = {
@@ -744,6 +762,18 @@ local function packer_startup_fun()
                     disable = {},
                     updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
                     persist_queries = false, -- Whether the query persists across vim sessions
+                },
+            }
+        end,
+    }
+    use {
+        'JoosepAlviste/nvim-ts-context-commentstring',
+        after = 'nvim-treesitter',
+        config = function()
+            require('nvim-treesitter.configs').setup {
+                context_commentstring = {
+                    enable = true,
+                    enable_autocmd = false,
                 },
             }
         end,
