@@ -19,4 +19,25 @@ utils.get_gcc_include_paths = function(ft)
     return paths
 end
 
+utils.pytest_file_toggle = function()
+    local file = vim.fn.expand('%:t')
+    local root = vim.fn.expand('%:p:h')
+    local alt_file
+    if file:match('^test_.+%.py$') then
+        alt_file = file:sub(6)
+    elseif file:match('^.+%.py$') then
+        alt_file = 'test_' .. file
+    else
+        return
+    end
+    local candidate = root .. '/' .. alt_file
+    if vim.fn.bufexists(candidate) ~= 0 then
+        vim.cmd('b ' .. candidate)
+    elseif vim.fn.filewritable('**/' .. alt_file) == 1 then
+        vim.cmd('e **/' .. alt_file)
+    elseif alt_file:match('^test_') then
+        vim.cmd('e ' .. candidate)
+    end
+end
+
 return utils

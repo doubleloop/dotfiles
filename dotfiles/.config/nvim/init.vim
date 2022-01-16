@@ -156,31 +156,6 @@ nnoremap <leader>W <cmd>%s/\s\+$//e<cr>
 
 " }}}
 
-" Custom misc functions {{{
-"
-" toggle xyz.py with test_xyz.py (in subdirectory of current root)
-function! PytestFileToggle() abort
-  let l:file = expand('%:t')
-  if empty(file)
-    return
-  elseif l:file =~# '^test_.\+\.py$'
-    let l:alt_file = substitute(l:file, '^test_', '', '')
-  elseif l:file =~# '^.\+.py$'
-    let l:alt_file = 'test_' . l:file
-  else
-    return
-  endif
-  if bufexists(alt_file)
-    execute 'b ' . l:alt_file
-  elseif filewritable('**/' . l:alt_file)
-    execute 'e **/' . l:alt_file
-  else
-    execute 'e ' . expand('%:p:h') . '/' . l:alt_file
-  endif
-endfunction
-
-" }}}
-
 " Auto commands {{{
 augroup filetype_settings
   au!
@@ -198,7 +173,7 @@ augroup filetype_settings
   au FileType cpp let &l:path=luaeval('require("utils").get_gcc_include_paths("cpp")')
   au FileType sql setl cms=--%s sw=2
   " au FileType asm setl
-  au FileType python command! -bang A call PytestFileToggle()
+  au FileType python command! -buffer A lua require('utils').pytest_file_toggle()
   au FileType markdown setl spell
   au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
   au FileType help,man setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
