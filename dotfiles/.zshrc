@@ -43,6 +43,7 @@ else
         fzf-tab
         custom-completions
         zsh-autosuggestions
+        zsh-history-substring-search
         zsh-syntax-highlighting
     )
 fi
@@ -132,6 +133,9 @@ _exists rustc && export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/
 ### zsh settings ### {{{
 # shift+tab
 bindkey '^[[Z' reverse-menu-complete
+
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
 
 # stop ctrl-s from hanging terminal
 setopt NO_FLOW_CONTROL
