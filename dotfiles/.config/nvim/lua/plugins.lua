@@ -65,7 +65,7 @@ local function packer_startup_fun()
         'tpope/vim-fugitive', -- git integration
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<leader>dd', '<cmd>Gdiffsplit<cr>', opts)
+            vim.keymap.set('n', '<leader>dd', '<cmd>Gdiffsplit<cr>', opts)
         end,
     }
     use { 'tpope/vim-rhubarb', after = 'vim-fugitive' } -- gihtub Gbrowse
@@ -81,24 +81,24 @@ local function packer_startup_fun()
     use {
         'numToStr/Navigator.nvim',
         config = function()
-            require('Navigator').setup {
+            local nv = require 'Navigator'
+            nv.setup {
                 disable_on_zoom = true,
             }
             local maps = {
-                ['<a-h>'] = 'left',
-                ['<a-j>'] = 'down',
-                ['<a-k>'] = 'up',
-                ['<a-l>'] = 'right',
-                ['<a-\\>'] = 'previous',
+                ['<a-h>'] = nv.left,
+                ['<a-j>'] = nv.down,
+                ['<a-k>'] = nv.up,
+                ['<a-l>'] = nv.right,
+                ['<a-\\>'] = nv.previous,
             }
             local opts = { noremap = true, silent = true }
-            for m, f in pairs(maps) do
-                local cmd = "<cmd>lua require('Navigator')." .. f .. '()<cr>'
-                local icmd = "<cmd>stopi | lua require('Navigator')." .. f .. '()<cr>'
-                for _, mode in ipairs { 'n', 'v', 'c', 't' } do
-                    vim.api.nvim_set_keymap(mode, m, cmd, opts)
-                end
-                vim.api.nvim_set_keymap('i', m, icmd, opts)
+            for m, fun in pairs(maps) do
+                vim.keymap.set({ 'n', 'v', 'c', 't' }, m, fun, opts)
+                vim.keymap.set('i', m, function()
+                    vim.cmd 'stopinsert'
+                    fun()
+                end, opts)
             end
         end,
     }
@@ -150,36 +150,23 @@ local function packer_startup_fun()
                 },
             }
 
-            function _G.telescopecustomprojectfiles()
-                local ok = pcall(builtin.git_files, {})
-                if not ok then
-                    builtin.find_files {}
-                end
-            end
-
-            local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap(
-                'n',
-                '<leader>p',
-                '<cmd>call v:lua.telescopecustomprojectfiles()<cr>',
-                opts
-            )
             local maps = {
-                ['<leader>:'] = 'commands',
-                ['<leader>b'] = 'buffers',
-                ['<leader>m'] = 'oldfiles',
-                ['<a-e>'] = 'tags',
-                ['<leader><c-r>'] = 'command_history',
-                ['<leader>/'] = 'live_grep',
-                ['<leader>h'] = 'help_tags',
+                ['<leader>p'] = function()
+                    local ok = pcall(builtin.git_files, {})
+                    if not ok then
+                        builtin.find_files {}
+                    end
+                end,
+                ['<leader>:'] = builtin.commands,
+                ['<leader>b'] = builtin.buffers,
+                ['<leader>m'] = builtin.oldfiles,
+                ['<a-e>'] = builtin.tags,
+                ['<leader><c-r>'] = builtin.command_history,
+                ['<leader>/'] = builtin.live_grep,
+                ['<leader>h'] = builtin.help_tags,
             }
-            for m, cmd in pairs(maps) do
-                vim.api.nvim_set_keymap(
-                    'n',
-                    m,
-                    "<cmd>lua require('telescope.builtin')." .. cmd .. '()<cr>',
-                    opts
-                )
+            for m, fun in pairs(maps) do
+                vim.keymap.set('n', m, fun, { noremap = true, silent = false })
             end
         end,
     }
@@ -226,9 +213,9 @@ local function packer_startup_fun()
         'zenbro/mirror.vim',
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<leader>rr', '<cmd>w<cr><cmd>MirrorPush<cr>', opts)
-            vim.api.nvim_set_keymap('n', '<leader>rd', '<cmd>MirrorDiff<cr>', opts)
-            vim.api.nvim_set_keymap('n', '<leader>rl', '<cmd>MirrorReload<cr>', opts)
+            vim.keymap.set('n', '<leader>rr', '<cmd>w<cr><cmd>MirrorPush<cr>', opts)
+            vim.keymap.set('n', '<leader>rd', '<cmd>MirrorDiff<cr>', opts)
+            vim.keymap.set('n', '<leader>rl', '<cmd>MirrorReload<cr>', opts)
         end,
     }
     use {
@@ -239,9 +226,7 @@ local function packer_startup_fun()
         end,
         config = function()
             local opts = { noremap = true, silent = true }
-            for _, mode in ipairs { 'n', 'v' } do
-                vim.api.nvim_set_keymap(mode, '<c-w>z', '<cmd>ZoomWinTabToggle<cr>', opts)
-            end
+            vim.keymap.set({ 'n', 'v' }, '<c-w>z', '<cmd>ZoomWinTabToggle<cr>', opts)
         end,
     }
     use {
@@ -254,19 +239,40 @@ local function packer_startup_fun()
         'lewis6991/gitsigns.nvim',
         requires = 'nvim-lua/plenary.nvim',
         config = function()
-            require('gitsigns').setup {
-                keymaps = {
-                    noremap = true,
-                    ['n ]c'] = {
-                        expr = true,
-                        "&diff ? ']c' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<cr>'",
-                    },
-                    ['n [c'] = {
-                        expr = true,
-                        "&diff ? '[c' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<cr>'",
-                    },
-                    ['n <a-g>'] = '<cmd>lua require"gitsigns".preview_hunk()<cr>',
-                },
+            gs = require 'gitsigns'
+            gs.setup {
+                on_attach = function(bufnr)
+                    local opts = { buffer = bufnr }
+                    for m, fun in
+                        pairs {
+                            ['<a-g>'] = gs.preview_hunk,
+                            ['<leader>gh'] = gs.preview_hunk,
+                            ['<leader>gs'] = gs.stage_hunk,
+                            ['<leader>gu'] = gs.undo_stage_hunk,
+                            ['<leader>gr'] = gs.reset_hunk,
+                        }
+                    do
+                        vim.keymap.set('n', m, fun, opts)
+                    end
+
+                    for m, cmd in
+                        pairs {
+                            ['v <leader>gs'] = '<cmd>Gitsigns stage_hunk<cr>',
+                            ['v <leader>hr'] = '<cmd>Gitsigns reset_hunk<cr>',
+                        }
+                    do
+                        vim.keymap.set({ 'n', 'v' }, m, cmd, opts)
+                    end
+
+                    for m, cmd in
+                        pairs {
+                            [']c'] = "&diff ? ']c' : '<cmd>Gitsigns next_hunk<cr>'",
+                            ['[c'] = "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<cr>'",
+                        }
+                    do
+                        vim.keymap.set('n', m, cmd, vim.tbl_extend('force', opts, { expr = true }))
+                    end
+                end,
             }
         end,
     }
@@ -278,13 +284,13 @@ local function packer_startup_fun()
             vim.g.nvim_tree_indent_markers = 1
         end,
         config = function()
-            require('nvim-tree').setup {
+            nvt = require 'nvim-tree'
+            nvt.setup {
                 hijack_cursor = true,
                 update_focused_file = { enable = true },
                 update_cwd = true,
             }
-            local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<a-1>', '<cmd>NvimTreeToggle<cr>', opts)
+            vim.keymap.set('n', '<a-1>', nvt.toggle, { noremap = true, silent = false })
         end,
     }
     -- use 'stsewd/gx-extended.vim'
@@ -306,8 +312,8 @@ local function packer_startup_fun()
         end,
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<leader>so', '<cmd>SessionOpen default<cr>', opts)
-            vim.api.nvim_set_keymap('n', '<leader>S', '<cmd>SessionOpen<cr>', opts)
+            vim.keymap.set('n', '<leader>so', '<cmd>SessionOpen default<cr>', opts)
+            vim.keymap.set('n', '<leader>S', '<cmd>SessionOpen<cr>', opts)
         end,
     }
     use 'famiu/bufdelete.nvim'
@@ -335,22 +341,13 @@ local function packer_startup_fun()
                 Rule('r"', "'", 'python'),
             }
 
-            -- skip it, if you use another global object
-            _G.MUtils = {}
-
-            MUtils.completion_confirm = function()
+            vim.keymap.set('i', '<cr>', function()
                 if vim.fn.pumvisible() ~= 0 then
                     return npairs.esc '<cr>'
                 else
                     return npairs.autopairs_cr()
                 end
-            end
-            vim.api.nvim_set_keymap(
-                'i',
-                '<cr>',
-                'v:lua.MUtils.completion_confirm()',
-                { expr = true, noremap = true }
-            )
+            end, { expr = true, noremap = true })
         end,
     }
     use {
@@ -359,7 +356,7 @@ local function packer_startup_fun()
         config = function()
             require('nvim-ts-autotag').setup()
             -- fix treesitter
-            vim.api.nvim_set_keymap(
+            vim.keymap.set(
                 'n',
                 '<leader><leader>',
                 '<cmd>write <bar> edit <bar> TSBufEnable highlight<cr>',
@@ -373,18 +370,12 @@ local function packer_startup_fun()
             vim.g.Illuminate_delay = 500
             vim.g.Illuminate_ftblacklist = { 'LuaTree', 'nerdtree' }
             local opts = { noremap = true, silent = true }
-            vim.api.nvim_set_keymap(
-                'n',
-                '<c-n>',
-                '<cmd>lua require"illuminate".next_reference{wrap=true}<cr>',
-                opts
-            )
-            vim.api.nvim_set_keymap(
-                'n',
-                '<c-p>',
-                '<cmd>lua require"illuminate".next_reference{reverse=true,wrap=true}<cr>',
-                opts
-            )
+            vim.keymap.set('n', '<c-n>', function()
+                require('illuminate').next_reference { wrap = true }
+            end, opts)
+            vim.keymap.set('n', '<c-p>', function()
+                require('illuminate').next_reference { reverse = true, wrap = true }
+            end, opts)
         end,
     }
     use {
@@ -441,7 +432,7 @@ local function packer_startup_fun()
         end,
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.api.nvim_set_keymap('n', '<a-2>', '<cmd>TagbarToggle<cr>', opts)
+            vim.keymap.set('n', '<a-2>', '<cmd>TagbarToggle<cr>', opts)
         end,
     }
     use {
@@ -489,9 +480,11 @@ local function packer_startup_fun()
         'BurningEther/iron.nvim',
         setup = function()
             vim.g.iron_map_defaults = 0
+            vim.g.iron_map_extended = 0
         end,
         config = function()
-            require('iron').core.set_config {
+            iron = require('iron').core
+            iron.set_config {
                 preferred = {
                     python = 'ipython',
                 },
@@ -499,9 +492,8 @@ local function packer_startup_fun()
             }
 
             local opts = { noremap = false, silent = false }
-            vim.api.nvim_set_keymap('n', '<F5>', '<Plug>(iron-send-line)', opts)
-            vim.api.nvim_set_keymap('v', '<F5>', '<esc><Plug>(iron-visual-send)', opts)
-            vim.api.nvim_set_keymap('n', '<F8>', '<Plug>(iron-interrupt)', opts)
+            vim.keymap.set('n', '<F5>', iron.send_line, opts)
+            vim.keymap.set('v', '<F5>', '<esc><cmd>lua require("iron").exec_visual()<cr>', opts)
         end,
     }
     use {
@@ -521,17 +513,22 @@ local function packer_startup_fun()
         ft = 'coq',
         config = function()
             local opts = { noremap = true, silent = true }
-            local function map(m, k, v)
-                vim.api.nvim_set_keymap(m, k, v, opts)
+            for m, cmd in
+                pairs {
+                    ['<leader>cc'] = '<cmd>CoqLaunch<cr>',
+                    ['<leader>cq'] = '<cmd>CoqKill<cr>',
+                    ['<leader><F5>'] = '<cmd>CoqToCursor<cr>',
+                }
+            do
+                vim.keymap.set('n', m, cmd, opts)
             end
-            map('n', '<leader>cc', '<cmd>CoqLaunch<cr>')
-            map('n', '<leader>cq', '<cmd>CoqKill<cr>')
-            map('n', '<leader><F5>', '<cmd>CoqToCursor<cr>')
-            for m, cmd in pairs { ['c-n'] = 'CoqNext', ['c-p'] = 'CoqUndo' } do
-                cmd = '<cmd>' .. cmd .. '<cr>'
-                for _, mode in ipairs { 'n', 'v' } do
-                    map(mode, m, cmd)
-                end
+            for m, cmd in
+                pairs {
+                    ['c-n'] = '<cmd>CoqNext<cr>',
+                    ['c-p'] = '<cmd>CoqUndo<cr>',
+                }
+            do
+                vim.keymap.set({ 'n', 'i' }, m, cmd, opts)
             end
         end,
     }
