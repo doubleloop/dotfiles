@@ -22,7 +22,7 @@ set textwidth=0
 set nowrap
 set linebreak
 set foldmethod=expr
-set foldexpr=nvim_treesitter#foldexpr() " works with some bugs
+set foldexpr=nvim_treesitter#foldexpr()
 set foldlevelstart=99
 set foldnestmax=10
 
@@ -108,13 +108,14 @@ cnoremap <Up>     <nop>
 cnoremap <Down>   <nop>
 
 " more tmux like behavior
-nnoremap <c-w>c :tabedit %<cr>
+nnoremap <c-w>c <cmd>tabedit %<cr>
+
+" do not override unnamed register when pasting over
+xnoremap <expr> p 'pgv"'.v:register.'y'
 
 " update history on certain input events
 " note: careful, this is not cool when using macro..
-" if there was any way to make this enabled but not when recording macro..
-" TODO: check out https://github.com/neovim/neovim/pull/15407 when it is
-" merged!
+" if there was any way to make this enabled but not when running macro..
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 inoremap <c-r> <c-g>u<c-r>
@@ -163,20 +164,16 @@ augroup filetype_settings
   au FileType gitcommit setl spell tw=72 cc=+1
   au FileType vim setl fdm=marker sw=2
   au FileType go setl noet sw=0 ts=4
-  au FileType haskell
-    \  setl sw=2
-    \| setl tags+=codex.tags;/
-  au FileType c,cpp
-    \  setl sw=2
-    \| setl tags+=~/.tags/c.tags
+  au FileType haskell setl sw=2 | setl tags+=codex.tags;/
+  au FileType c,cpp setl sw=2 | setl tags+=~/.tags/c.tags
   au FileType c   let &l:path=luaeval('require("utils").get_gcc_include_paths()')
   au FileType cpp let &l:path=luaeval('require("utils").get_gcc_include_paths("cpp")')
   au FileType sql setl cms=--%s sw=2
   " au FileType asm setl
-  au FileType python command! -buffer A lua require('utils').pytest_file_toggle()
+  au FileType python lua vim.api.nvim_buf_add_user_command(0, 'A', require('utils').pytest_file_toggle, {})
   au FileType markdown setl spell
-  au FileType qf nnoremap <silent> <buffer> q :cclose<cr>:lclose<cr>
-  au FileType help,man setl signcolumn=no | nnoremap <silent> <buffer> q :q<cr>
+  au FileType qf,help,man nnoremap <silent> <buffer> q <c-w>q
+  au FileType help,man setl signcolumn=no
   au FileType tex setl sw=2 spell wrap
   au FileType vifm setl syntax=vim cms=\"%s
   au FileType coq setl cms=(*%s*) sw=2
@@ -205,17 +202,14 @@ augroup end
 au TextYankPost * silent! lua vim.highlight.on_yank { higroup = 'IncSearch', timeout = 250, on_visual = false }
 
 " terminal
-function! TerminalSet()
-  setl nonu nornu signcolumn=no
-  startinsert
-  nnoremap <buffer> q <insert>
-  vnoremap <buffer> q <Esc><insert>
-endfunction
 augroup Terminal
   au!
-  au TermOpen *  call TerminalSet()
   au BufWinEnter,WinEnter,FocusGained term://* startinsert
   au BufLeave,FocusLost term://* stopinsert
+  " note: TermOpen is fired after all Win/Buf events
+  " filename and buftype are not set before TermOpen event
+  au TermOpen * setl nonu nornu signcolumn=no
+  au TermClose * if !v:event.status | exe 'bdelete! '..expand('<abuf>') | endif
 augroup end
 tnoremap <pageup> <c-\><c-n><pageup>
 " }}}

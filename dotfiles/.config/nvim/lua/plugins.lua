@@ -147,6 +147,12 @@ local function packer_startup_fun()
                             ['q'] = actions.close,
                         },
                     },
+                    layout_config = {
+                        horizontal = {
+                            preview_width = 0.5,
+                            width = 0.9,
+                        },
+                    },
                 },
             }
 
@@ -190,7 +196,13 @@ local function packer_startup_fun()
             }
         end,
     }
-    use 'tversteeg/registers.nvim'
+    use {
+        'tversteeg/registers.nvim',
+        setup = function()
+            vim.g.registers_delay = 2000
+            vim.g.registers_trim_whitespace = 0
+        end,
+    }
     use {
         'mileszs/ack.vim',
         config = function()
@@ -246,10 +258,8 @@ local function packer_startup_fun()
                     for m, fun in
                         pairs {
                             ['<a-g>'] = gs.preview_hunk,
-                            ['<leader>gh'] = gs.preview_hunk,
-                            ['<leader>gs'] = gs.stage_hunk,
-                            ['<leader>gu'] = gs.undo_stage_hunk,
-                            ['<leader>gr'] = gs.reset_hunk,
+                            ['<leader>hh'] = gs.preview_hunk,
+                            ['<leader>hu'] = gs.undo_stage_hunk,
                         }
                     do
                         vim.keymap.set('n', m, fun, opts)
@@ -257,7 +267,7 @@ local function packer_startup_fun()
 
                     for m, cmd in
                         pairs {
-                            ['v <leader>gs'] = '<cmd>Gitsigns stage_hunk<cr>',
+                            ['v <leader>hs'] = '<cmd>Gitsigns stage_hunk<cr>',
                             ['v <leader>hr'] = '<cmd>Gitsigns reset_hunk<cr>',
                         }
                     do
@@ -533,6 +543,13 @@ local function packer_startup_fun()
         end,
     }
     use {
+        'lewis6991/spellsitter.nvim',
+        after = 'nvim-treesitter',
+        config = function()
+            require('spellsitter').setup { enable = true }
+        end,
+    }
+    use {
         'neovim/nvim-lspconfig',
         requires = 'RRethy/vim-illuminate',
         config = function()
@@ -751,6 +768,14 @@ local function packer_startup_fun()
         end,
     }
     use {
+        'mizlan/iswap.nvim',
+        config = function()
+            vim.keymap.set('n', 'gs', function()
+                require('iswap').iswap_with()
+            end, { noremap = true, silent = false })
+        end,
+    }
+    use {
         'nvim-treesitter/playground',
         after = 'nvim-treesitter',
         config = function()
@@ -815,6 +840,9 @@ local function packer_startup_fun()
     }
     use {
         'tanvirtin/monokai.nvim',
+        setup = function()
+            vim.api.nvim_set_option('termguicolors', true)
+        end,
         config = function()
             local monokai = require 'monokai'
             local palette = monokai.classic
@@ -887,9 +915,16 @@ local function packer_startup_fun()
             }
 
             -- used by document_highlight
-            vim.cmd [[ hi link LspReferenceText CursorLine ]]
-            vim.cmd [[ hi link LspReferenceWrite CursorLine ]]
-            vim.cmd [[ hi link LspReferenceRead CursorLine ]]
+            vim.cmd [[ hi! link LspReferenceText CursorLine ]]
+            vim.cmd [[ hi! link LspReferenceWrite CursorLine ]]
+            vim.cmd [[ hi! link LspReferenceRead CursorLine ]]
+
+            -- I do not like this overwrites so switch back to defaults
+            vim.cmd [[ hi! link TelescopeNormal Normal ]]
+            vim.cmd [[ hi! link TelescopeSelection Visual ]]
+            vim.cmd [[ hi! link TelescopeSelectionCaret TelescopeSelection ]]
+            vim.cmd [[ hi! link TelescopeMatching Special ]]
+            vim.cmd [[ hi! link TelescopeMultiSelection Type ]]
         end,
     }
 end
@@ -902,8 +937,8 @@ require('packer').startup {
                 return require('packer.util').float { border = 'single' }
             end,
         },
-        compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua'
+        compile_path = vim.fn.stdpath 'config' .. '/lua/packer_compiled.lua',
     },
 }
 
-require('packer_compiled')
+require 'packer_compiled'
