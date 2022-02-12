@@ -251,7 +251,7 @@ local function packer_startup_fun()
         'lewis6991/gitsigns.nvim',
         requires = 'nvim-lua/plenary.nvim',
         config = function()
-            gs = require 'gitsigns'
+            local gs = require 'gitsigns'
             gs.setup {
                 on_attach = function(bufnr)
                     local opts = { buffer = bufnr }
@@ -294,7 +294,7 @@ local function packer_startup_fun()
             vim.g.nvim_tree_indent_markers = 1
         end,
         config = function()
-            nvt = require 'nvim-tree'
+            local nvt = require 'nvim-tree'
             nvt.setup {
                 hijack_cursor = true,
                 update_focused_file = { enable = true },
@@ -493,7 +493,7 @@ local function packer_startup_fun()
             vim.g.iron_map_extended = 0
         end,
         config = function()
-            iron = require('iron').core
+            local iron = require('iron').core
             iron.set_config {
                 preferred = {
                     python = 'ipython',
@@ -554,48 +554,45 @@ local function packer_startup_fun()
         requires = 'RRethy/vim-illuminate',
         config = function()
             local lsp = require 'lspconfig'
-            local opts = { noremap = true, silent = true }
+            local tb = require 'telescope.builtin'
             local function on_attach_defaults(_, bufnr)
                 vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
                 vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
-                vim.api.nvim_buf_set_keymap(
-                    bufnr,
+
+                vim.keymap.set(
                     'i',
                     '<c-n>',
                     [[ pumvisible() ? '<c-n>' : '' ]],
-                    { expr = true, noremap = true }
+                    { expr = true, noremap = true, buffer = bufnr }
                 )
 
-                local function map(m, k, v)
-                    vim.api.nvim_buf_set_keymap(bufnr, m, k, v, opts)
+                local opts = { noremap = true, silent = true, buffer = bufnr }
+                for m, v in
+                    pairs {
+                        ['gd'] = vim.lsp.buf.declaration,
+                        ['gi'] = vim.lsp.buf.implementation,
+                        -- ['<leader>n'] = vim.lsp.buf.references,
+                        ['<leader>n'] = tb.lsp_references,
+                        ['<c-k>'] = vim.lsp.buf.signature_help,
+                        ['K'] = vim.lsp.buf.hover,
+                        ['<leader>D'] = vim.lsp.buf.type_definition,
+                        ['<leader>r'] = vim.lsp.buf.rename,
+                        ['<leader>.'] = vim.lsp.buf.code_action,
+                        ['<a-d>'] = vim.diagnostic.open_float,
+                        ['[d'] = vim.diagnostic.goto_prev,
+                        [']d'] = vim.diagnostic.goto_next,
+                        ['<a-e>'] = tb.lsp_document_symbols,
+                    }
+                do
+                    vim.keymap.set('n', m, v, opts)
                 end
-                map('n', 'gd', '<cmd>lua vim.lsp.buf.declaration()<cr>zt')
-                map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>zt')
-                -- map('n', '<leader>n', '<cmd>lua vim.lsp.buf.references()<cr>')
-                map('n', '<leader>n', '<cmd>lua require("telescope.builtin").lsp_references()<cr>')
 
-                map('n', '<c-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
-                map('i', '<a-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
-                map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
-                map('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
-
-                map('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>')
-                map('n', '<leader>.', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-
-                map('n', '<a-d>', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>')
-                map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>zt')
-                map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>zt')
-
-                map(
-                    'n',
-                    '<a-e>',
-                    '<cmd>lua require("telescope.builtin").lsp_document_symbols()<cr>'
-                )
+                vim.keymap.set('i', '<a-s>', vim.lsp.buf.signature_help, opts)
 
                 local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
                 if ft ~= 'python' and ft ~= 'lua' then
-                    map('n', '<leader>=', '<cmd>lua vim.lsp.buf.formatting()<cr>')
-                    map('v', '<leader>=', '<cmd>lua vim.lsp.buf.range_formatting()<cr>')
+                    vim.keymap.set('n', '<leader>=', vim.lsp.buf.formatting, opts)
+                    vim.keymap.set('v', '<leader>=', vim.lsp.buf.range_formatting, opts)
                 end
             end
 
