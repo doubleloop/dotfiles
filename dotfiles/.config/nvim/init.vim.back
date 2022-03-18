@@ -1,6 +1,8 @@
 let mapleader=","
 let g:python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 let g:vimsyn_embed = 'l'
+let g:do_filetype_lua = 1
+let g:did_load_filetypes = 0
 
 lua require('impatient')
 
@@ -140,12 +142,12 @@ nnoremap g* g*zt
 nnoremap g# g#zt
 nnoremap gd gdzt
 nnoremap <c-]> <c-]>zt
-nnoremap <c-t> <c-t>zt
-nnoremap <c-o> <c-o>zt
+" nnoremap <c-t> <c-t>zt
+" nnoremap <c-o> <c-o>zt
 nnoremap G Gzz
 
-inoremap <expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-Tab>"
+" inoremap <expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
+" inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-Tab>"
 
 noremap <leader>ds <cmd>windo diffthis<cr>
 noremap <leader>de <cmd>windo diffoff<cr>
