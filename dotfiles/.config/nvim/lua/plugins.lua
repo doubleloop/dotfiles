@@ -258,8 +258,8 @@ local function packer_startup_fun()
                     for m, fun in
                         pairs {
                             ['<a-g>'] = gs.preview_hunk,
-                            ['<leader>hh'] = gs.preview_hunk,
-                            ['<leader>hu'] = gs.undo_stage_hunk,
+                            ['<leader>gh'] = gs.preview_hunk,
+                            ['<leader>gu'] = gs.undo_stage_hunk,
                         }
                     do
                         vim.keymap.set('n', m, fun, opts)
@@ -267,8 +267,8 @@ local function packer_startup_fun()
 
                     for m, cmd in
                         pairs {
-                            ['v <leader>hs'] = '<cmd>Gitsigns stage_hunk<cr>',
-                            ['v <leader>hr'] = '<cmd>Gitsigns reset_hunk<cr>',
+                            ['v <leader>gs'] = '<cmd>Gitsigns stage_hunk<cr>',
+                            ['v <leader>gr'] = '<cmd>Gitsigns reset_hunk<cr>',
                         }
                     do
                         vim.keymap.set({ 'n', 'v' }, m, cmd, opts)
@@ -290,6 +290,7 @@ local function packer_startup_fun()
         'kyazdani42/nvim-tree.lua',
         requires = 'kyazdani42/nvim-web-devicons',
         keys = '<a-1>',
+        cmd = { 'NvimTreeOpen' },
         setup = function()
             vim.g.nvim_tree_indent_markers = 1
         end,
@@ -365,13 +366,6 @@ local function packer_startup_fun()
         after = 'nvim-treesitter',
         config = function()
             require('nvim-ts-autotag').setup()
-            -- fix treesitter
-            vim.keymap.set(
-                'n',
-                '<leader><leader>',
-                '<cmd>write <bar> edit <bar> TSBufEnable highlight<cr>',
-                { noremap = true, silent = false }
-            )
         end,
     }
     use {
@@ -482,7 +476,17 @@ local function packer_startup_fun()
                     },
                 },
             }
-            vim.cmd [[au FileType python,lua nnoremap <buffer> <leader>= <cmd>Format<cr>]]
+            a.nvim_create_autocmd('FileType', {
+                pattern = 'python,lua',
+                callback = function()
+                    vim.keymap.set(
+                        'n',
+                        '<leader>=',
+                        '<cmd>Format<cr>',
+                        { noremap = true, buffer = true }
+                    )
+                end,
+            })
         end,
     }
     use { 'Vimjas/vim-python-pep8-indent', ft = { 'python' } }
@@ -665,7 +669,7 @@ local function packer_startup_fun()
                     },
                 },
             }
-            for _, server in ipairs { 'rls', 'gopls' } do
+            for _, server in ipairs { 'rls', 'gopls', 'tsserver' } do
                 lsp[server].setup {
                     on_attach = function(client, bufnr)
                         on_attach_defaults(client, bufnr)
@@ -690,7 +694,7 @@ local function packer_startup_fun()
             }
 
             local sumneko_root_path = vim.fn.getenv 'HOME' .. '/src/lua-language-server'
-            local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
+            local sumneko_binary = sumneko_root_path .. '/bin/lua-language-server'
 
             local runtime_path = vim.split(package.path, ';')
             table.insert(runtime_path, 'lua/?.lua')
@@ -764,6 +768,13 @@ local function packer_startup_fun()
                 --     enable = true,
                 -- },
             }
+            -- fix treesitter
+            vim.keymap.set(
+                'n',
+                '<leader><leader>',
+                '<cmd>write <bar> edit <bar> TSBufEnable highlight<cr>',
+                { noremap = true, silent = false }
+            )
         end,
     }
     use {
@@ -849,6 +860,7 @@ local function packer_startup_fun()
     use {
         'hoob3rt/lualine.nvim',
         requires = 'kyazdani42/nvim-web-devicons',
+        after = 'monokai.nvim',
         config = function()
             require('lualine').setup {
                 options = {
@@ -895,9 +907,8 @@ local function packer_startup_fun()
                 custom_hlgroups = {
                     SpellBad = {
                         style = 'undercurl',
-                        -- underline color support is not yet implemented in allacritty
-                        -- fg = None,
-                        fg = '#e73c50',
+                        fg = 'fg',
+                        bg = 'bg',
                         sp = '#e73c50',
                     },
                     FoldColumn = {
