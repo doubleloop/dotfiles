@@ -201,9 +201,9 @@ bindsym XF86ScreenSaver exec --no-startup-id i3lock -e -c 000000
 bindsym $mod+b exec --no-startup-id i3lock -e -c 000000
 exec xautolock -time 10 -locker 'i3lock -e -c 000000' -detectsleep
 
-bindsym --release Print exec scrot -z -m ~/media/pictures/screenshots/%Y-%m-%d-%H:%M:%s.png
-bindsym --release Shift+Print exec scrot -z -s ~/media/pictures/screenshots/%Y-%m-%d-%H:%M:%s.png
-bindsym --release $mod+Shift+Print exec scrot -z -u -d 4 ~/media/pictures/screenshots/%Y-%m-%d-%H:%M:%s.png
+bindsym --release Print exec scrot -z -m ~/media/pics/screenshots/%Y-%m-%d-%H:%M:%s.png
+bindsym --release Shift+Print exec scrot -z -s ~/media/pics/screenshots/%Y-%m-%d-%H:%M:%s.png
+bindsym --release $mod+Shift+Print exec scrot -z -u -d 4 ~/media/pics/screenshots/%Y-%m-%d-%H:%M:%s.png
 
 # this sometimes crashes on my system..
 # exec xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
@@ -215,10 +215,10 @@ exec i3-msg workspace $ws2
 exec alacritty
 exec qutebrowser
 exec element-desktop
-exec gpm
 exec --no-startup-id dropbox start
 exec --no-startup-id nm-applet
-exec --no-startup-id redshift
+exec --no-startup-id workrave
+exec --no-startup-id redshift -x -P
 exec --no-startup-id blueman-applet
 exec --no-startup-id xss-lock -l -- i3lock -e -c 000000
 exec --no-startup-id volumeicon
