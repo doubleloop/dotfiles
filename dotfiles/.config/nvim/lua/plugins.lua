@@ -77,7 +77,6 @@ local function packer_startup_fun()
             vim.g.sleuth_automatic = 0
         end,
     }
-    use { 'ericpruitt/tmux.vim', ft = 'tmux' }
     use {
         'numToStr/Navigator.nvim',
         config = function()
@@ -156,23 +155,33 @@ local function packer_startup_fun()
                 },
             }
 
+            local open_files = function()
+                local ok = pcall(builtin.git_files, {})
+                if not ok then
+                    builtin.find_files {}
+                end
+            end
+
+
+            local opts = { noremap = true, silent = false }
             local maps = {
-                ['<leader>p'] = function()
-                    local ok = pcall(builtin.git_files, {})
-                    if not ok then
-                        builtin.find_files {}
-                    end
-                end,
-                ['<leader>:'] = builtin.commands,
+                ['<c-p>'] = open_files,
+                ['<c-b>'] = builtin.buffers,
+                ['<c-s-p>'] = builtin.commands,
+                ['<c-/>'] = builtin.live_grep,
+                ['<c-s-h>'] = builtin.help_tags,
+                ['<c-s-r>'] = builtin.command_history,
+                -- <c-m> does not work with tmux :(, https://github.com/tmux/tmux/issues/2705#issuecomment-841133549
+                ['<c-s-m>'] = builtin.keymaps,
+                ['<c-m>'] = builtin.oldfiles,
+                ['<leader>p'] = open_files,
                 ['<leader>b'] = builtin.buffers,
                 ['<leader>m'] = builtin.oldfiles,
-                ['<a-e>'] = builtin.tags,
                 ['<leader><c-r>'] = builtin.command_history,
-                ['<leader>/'] = builtin.live_grep,
-                ['<leader>h'] = builtin.help_tags,
+                ['<a-e>'] = builtin.tags,
             }
             for m, fun in pairs(maps) do
-                vim.keymap.set('n', m, fun, { noremap = true, silent = false })
+                vim.keymap.set('n', m, fun, opts)
             end
         end,
     }
@@ -182,18 +191,6 @@ local function packer_startup_fun()
         run = 'make',
         config = function()
             require('telescope').load_extension 'fzf'
-        end,
-    }
-    use {
-        'folke/which-key.nvim',
-        config = function()
-            require('which-key').setup {
-                plugins = {
-                    spelling = {
-                        enabled = true,
-                    },
-                },
-            }
         end,
     }
     use {
@@ -211,13 +208,6 @@ local function packer_startup_fun()
             elseif vim.fn.executalbe 'ag' then
                 vim.g.ackprg = 'ag --vimgrep'
             end
-        end,
-    }
-    use {
-        'vigoux/LanguageTool.nvim',
-        setup = function()
-            vim.g.languagetool_server_jar =
-                '$HOME/.local/share/languagetool/languagetool-server.jar'
         end,
     }
     use {
@@ -373,13 +363,6 @@ local function packer_startup_fun()
         config = function()
             vim.g.Illuminate_delay = 500
             vim.g.Illuminate_ftblacklist = { 'LuaTree', 'nerdtree' }
-            local opts = { noremap = true, silent = true }
-            vim.keymap.set('n', '<c-n>', function()
-                require('illuminate').next_reference { wrap = true }
-            end, opts)
-            vim.keymap.set('n', '<c-p>', function()
-                require('illuminate').next_reference { reverse = true, wrap = true }
-            end, opts)
         end,
     }
     use {
@@ -535,14 +518,6 @@ local function packer_startup_fun()
                 }
             do
                 vim.keymap.set('n', m, cmd, opts)
-            end
-            for m, cmd in
-                pairs {
-                    ['c-n'] = '<cmd>CoqNext<cr>',
-                    ['c-p'] = '<cmd>CoqUndo<cr>',
-                }
-            do
-                vim.keymap.set({ 'n', 'i' }, m, cmd, opts)
             end
         end,
     }

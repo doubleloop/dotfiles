@@ -88,7 +88,7 @@ local function set_options()
     o.completeopt = { 'menuone', 'noinsert', 'noselect' }
 
     o.showmode = false
-    o.showcmd = false
+    o.showcmd = true
 
     o.signcolumn = 'yes'
 
