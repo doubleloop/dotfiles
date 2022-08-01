@@ -6,8 +6,6 @@ local ol = vim.opt_local
 vim.g.mapleader = ','
 vim.g.python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 vim.g.vimsyn_embed = 'l'
-vim.g.do_filetype_lua = 1
-vim.g.did_load_filetypes = 0
 
 require 'impatient'
 -- ~/.config/nvim/lua/plugins.lua
