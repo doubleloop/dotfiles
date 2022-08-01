@@ -205,7 +205,7 @@ local function set_filetype_settings()
         ol.shiftwidth = 2
     end)
     f('python', function()
-        a.nvim_buf_add_user_command(0, 'A', u.pytest_file_toggle, {})
+        a.nvim_buf_create_user_command(0, 'A', u.pytest_file_toggle, {})
     end)
     f('markdown', function()
         ol.spell = true
