@@ -102,21 +102,26 @@ local function packer_startup_fun()
         end,
     }
     use {
-        'Pocco81/AutoSave.nvim',
+        'Pocco81/auto-save.nvim',
         config = function()
-            require('autosave').setup {
+            require('auto-save').setup {
                 enabled = true,
-                execution_message = '',
-                events = { 'InsertLeave', 'TextChanged', 'FocusLost', 'BufHidden', 'ExitPre' },
-                conditions = {
-                    exists = true,
-                    filetype_is_not = {},
-                    modifiable = true,
-                },
+                trigger_events = { 'InsertLeave', 'TextChanged', 'FocusLost', 'BufHidden', 'ExitPre' },
                 write_all_buffers = false,
-                on_off_commands = true,
-                clean_command_line_interval = 0,
                 debounce_delay = 1000,
+                execution_message = {
+                    enabled = false,
+                },
+                condition = function(buf)
+                    if vim.fn.getbufvar(buf, "&modifiable") ~= 1 then
+                        return false
+                    end
+                    local bt = vim.fn.getbufvar(buf, "&buftype")
+                    if bt == "nofile" or bt == "nowrite" or bt == "prompt" then
+                        return false
+                    end
+                    return true
+                end,
             }
         end,
     }
