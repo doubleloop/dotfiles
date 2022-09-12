@@ -20,6 +20,9 @@ if not pcall(bootstrap) then
     end
 end
 
+-- TODO: fix bootstrap
+require 'impatient'
+
 local use = require('packer').use
 
 local function packer_startup_fun()
@@ -177,8 +180,8 @@ local function packer_startup_fun()
                 ['<c-s-h>'] = builtin.help_tags,
                 ['<c-s-r>'] = builtin.command_history,
                 -- <c-m> does not work with tmux :(, https://github.com/tmux/tmux/issues/2705#issuecomment-841133549
+                -- ['<c-m>'] = builtin.oldfiles,
                 ['<c-s-m>'] = builtin.keymaps,
-                ['<c-m>'] = builtin.oldfiles,
                 ['<leader>p'] = open_files,
                 ['<leader>b'] = builtin.buffers,
                 ['<leader>m'] = builtin.oldfiles,
@@ -524,13 +527,6 @@ local function packer_startup_fun()
             do
                 vim.keymap.set('n', m, cmd, opts)
             end
-        end,
-    }
-    use {
-        'lewis6991/spellsitter.nvim',
-        after = 'nvim-treesitter',
-        config = function()
-            require('spellsitter').setup { enable = true }
         end,
     }
     use 'rafamadriz/friendly-snippets'
@@ -965,6 +961,7 @@ local function packer_startup_fun()
     }
 end
 
+-- TODO: fix bootstrap
 require('packer').startup {
     packer_startup_fun,
     config = {

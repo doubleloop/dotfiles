@@ -7,7 +7,6 @@ vim.g.mapleader = ','
 vim.g.python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 vim.g.vimsyn_embed = 'l'
 
-require 'impatient'
 -- ~/.config/nvim/lua/plugins.lua
 require 'plugins'
 
@@ -136,6 +135,7 @@ local function set_mappings()
     map('c', '<c-n>', '<down>', opts)
     map('c', '<c-p>', '<up>', opts)
     map('c', '<c-a>', '<home>', opts)
+    map('c', '<c-bs>', '<c-w>', opts)
 
     for _, nav in ipairs { 'n', 'N', '*', '#', 'g*', 'g#', 'gd', '<c-]' } do
         map('n', nav, nav .. 'zt', opts)
