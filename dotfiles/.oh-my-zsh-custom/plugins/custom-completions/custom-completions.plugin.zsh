@@ -1,5 +1,6 @@
 export CUSTOM_COMPLETION_OPTS='-1 -0 --ansi --no-info'
 
+# based on completion.zsh (fzf repo)
 _try_custom_completion() {
     [[ $LBUFFER == *"${FZF_COMPLETION_TRIGGER-**}" ]] && return 1
     local tokens=(${(z)LBUFFER})
@@ -11,7 +12,8 @@ _try_custom_completion() {
         prefix=$tokens[-1]
         lbuf=${LBUFFER:0:-$#prefix}
     fi
-    $func "$lbuf"
+    eval $func ${(q)lbuf}
+    zle reset-prompt
     return
 }
 
@@ -37,7 +39,6 @@ _fzf_custom_complete() {
     local matches=$(FZF_DEFAULT_OPTS="$dopts"\
                     fzf ${(Q)${(Z+n+)fzf_opts}} -q "${(Q)prefix}" <"$fifo" | $post | tr '\n' ' ')
     [[ -n "$matches" ]] && LBUFFER="$lbuf$matches"
-    zle reset-prompt
     (( instant_accept )) && [[ -n $matches ]] && zle reset-prompt-accept-line
     [[ -n "$pid" ]] && kill $pid >/dev/null 2>&1
     command rm -f "$fifo"
