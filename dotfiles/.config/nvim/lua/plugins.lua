@@ -567,7 +567,8 @@ local function packer_startup_fun()
                 end
             end)
             ls.snippets = {} -- custom snippets (some day maybe)
-            require('luasnip.loaders.from_vscode').load()
+            -- this is VERY slow ..
+            -- require('luasnip.loaders.from_vscode').load()
         end,
     }
     use {
