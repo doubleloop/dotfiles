@@ -42,6 +42,7 @@ c.qt.args = ['ppapi-widevine-path=/usr/lib/chromium/libwidevinecdmadapter.so']
 # set font sizes and the `zoom.default` setting.
 # Type: Bool
 c.qt.highdpi = True
+c.fonts.default_size = '8pt'
 
 # Always restore open sites when qutebrowser is reopened. Without this
 # option set, `:wq` (`:quit --save`) needs to be used to save open tabs
@@ -133,13 +134,9 @@ config.set(
 # URL-decoding it).
 # Type: List of Url
 c.content.blocking.adblock.lists = [
-    'https://easylist-downloads.adblockplus.org/easyprivacy+easylist.txt',
+    'https://easylist-downloads.adblockplus.org/easylist.txt',
     'https://easylist-downloads.adblockplus.org/easylistpolish.txt',
-    # 'https://easylist-downloads.adblockplus.org/fanboy-annoyance.txt',
-    # 'https://easylist-downloads.adblockplus.org/easyprivacy.txt',
-    # 'https://easylist-downloads.adblockplus.org/fanboy-social.txt',
-    # 'https://raw.githubusercontent.com/Spam404/lists/master/adblock-list.txt',
-    'https://raw.githubusercontent.com/MajkiIT/polish-ads-filter/master/polish-adblock-filters/adblock.txt',
+    'https://easylist-downloads.adblockplus.org/easyprivacy.txt',
 ]
 
 # Load images automatically in web pages.
@@ -408,3 +405,5 @@ config.bind('<Alt+n>', 'completion-item-focus --history next', mode='command')
 config.bind('<Alt+p>', 'completion-item-focus --history prev', mode='command')
 config.bind('<Ctrl+n>', 'completion-item-focus next', mode='command')
 config.bind('<Ctrl+p>', 'completion-item-focus prev', mode='command')
+config.bind('<Ctrl-Shift-p>', 'spawn --userscript qute-keepassxc --key 6FA16A83DB8729C771C6D16ACB6F8014581BD795', mode='insert')
+config.bind('pw', 'spawn --userscript qute-keepassxc --key 6FA16A83DB8729C771C6D16ACB6F8014581BD795', mode='normal')
