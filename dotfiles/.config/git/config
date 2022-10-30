@@ -52,3 +52,5 @@
     lgp = log --stat --topo-order -p
     lo  = log --topo-order --pretty='%Cgreen%><(12,trunc)%ar %C(bold blue)%<(8,trunc)%an%Creset %C(auto)%h%Creset %s %C(auto)%d%Creset'
     lol = log --topo-order --pretty='%Cgreen%ai %C(bold blue)%<(20,trunc)%an%Creset %C(auto)%h%Creset %s %C(auto)%d%Creset'
+[init]
+	defaultBranch = master
