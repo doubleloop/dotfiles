@@ -32,10 +32,10 @@ markup=none
 #
 [time]
 command=date '+%A, W%V %d %b    %H:%M'
-min_width=xxxxxxxxxxxx, W99 99 xxx    99:99
+min_width=xxxxxxxxxxxx, W99 99 xxx    99:99 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 interval=5
-# separator=false
-align=right
+separator=false
+align=left
 
 # [wifi]
 # instance=wlp3s0
