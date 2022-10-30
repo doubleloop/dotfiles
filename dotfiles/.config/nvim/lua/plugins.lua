@@ -149,8 +149,10 @@ local function packer_startup_fun()
             }
 
             local open_files = function()
-                local ok = pcall(builtin.git_files, {})
-                if not ok then
+                vim.fn.system('git rev-parse --is-inside-work-tree')
+                if vim.v.shell_error == 0 then
+                    builtin.git_files {}
+                else
                     builtin.find_files {}
                 end
             end
@@ -165,6 +167,7 @@ local function packer_startup_fun()
                 ['<c-s-h>'] = builtin.help_tags,
                 ['<c-s-r>'] = builtin.command_history,
                 -- <c-m> does not work with tmux :(, https://github.com/tmux/tmux/issues/2705#issuecomment-841133549
+                -- currently in tmux <c-m> conflicts with Enter and <c-i> with TAB so should not bind anything to those
                 -- ['<c-m>'] = builtin.oldfiles,
                 ['<c-s-m>'] = builtin.keymaps,
                 ['<leader>p'] = open_files,
@@ -176,6 +179,13 @@ local function packer_startup_fun()
             for m, fun in pairs(maps) do
                 vim.keymap.set('n', m, fun, opts)
             end
+
+            vim.keymap.set(
+                'c',
+                '<c-s-r>',
+                '<c-f>0"pyg_<cmd>q<cr>:Telescope command_history default_text=<c-r>p<cr>',
+                vim.tbl_extend('force', opts, { silent = true })
+            )
         end,
     }
     use {
