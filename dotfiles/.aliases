@@ -86,7 +86,7 @@ update() {
     sudo -v
     (cd ~/ && mr update)
     sudo sh -c "apt update && \
-                apt dist-upgrade -y && \
+                apt dist-upgrade && \
                 apt autoremove --purge -y"
     sudo -k
     # flatpak update --noninteractive
