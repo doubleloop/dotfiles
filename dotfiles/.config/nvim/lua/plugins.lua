@@ -499,24 +499,6 @@ local function packer_startup_fun()
     }
 
     use { 'momota/junos.vim', ft = 'junos' }
-    use {
-        'the-lambda-church/coquille',
-        branch = 'pathogen-bundle',
-        requires = 'let-def/vimbufsync',
-        ft = 'coq',
-        config = function()
-            local opts = { noremap = true, silent = true }
-            for m, cmd in
-                pairs {
-                    ['<leader>cc'] = '<cmd>CoqLaunch<cr>',
-                    ['<leader>cq'] = '<cmd>CoqKill<cr>',
-                    ['<leader><F5>'] = '<cmd>CoqToCursor<cr>',
-                }
-            do
-                vim.keymap.set('n', m, cmd, opts)
-            end
-        end,
-    }
     use 'rafamadriz/friendly-snippets'
     use {
         'L3MON4D3/LuaSnip',
