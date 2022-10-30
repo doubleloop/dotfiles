@@ -202,13 +202,6 @@ local function packer_startup_fun()
         end,
     }
     use {
-        'tversteeg/registers.nvim',
-        setup = function()
-            vim.g.registers_delay = 2000
-            vim.g.registers_trim_whitespace = 0
-        end,
-    }
-    use {
         'mileszs/ack.vim',
         config = function()
             if vim.fn.executable 'rg' then
