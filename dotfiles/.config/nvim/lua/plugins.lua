@@ -419,54 +419,28 @@ local function packer_startup_fun()
         end,
     }
     use {
-        'mhartington/formatter.nvim',
-        ft = { 'lua', 'python' },
+        'jose-elias-alvarez/null-ls.nvim',
+        requires = 'nvim-lua/plenary.nvim',
         config = function()
-            require('formatter').setup {
-                logging = false,
-                filetype = {
-                    python = {
-                        function()
-                            return {
-                                exe = 'yapf',
-                                args = {},
-                                stdin = true,
-                            }
-                        end,
-                        function()
-                            return {
-                                exe = 'isort',
-                                args = { '-q', '-' },
-                                stdin = true,
-                            }
-                        end,
-                    },
-                    lua = {
-                        function()
-                            return {
-                                exe = 'stylua',
-                                args = {
-                                    '--search-parent-directories',
-                                    '-',
-                                },
-                                stdin = true,
-                            }
-                        end,
-                    },
-                },
+            local nls = require("null-ls")
+            local b = nls.builtins
+            local u = require('utils')
+            local sources = {
+                b.formatting.stylua,
+                b.formatting.prettierd,
+                b.formatting.tidy.with { filetypes = { 'xml' }, extra_args = function(params)
+                    return {
+                        '-xml',
+                        '--ident-spaces ' .. vim.fn.shiftwidth(),
+                        '--wrap ' .. vim.o.textwidth,
+                        '--vertical-space yes',
+                    }
+                end},
+                b.formatting.yapf,
+                b.formatting.isort
             }
-            a.nvim_create_autocmd('FileType', {
-                pattern = 'python,lua',
-                callback = function()
-                    vim.keymap.set(
-                        'n',
-                        '<leader>=',
-                        '<cmd>Format<cr>',
-                        { noremap = true, buffer = true }
-                    )
-                end,
-            })
-        end,
+            nls.setup({ sources = sources, on_attach = u.on_attach_defaults })
+        end
     }
     use { 'Vimjas/vim-python-pep8-indent', ft = { 'python' } }
     use {
@@ -553,71 +527,30 @@ local function packer_startup_fun()
         requires = 'RRethy/vim-illuminate',
         config = function()
             local lsp = require 'lspconfig'
-            local tb = require 'telescope.builtin'
-            local function on_attach_defaults(_, bufnr)
-                vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-                vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
-
-                vim.keymap.set(
-                    'i',
-                    '<c-n>',
-                    [[ pumvisible() ? '<c-n>' : '' ]],
-                    { expr = true, noremap = true, buffer = bufnr }
-                )
-
-                local opts = { noremap = true, silent = true, buffer = bufnr }
-                for m, v in
-                    pairs {
-                        ['gd'] = vim.lsp.buf.declaration,
-                        ['gi'] = vim.lsp.buf.implementation,
-                        -- ['<leader>n'] = vim.lsp.buf.references,
-                        ['<leader>n'] = tb.lsp_references,
-                        ['<c-k>'] = vim.lsp.buf.signature_help,
-                        ['K'] = vim.lsp.buf.hover,
-                        ['<leader>D'] = vim.lsp.buf.type_definition,
-                        ['<leader>r'] = vim.lsp.buf.rename,
-                        ['<leader>.'] = vim.lsp.buf.code_action,
-                        ['<a-d>'] = vim.diagnostic.open_float,
-                        ['[d'] = vim.diagnostic.goto_prev,
-                        [']d'] = vim.diagnostic.goto_next,
-                        ['<a-e>'] = tb.lsp_document_symbols,
-                    }
-                do
-                    vim.keymap.set('n', m, v, opts)
-                end
-
-                vim.keymap.set('i', '<a-s>', vim.lsp.buf.signature_help, opts)
-
-                local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-                if ft ~= 'python' and ft ~= 'lua' then
-                    vim.keymap.set('n', '<leader>=', vim.lsp.buf.formatting, opts)
-                    vim.keymap.set('v', '<leader>=', vim.lsp.buf.range_formatting, opts)
-                end
-            end
+            local u = require 'utils'
 
             lsp.clangd.setup {
                 cmd = { 'clangd-11', '--background-index' },
                 on_attach = function(client, bufnr)
-                    on_attach_defaults(client, bufnr)
+                    u.on_attach_defaults(client, bufnr)
                     require('illuminate').on_attach(client)
                     vim.cmd [[cnoreabbrev A ClangdSwitchSourceHeader]]
                 end,
             }
 
-            -- NOTE: current config assums pyright is always available
-            -- TODO: handle situation when it is not true
             lsp.jedi_language_server.setup {
                 on_attach = function(client, bufnr)
                     client.server_capabilities.documentSymbolProvider = false
                     client.server_capabilities.renameProvider = false
                     client.server_capabilities.completionProvider = false
+                    u.on_attach_defaults(client, bufnr)
                 end,
             }
             lsp.pyright.setup {
                 on_attach = function(client, bufnr)
                     client.server_capabilities.hoverProvider = false
                     client.server_capabilities.signatureHelp = false
-                    on_attach_defaults(client, bufnr)
+                    u.on_attach_defaults(client, bufnr)
                 end,
                 settings = {
                     python = {
@@ -630,14 +563,14 @@ local function packer_startup_fun()
             for _, server in ipairs { 'rls', 'gopls', 'tsserver' } do
                 lsp[server].setup {
                     on_attach = function(client, bufnr)
-                        on_attach_defaults(client, bufnr)
+                        u.on_attach_defaults(client, bufnr)
                         require('illuminate').on_attach(client)
                     end,
                 }
             end
 
             lsp.texlab.setup {
-                on_attach = on_attach_defaults,
+                on_attach = u.on_attach_defaults,
                 settings = {
                     texlab = {
                         build = {
@@ -682,7 +615,7 @@ local function packer_startup_fun()
                         },
                     },
                 },
-                on_attach = on_attach_defaults,
+                on_attach = u.on_attach_defaults,
             }
         end,
     }

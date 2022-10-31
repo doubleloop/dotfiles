@@ -40,4 +40,43 @@ utils.pytest_file_toggle = function()
     end
 end
 
+-- TODO: some mechanizm to avoid duplicated calls
+utils.on_attach_defaults = function(_, bufnr)
+    local tb = require 'telescope.builtin'
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
+
+    vim.keymap.set(
+        'i',
+        '<c-n>',
+        [[ pumvisible() ? '<c-n>' : '' ]],
+        { expr = true, noremap = true, buffer = bufnr }
+    )
+
+    local opts = { noremap = true, silent = true, buffer = bufnr }
+    for m, v in
+        pairs {
+            ['gd'] = vim.lsp.buf.declaration,
+            ['gi'] = vim.lsp.buf.implementation,
+            -- ['<leader>n'] = vim.lsp.buf.references,
+            ['<leader>n'] = tb.lsp_references,
+            ['<c-k>'] = vim.lsp.buf.signature_help,
+            ['K'] = vim.lsp.buf.hover,
+            ['<leader>D'] = vim.lsp.buf.type_definition,
+            ['<leader>r'] = vim.lsp.buf.rename,
+            ['<leader>.'] = vim.lsp.buf.code_action,
+            ['<a-d>'] = vim.diagnostic.open_float,
+            ['[d'] = vim.diagnostic.goto_prev,
+            [']d'] = vim.diagnostic.goto_next,
+            ['<a-e>'] = tb.lsp_document_symbols,
+            ['<leader>='] = vim.lsp.buf.format,
+        }
+    do
+        vim.keymap.set('n', m, v, opts)
+    end
+
+    vim.keymap.set('i', '<a-s>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('v', '<leader>=', vim.lsp.buf.format, opts)
+end
+
 return utils
