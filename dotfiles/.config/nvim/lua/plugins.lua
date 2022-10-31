@@ -350,6 +350,7 @@ local function packer_startup_fun()
     use {
         'windwp/nvim-ts-autotag', -- html tags autoclose
         after = 'nvim-treesitter',
+        ft = { 'html', 'xml' },
         config = function()
             require('nvim-ts-autotag').setup()
         end,
@@ -580,6 +581,20 @@ local function packer_startup_fun()
                             executable = 'zathura',
                             args = { '--synctex-forward', '%l:1:%f', '%p' },
                         },
+                    },
+                },
+            }
+
+            lsp.ltex.setup {
+                settings = {
+                    ltex = {
+                        diagnosticSeverity = 'hint',
+                        dictionary = {
+                            -- NOTE: loading dict from file does not work
+                            -- TODO: check why and fix
+                            ['en-US'] = { ':' .. vim.fn.stdpath 'config' .. '/spell/en.utf-8.add' },
+                        },
+                        disabledRules = { ['en-US'] = { 'MORFOLOGIK_RULE_EN_US' } }, -- untill I fix dictionary
                     },
                 },
             }
