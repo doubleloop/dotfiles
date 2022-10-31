@@ -604,10 +604,21 @@ local function packer_startup_fun()
                 end,
             }
 
+            -- NOTE: current config assums pyright is always available
+            -- TODO: handle situation when it is not true
             lsp.jedi_language_server.setup {
-                on_attach = on_attach_defaults,
+                on_attach = function(client, bufnr)
+                    client.server_capabilities.documentSymbolProvider = false
+                    client.server_capabilities.renameProvider = false
+                    client.server_capabilities.completionProvider = false
+                end,
             }
             lsp.pyright.setup {
+                on_attach = function(client, bufnr)
+                    client.server_capabilities.hoverProvider = false
+                    client.server_capabilities.signatureHelp = false
+                    on_attach_defaults(client, bufnr)
+                end,
                 settings = {
                     python = {
                         analysis = {
