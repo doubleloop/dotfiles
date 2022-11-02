@@ -474,7 +474,7 @@ local function packer_startup_fun()
     }
 
     use { 'momota/junos.vim', ft = 'junos' }
-    use 'rafamadriz/friendly-snippets'
+    use { 'rafamadriz/friendly-snippets' }
     use {
         'L3MON4D3/LuaSnip',
         config = function()
@@ -519,8 +519,7 @@ local function packer_startup_fun()
                 end
             end)
             ls.snippets = {} -- custom snippets (some day maybe)
-            -- this is VERY slow ..
-            -- require('luasnip.loaders.from_vscode').load()
+            require('luasnip.loaders.from_vscode').lazy_load()
         end,
     }
     use {
