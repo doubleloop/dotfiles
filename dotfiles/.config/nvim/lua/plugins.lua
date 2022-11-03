@@ -480,38 +480,20 @@ local function packer_startup_fun()
     use {
         'L3MON4D3/LuaSnip',
         config = function()
-            local t = function(str)
-                return vim.api.nvim_replace_termcodes(str, true, true, true)
-            end
             local ls = require 'luasnip'
-            ls.config.set_config {
+            ls.setup {
                 history = true,
-                updateevents = 'TextChanged,TextChangedI',
             }
-            vim.keymap.set({ 'i', 's' }, '<TAB>', function()
-                if vim.fn.pumvisible() ~= 0 then
-                    vim.fn.feedkeys(t '<c-n>', 'n')
-                    return true
-                elseif ls.expand_or_jumpable() then
-                    return ls.expand_or_jump()
-                end
-                vim.fn.feedkeys(t '<TAB>', 'n')
-            end)
-            vim.keymap.set({ 'i', 's' }, '<S-TAB>', function()
-                if vim.fn.pumvisible() ~= 0 then
-                    vim.fn.feedkeys(t '<c-p>', 'n')
-                    return true
-                elseif ls.jumpable(-1) then
-                    return ls.jump(-1)
-                end
-            end)
+            ls.snippets = {} -- custom snippets (some day maybe)
+            require('luasnip.loaders.from_vscode').lazy_load()
+
             vim.keymap.set({ 'i', 's' }, '<c-j>', function()
-                if ls.expand_or_jumpable() then
+                if ls.expand_or_locally_jumpable() then
                     return ls.expand_or_jump()
                 end
             end)
             vim.keymap.set({ 'i', 's' }, '<c-k>', function()
-                if ls.jumpable(-1) then
+                if ls.locally_jumpable(-1) then
                     return ls.jump(-1)
                 end
             end)
@@ -520,8 +502,31 @@ local function packer_startup_fun()
                     ls.change_choice(1)
                 end
             end)
-            ls.snippets = {} -- custom snippets (some day maybe)
-            require('luasnip.loaders.from_vscode').lazy_load()
+
+
+            -- my version of smart tab
+            local function feedkeys(keys)
+                local ekeys = vim.api.nvim_replace_termcodes(keys, true, true, true)
+                vim.api.nvim_feedkeys(ekeys, 'n', false)
+            end
+            vim.keymap.set({ 'i', 's' }, '<TAB>', function()
+                if vim.fn.pumvisible() ~= 0 then
+                    feedkeys('<c-n>')
+                elseif ls.expand_or_locally_jumpable() then
+                    ls.expand_or_jump()
+                else
+                    feedkeys('<TAB>')
+                end
+            end)
+            vim.keymap.set({ 'i', 's' }, '<S-TAB>', function()
+                if vim.fn.pumvisible() ~= 0 then
+                    feedkeys('<c-p>')
+                elseif ls.locally_jumpable(-1) then
+                    ls.jump(-1)
+                else
+                    feedkeys('<c-d>')
+                end
+            end)
         end,
     }
     use {
