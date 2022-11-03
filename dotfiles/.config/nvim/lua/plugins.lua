@@ -551,7 +551,7 @@ local function packer_startup_fun()
             lsp.pyright.setup {
                 on_attach = function(client, bufnr)
                     client.server_capabilities.hoverProvider = false
-                    client.server_capabilities.signatureHelp = false
+                    client.server_capabilities.signatureHelpProvider = false
                     u.on_attach_defaults(client, bufnr)
                 end,
                 settings = {
