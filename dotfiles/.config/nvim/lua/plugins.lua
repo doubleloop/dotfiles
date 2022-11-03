@@ -358,8 +358,10 @@ local function packer_startup_fun()
     use {
         'RRethy/vim-illuminate',
         config = function()
-            vim.g.Illuminate_delay = 500
-            vim.g.Illuminate_ftblacklist = { 'LuaTree', 'nerdtree' }
+            require('illuminate').configure({
+                delay = 500,
+                filetypes_denylist = { 'LuaTree', 'nerdtree' },
+            })
         end,
     }
     use {
@@ -892,6 +894,11 @@ local function packer_startup_fun()
             vim.cmd [[ hi! link TelescopeSelectionCaret TelescopeSelection ]]
             vim.cmd [[ hi! link TelescopeMatching Special ]]
             vim.cmd [[ hi! link TelescopeMultiSelection Type ]]
+
+            -- illuminate
+            vim.cmd [[ hi! link IlluminatedWordText CursorLine ]]
+            vim.cmd [[ hi! link IlluminatedWordRead CursorLine ]]
+            vim.cmd [[ hi! link IlluminatedWordWrite CursorLine ]]
         end,
     }
 end
