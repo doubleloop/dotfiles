@@ -330,6 +330,8 @@ local function packer_startup_fun()
 
             npairs.setup {
                 check_ts = true,
+                map_c_w = true,
+                map_cr = false,
             }
             npairs.add_rules {
                 Rule("f'", "'", 'python'),
@@ -535,6 +537,7 @@ local function packer_startup_fun()
         config = function()
             local lsp = require 'lspconfig'
             local u = require 'utils'
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
             lsp.clangd.setup {
                 cmd = { 'clangd-11', '--background-index' },
@@ -543,6 +546,7 @@ local function packer_startup_fun()
                     require('illuminate').on_attach(client)
                     vim.cmd [[cnoreabbrev A ClangdSwitchSourceHeader]]
                 end,
+                capabilities = capabilities,
             }
 
             lsp.jedi_language_server.setup {
@@ -552,6 +556,7 @@ local function packer_startup_fun()
                     client.server_capabilities.completionProvider = false
                     u.on_attach_defaults(client, bufnr)
                 end,
+                capabilities = capabilities,
             }
             lsp.pyright.setup {
                 on_attach = function(client, bufnr)
@@ -566,6 +571,7 @@ local function packer_startup_fun()
                         },
                     },
                 },
+                capabilities = capabilities,
             }
             for _, server in ipairs { 'rls', 'gopls', 'tsserver' } do
                 lsp[server].setup {
@@ -573,6 +579,7 @@ local function packer_startup_fun()
                         u.on_attach_defaults(client, bufnr)
                         require('illuminate').on_attach(client)
                     end,
+                    capabilities = capabilities,
                 }
             end
 
@@ -588,6 +595,7 @@ local function packer_startup_fun()
                             args = { '--synctex-forward', '%l:1:%f', '%p' },
                         },
                     },
+                    capabilities = capabilities,
                 },
             }
 
@@ -637,8 +645,68 @@ local function packer_startup_fun()
                     },
                 },
                 on_attach = u.on_attach_defaults,
+                capabilities = capabilities,
             }
         end,
+    }
+    use {
+        'hrsh7th/nvim-cmp',
+        requires = {'hrsh7th/cmp-nvim-lsp', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-buffer', 'onsails/lspkind.nvim' },
+        setup = function()
+            local cmp = require'cmp'
+            local lspkind = require('lspkind')
+
+            cmp.setup {
+                completion = {
+                    autocomplete = false,
+                },
+                snippet = {
+                    expand = function(args)
+                        require('luasnip').lsp_expand(args.body)
+                    end
+                },
+                sources = cmp.config.sources ({
+                    { name = 'nvim_lsp' },
+                    { name = 'luasnip' },
+                }, {
+                    { name = 'buffer', keyword_length = 3 },
+                }),
+                mapping = {
+                    ['<c-n>'] =  cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.mapping.select_next_item()(fallback)
+                        else
+                            cmp.mapping.complete()(fallback)
+                        end
+                    end),
+                    ['<c-p>'] = cmp.mapping.select_prev_item(),
+                    ['<cr>'] = cmp.mapping.confirm(),
+                    ['<c-u>'] = cmp.mapping.scroll_docs(-4),
+                    ['<c-d>'] = cmp.mapping.scroll_docs(4),
+
+                },
+                window = {
+                    completion = {
+                        col_offset = -3,
+                        side_padding = 0,
+                    },
+                },
+                formatting = {
+                    fields = { "kind", "abbr", "menu" },
+                    format = function(entry, vim_item)
+                        local kind = lspkind.cmp_format({
+                            mode = 'symbol_text',
+                            maxwidth = 50,
+                            ellipsis_char = '...',
+                        })(entry, vim_item)
+                        local strings = vim.split(kind.kind, "%s", { trimempty = true })
+                        kind.kind = " " .. strings[1] .. " "
+                        kind.menu = "    (" .. strings[2] .. ")"
+                        return kind
+                    end
+                }
+            }
+        end
     }
     use {
         'nvim-treesitter/nvim-treesitter',
