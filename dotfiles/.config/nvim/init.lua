@@ -27,7 +27,7 @@ local function set_options()
     o.list = false
     o.listchars = { extends = '#', precedes = '#', tab = '-->', space = '⋅' }
     o.fillchars = { vert = '│' }
-    o.diffopt:append { 'vertical', 'indent-heuristic', 'algorithm:patience' }
+    o.diffopt:append { 'vertical', 'indent-heuristic', 'algorithm:patience', 'linematch:60' }
 
     o.showtabline = 0 -- do not disply tab on the top os the screen
     o.laststatus = 3 -- global status line
