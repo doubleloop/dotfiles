@@ -433,7 +433,7 @@ local function packer_startup_fun()
             local sources = {
                 b.formatting.stylua,
                 b.formatting.prettierd,
-                b.formatting.tidy.with { filetypes = { 'xml' }, extra_args = function(params)
+                b.formatting.tidy.with { filetypes = { 'xml' }, extra_args = function(_)
                     return {
                         '-xml',
                         '--ident-spaces ' .. vim.fn.shiftwidth(),
@@ -505,7 +505,6 @@ local function packer_startup_fun()
                 end
             end)
 
-
             -- my version of smart tab
             local function feedkeys(keys)
                 local ekeys = vim.api.nvim_replace_termcodes(keys, true, true, true)
@@ -540,7 +539,7 @@ local function packer_startup_fun()
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
             lsp.clangd.setup {
-                cmd = { 'clangd-11', '--background-index' },
+                cmd = { 'clangd', '--background-index' },
                 on_attach = function(client, bufnr)
                     u.on_attach_defaults(client, bufnr)
                     require('illuminate').on_attach(client)
@@ -553,7 +552,6 @@ local function packer_startup_fun()
                 on_attach = function(client, bufnr)
                     client.server_capabilities.documentSymbolProvider = false
                     client.server_capabilities.renameProvider = false
-                    client.server_capabilities.completionProvider = false
                     u.on_attach_defaults(client, bufnr)
                 end,
                 capabilities = capabilities,
@@ -562,6 +560,7 @@ local function packer_startup_fun()
                 on_attach = function(client, bufnr)
                     client.server_capabilities.hoverProvider = false
                     client.server_capabilities.signatureHelpProvider = false
+                    client.server_capabilities.completionProvider = false
                     u.on_attach_defaults(client, bufnr)
                 end,
                 settings = {
@@ -599,6 +598,7 @@ local function packer_startup_fun()
                 },
             }
 
+            -- only ised for for diagnostics (checking grammar using languagetool)
             lsp.ltex.setup {
                 settings = {
                     ltex = {
@@ -613,33 +613,22 @@ local function packer_startup_fun()
                 },
             }
 
-            local sumneko_root_path = vim.fn.getenv 'HOME' .. '/src/lua-language-server'
-            local sumneko_binary = sumneko_root_path .. '/bin/lua-language-server'
-
-            local runtime_path = vim.split(package.path, ';')
-            table.insert(runtime_path, 'lua/?.lua')
-            table.insert(runtime_path, 'lua/?/init.lua')
-
             lsp.sumneko_lua.setup {
-                cmd = { sumneko_binary, '-E', sumneko_root_path .. '/main.lua' },
                 settings = {
                     Lua = {
                         runtime = {
-                            -- Tell the language server which version of Lua you're using (LuaJIT in the case of Neovim)
                             version = 'LuaJIT',
-                            -- Setup your lua path
-                            path = runtime_path,
                         },
                         diagnostics = {
                             -- Get the language server to recognize the `vim` global
                             globals = { 'vim' },
                         },
                         workspace = {
+                            checkThirdParty = false,
                             -- Make the server aware of Neovim runtime files
                             library = vim.api.nvim_get_runtime_file('', true),
                         },
                         telemetry = {
-                            -- Do not send telemetry data containing a randomized but unique identifier
                             enable = false,
                         },
                     },

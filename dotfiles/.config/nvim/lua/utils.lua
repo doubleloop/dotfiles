@@ -15,8 +15,7 @@ utils.get_gcc_include_paths = function(ft)
         table.insert(paths, p)
     end
     table.insert(paths, '**')
-    paths = table.concat(paths, ',')
-    return paths
+    return table.concat(paths, ',')
 end
 
 utils.pytest_file_toggle = function()
@@ -45,6 +44,7 @@ utils.on_attach_defaults = function(_, bufnr)
     local tb = require 'telescope.builtin'
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
+    vim.api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr')
 
     vim.keymap.set(
         'i',
