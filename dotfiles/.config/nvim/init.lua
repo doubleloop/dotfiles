@@ -21,7 +21,6 @@ local function set_options()
     o.wrap = true
     o.linebreak = true
     o.foldmethod = 'expr'
-    o.foldexpr = 'nvim_treesitter#foldexpr()'
     o.foldlevelstart = 99
     o.foldnestmax = 10
 

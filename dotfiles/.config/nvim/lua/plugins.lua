@@ -686,6 +686,7 @@ local function packer_startup_fun()
                 --     enable = true,
                 -- },
             }
+            vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
             -- fix treesitter
             vim.keymap.set(
                 'n',
