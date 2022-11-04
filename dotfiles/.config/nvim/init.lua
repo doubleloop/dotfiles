@@ -111,6 +111,10 @@ local function set_mappings()
         map('c', arrow, '<nop>', opts)
     end
 
+    -- this are used for tmux
+    map('n', '<a-n>', '<nop>', opts)
+    map('n', '<a-p>', '<nop>', opts)
+
     -- more tmux like behavior
     map('n', '<c-w>c', '<cmd>tabedit %<cr>', opts)
 
