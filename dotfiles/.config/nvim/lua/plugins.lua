@@ -670,9 +670,15 @@ local function packer_startup_fun()
                     end),
                     ['<c-p>'] = cmp.mapping.select_prev_item(),
                     ['<cr>'] = cmp.mapping.confirm(),
+                    ['<c-e>'] = cmp.mapping.close(),
                     ['<c-u>'] = cmp.mapping.scroll_docs(-4),
                     ['<c-d>'] = cmp.mapping.scroll_docs(4),
-
+                    ['('] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.close()
+                        end
+                        fallback()
+                    end),
                 },
                 window = {
                     completion = {
