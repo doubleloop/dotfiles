@@ -81,7 +81,7 @@ local function set_options()
     o.wildignorecase = true
     o.path:append { '**' }
 
-    o.completeopt = { 'menuone', 'noinsert', 'noselect' }
+    o.completeopt = { 'menu', 'menuone', 'noselect' }
 
     o.showmode = false
     o.showcmd = true
