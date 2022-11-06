@@ -508,16 +508,16 @@ local function packer_startup_fun()
     }
     use {
         'euclio/vim-markdown-composer',
-        -- building is slow, better to call it manually when it is needed
-        -- run = 'cargo build --release'
+        ft = 'markdown',
+        -- building is slow, uncomment this when it is really needed
+        -- run = 'cargo build --release --locked'
         setup = function()
             vim.g.markdown_composer_autostart = 0
         end,
     }
-
     use { 'momota/junos.vim', ft = 'junos' }
-    use { 'rafamadriz/friendly-snippets' }
     use {
+        requires = 'rafamadriz/friendly-snippets',
         'L3MON4D3/LuaSnip',
         config = function()
             local ls = require 'luasnip'
