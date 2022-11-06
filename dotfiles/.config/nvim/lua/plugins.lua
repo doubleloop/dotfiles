@@ -690,7 +690,7 @@ local function packer_startup_fun()
     use {
         'hrsh7th/nvim-cmp',
         requires = {'hrsh7th/cmp-nvim-lsp', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-buffer', 'onsails/lspkind.nvim' },
-        setup = function()
+        config = function()
             local cmp = require'cmp'
             local lspkind = require('lspkind')
 
