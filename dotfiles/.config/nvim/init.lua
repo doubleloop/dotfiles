@@ -95,7 +95,7 @@ local function set_options()
 
     o.termguicolors = true
     -- just in case when colorsheme is not installed
-    vim.cmd [[hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg]]
+    a.nvim_set_hl(0, 'MatchParen', {cterm={underline=true}, ctermbg=0, underline=true, bg='bg'})
 end
 
 local function set_mappings()

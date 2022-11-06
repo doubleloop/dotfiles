@@ -1002,22 +1002,22 @@ local function packer_startup_fun()
                 },
             }
 
-            -- used by document_highlight
-            vim.cmd [[ hi! link LspReferenceText CursorLine ]]
-            vim.cmd [[ hi! link LspReferenceWrite CursorLine ]]
-            vim.cmd [[ hi! link LspReferenceRead CursorLine ]]
-
-            -- I do not like this overwrites so switch back to defaults
-            vim.cmd [[ hi! link TelescopeNormal Normal ]]
-            vim.cmd [[ hi! link TelescopeSelection Visual ]]
-            vim.cmd [[ hi! link TelescopeSelectionCaret TelescopeSelection ]]
-            vim.cmd [[ hi! link TelescopeMatching Special ]]
-            vim.cmd [[ hi! link TelescopeMultiSelection Type ]]
+            -- used by document_highlight (in case illuminate is disabled)
+            vim.api.nvim_set_hl(0, 'LspReferenceText', {link='CursorLine'})
+            vim.api.nvim_set_hl(0, 'LspReferenceWrite', {link='CursorLine'})
+            vim.api.nvim_set_hl(0, 'LspReferenceRead', {link='CursorLine'})
 
             -- illuminate
-            vim.cmd [[ hi! link IlluminatedWordText CursorLine ]]
-            vim.cmd [[ hi! link IlluminatedWordRead CursorLine ]]
-            vim.cmd [[ hi! link IlluminatedWordWrite CursorLine ]]
+            vim.api.nvim_set_hl(0, 'IlluminatedWordText', {link='CursorLine'})
+            vim.api.nvim_set_hl(0, 'IlluminatedWordRead', {link='CursorLine'})
+            vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', {link='CursorLine'})
+
+            -- I do not like this overwrites so switch back to defaults
+            vim.api.nvim_set_hl(0, 'TelescopeNormal', {link='Normal'})
+            vim.api.nvim_set_hl(0, 'TelescopeSelection', {link='Visual'})
+            vim.api.nvim_set_hl(0, 'TelescopeSelectionCaret', {link='TelescopeSelection'})
+            vim.api.nvim_set_hl(0, 'TelescopeMatching', {link='Special'})
+            vim.api.nvim_set_hl(0, 'TelescopeMultiSelection', {link='Type'})
         end,
     }
 end
