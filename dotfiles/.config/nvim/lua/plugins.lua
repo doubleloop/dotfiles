@@ -51,13 +51,16 @@ local function packer_startup_fun()
     }
     use {
         'tpope/vim-fugitive', -- git integration
+        requires = {
+            'tpope/vim-rhubarb',                -- gihtub GBrowse
+            'tommcdo/vim-fubitive',             -- bitbucket GBrowse
+            'shumphrey/fugitive-gitlab.vim',    -- gitlab GBrowse
+        },
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.keymap.set('n', '<leader>dd', '<cmd>Gdiffsplit<cr>', opts)
+            vim.keymap.set('n', '<leader>dd', vim.cmd.Gdiffsplit, opts)
         end,
     }
-    use { 'tpope/vim-rhubarb', after = 'vim-fugitive' } -- gihtub Gbrowse
-    use { 'tommcdo/vim-fubitive', after = 'vim-fugitive' } -- bitbucket Gbrowse
     use {
         'tpope/vim-sleuth', -- guess ts heuristically
         cmd = { 'Sleuth' },
@@ -244,8 +247,8 @@ local function packer_startup_fun()
                     for m, fun in
                         pairs {
                             ['<a-g>'] = gs.preview_hunk,
-                            ['<leader>gh'] = gs.preview_hunk,
-                            ['<leader>gu'] = gs.undo_stage_hunk,
+                            ['<leader>hp'] = gs.preview_hunk,
+                            ['<leader>hu'] = gs.undo_stage_hunk,
                         }
                     do
                         vim.keymap.set('n', m, fun, opts)
@@ -253,8 +256,8 @@ local function packer_startup_fun()
 
                     for m, cmd in
                         pairs {
-                            ['v <leader>gs'] = '<cmd>Gitsigns stage_hunk<cr>',
-                            ['v <leader>gr'] = '<cmd>Gitsigns reset_hunk<cr>',
+                            ['<leader>hs'] = function() vim.cmd.Gitsigns('stage_hunk') end,
+                            ['<leader>hr'] = function() vim.cmd.Gitsigns('reset_hunk') end,
                         }
                     do
                         vim.keymap.set({ 'n', 'v' }, m, cmd, opts)
@@ -262,8 +265,16 @@ local function packer_startup_fun()
 
                     for m, cmd in
                         pairs {
-                            [']c'] = "&diff ? ']c' : '<cmd>Gitsigns next_hunk<cr>'",
-                            ['[c'] = "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<cr>'",
+                            [']c'] = function()
+                                if vim.wo.diff then return ']c' end
+                                vim.schedule(gs.next_hunk)
+                                return '<Ignore>'
+                            end,
+                            ['[c'] = function()
+                                if vim.wo.diff then return '[c' end
+                                vim.schedule(gs.prev_hunk)
+                                return '<Ignore>'
+                            end,
                         }
                     do
                         vim.keymap.set('n', m, cmd, vim.tbl_extend('force', opts, { expr = true }))
@@ -480,7 +491,7 @@ local function packer_startup_fun()
                     }
                 end},
                 b.formatting.yapf,
-                b.formatting.isort
+                b.formatting.isort,
             }
             nls.setup({ sources = sources, on_attach = u.on_attach_defaults })
         end
