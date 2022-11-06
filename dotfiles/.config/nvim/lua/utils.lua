@@ -39,8 +39,10 @@ utils.pytest_file_toggle = function()
     end
 end
 
--- TODO: some mechanizm to avoid duplicated calls
 utils.on_attach_defaults = function(_, bufnr)
+    if vim.b[bufnr].lsp_defaults_attached then
+        return
+    end
     local tb = require 'telescope.builtin'
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.api.nvim_buf_set_option(bufnr, 'tagfunc', 'v:lua.vim.lsp.tagfunc')
@@ -77,6 +79,7 @@ utils.on_attach_defaults = function(_, bufnr)
 
     vim.keymap.set('i', '<a-s>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('v', '<leader>=', vim.lsp.buf.format, opts)
+    vim.b[bufnr].lsp_defaults_attached = true
 end
 
 return utils
