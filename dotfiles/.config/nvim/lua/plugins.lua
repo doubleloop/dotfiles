@@ -273,21 +273,59 @@ local function packer_startup_fun()
         end,
     }
     use {
-        'kyazdani42/nvim-tree.lua',
+        'nvim-tree/nvim-tree.lua',
         requires = 'kyazdani42/nvim-web-devicons',
+        after = 'monokai.nvim',
         keys = '<a-1>',
-        cmd = { 'NvimTreeOpen' },
-        setup = function()
-            vim.g.nvim_tree_indent_markers = 1
-        end,
+        cmd = { 'NvimTreeOpen', 'NvimTreeFindFile' },
         config = function()
             local nvt = require 'nvim-tree'
             nvt.setup {
+                hijack_netrw = false,
                 hijack_cursor = true,
-                update_focused_file = { enable = true },
-                update_cwd = true,
+                sync_root_with_cwd = true,
+                reload_on_bufenter = true,
+                update_focused_file = {
+                    enable = true,
+                    update_root = true,
+                },
+                actions = {
+                    change_dir = {
+                        enable = false
+                    },
+                },
+                view = {
+                    float = {
+                        enable = true,
+                        open_win_config = function()
+                            local height = vim.o.lines - 4
+                            local width = math.min(80, math.floor(vim.o.columns / 3))
+                            return {
+                                relative = 'editor',
+                                border='rounded',
+                                row = 0,
+                                col = 0,
+                                height = height,
+                                width = width,
+                            }
+                        end
+                    },
+                    hide_root_folder = true,
+                },
+                renderer = {
+                    indent_markers = {
+                        enable = true,
+                    },
+                    highlight_opened_files = 'name',
+                },
             }
             vim.keymap.set('n', '<a-1>', nvt.toggle, { noremap = true, silent = false })
+            vim.api.nvim_create_autocmd('BufWinEnter', {
+                pattern = 'NvimTree_*',
+                callback = function()
+                    vim.wo.cursorline = true
+                end
+            })
         end,
     }
     -- use 'stsewd/gx-extended.vim'
@@ -840,13 +878,14 @@ local function packer_startup_fun()
         end,
     }
     use {
-        'hoob3rt/lualine.nvim',
+        'nvim-lualine/lualine.nvim',
         requires = 'kyazdani42/nvim-web-devicons',
         after = 'monokai.nvim',
         config = function()
             require('lualine').setup {
                 options = {
                     theme = 'wombat',
+                    globalstatus = true,
                     icons_enabled = true,
                     section_separators = '',
                     component_separators = { '|', '|' },
@@ -867,7 +906,7 @@ local function packer_startup_fun()
                     lualine_y = {},
                     lualine_z = {},
                 },
-                extensions = { 'nvim-tree', 'fugitive', 'quickfix' },
+                extensions = { 'nvim-tree', 'fugitive', 'quickfix', 'man' },
             }
         end,
     }
