@@ -215,8 +215,8 @@ local function packer_startup_fun()
         config = function()
             local opts = { noremap = true, silent = false }
             vim.keymap.set('n', '<leader>rr', '<cmd>w<cr><cmd>MirrorPush<cr>', opts)
-            vim.keymap.set('n', '<leader>rd', '<cmd>MirrorDiff<cr>', opts)
-            vim.keymap.set('n', '<leader>rl', '<cmd>MirrorReload<cr>', opts)
+            vim.keymap.set('n', '<leader>rd', vim.cmd.MirrorDiff, opts)
+            vim.keymap.set('n', '<leader>rl', vim.cmd.MirrorReload, opts)
         end,
     }
     use {
@@ -227,7 +227,7 @@ local function packer_startup_fun()
         end,
         config = function()
             local opts = { noremap = true, silent = true }
-            vim.keymap.set({ 'n', 'v' }, '<c-w>z', '<cmd>ZoomWinTabToggle<cr>', opts)
+            vim.keymap.set({ 'n', 'v' }, '<c-w>z', vim.cmd.ZoomWinTabToggle, opts)
         end,
     }
     use {
@@ -358,8 +358,8 @@ local function packer_startup_fun()
         end,
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.keymap.set('n', '<leader>so', '<cmd>SessionOpen default<cr>', opts)
-            vim.keymap.set('n', '<leader>S', '<cmd>SessionOpen<cr>', opts)
+            vim.keymap.set('n', '<leader>so', function() vim.cmd.SessionOpen('default') end, opts)
+            vim.keymap.set('n', '<leader>S', vim.cmd.SessionOpen, opts)
         end,
     }
     use 'famiu/bufdelete.nvim'
@@ -469,7 +469,7 @@ local function packer_startup_fun()
         end,
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.keymap.set('n', '<a-2>', '<cmd>TagbarToggle<cr>', opts)
+            vim.keymap.set('n', '<a-2>', vim.cmd.TagbarToggle, opts)
         end,
     }
     use {

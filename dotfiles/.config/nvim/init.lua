@@ -115,7 +115,7 @@ local function set_mappings()
     map('n', '<a-p>', '<nop>', opts)
 
     -- more tmux like behavior
-    map('n', '<c-w>c', '<cmd>tabedit %<cr>', opts)
+    map('n', '<c-w>c', function() vim.cmd.tabedit('%') end, opts)
 
     -- do not override unnamed register when pasting over
     map('x', 'p', [['pgv"'.v:register.'y']], extend(opts, { expr = true }))
@@ -148,8 +148,8 @@ local function set_mappings()
     -- inoremap <expr> <tab>   pumvisible() ? "\<c-n>" : "\<tab>"
     -- inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-Tab>"
 
-    map('n', '<leader>ds', '<cmd>windo diffthis<cr>', opts)
-    map('n', '<leader>de', '<cmd>windo diffoff<cr>', opts)
+    map('n', '<leader>ds', function() vim.cmd.windo('diffthis') end, opts)
+    map('n', '<leader>de', function() vim.cmd.windo('diffoff') end, opts)
 
     map(
         'n',
@@ -157,7 +157,7 @@ local function set_mappings()
         [[<cmd>let @z=expand("<cword>")<cr>q:i%s/\C\v<<esc>"zpa>//g<esc>hi]],
         opts
     )
-    map('n', '<leader>e', '<cmd>e $MYVIMRC<cr>', opts)
+    map('n', '<leader>e', function() vim.cmd.e('$MYVIMRC') end, opts)
     map('n', '<leader>q', '<cmd>botright copen 10<cr>', opts)
     map('n', '<leader>W', '<cmd>%s/s+$//e<cr>', opts)
 end
