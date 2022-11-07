@@ -580,6 +580,7 @@ local function packer_startup_fun(use)
     use {
         'neovim/nvim-lspconfig',
         requires = 'RRethy/vim-illuminate',
+        after = 'cmp-nvim-lsp',
         config = function()
             local lsp = require 'lspconfig'
             local u = require 'utils'
