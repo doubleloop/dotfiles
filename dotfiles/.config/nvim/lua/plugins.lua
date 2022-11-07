@@ -9,23 +9,21 @@ local function bootstrap()
             'https://github.com/wbthomason/packer.nvim',
             install_path,
         }
-        vim.cmd 'packadd packer.nvim'
+        vim.cmd.packadd('packer.nvim')
+        return true
     end
+    return false
 end
 
-if not pcall(bootstrap) then
+local ok, bootstrapped = pcall(bootstrap)
+if not ok then
     print 'Failed to bootstrap packer!'
     do
         return
     end
 end
 
--- TODO: fix bootstrap
-require 'impatient'
-
-local use = require('packer').use
-
-local function packer_startup_fun()
+local function packer_startup_fun(use)
     use 'wbthomason/packer.nvim'
     use 'lewis6991/impatient.nvim'
 
@@ -691,7 +689,7 @@ local function packer_startup_fun()
         'hrsh7th/nvim-cmp',
         requires = {'hrsh7th/cmp-nvim-lsp', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-buffer', 'onsails/lspkind.nvim' },
         config = function()
-            local cmp = require'cmp'
+            local cmp = require('cmp')
             local lspkind = require('lspkind')
 
             cmp.setup {
@@ -754,7 +752,11 @@ local function packer_startup_fun()
     }
     use {
         'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
+        run = function()
+            if vim.fn.exists("TSUpdate") ~= 0 then
+                vim.cmd.TSUpdate()
+            end
+        end,
         config = function()
             require('nvim-treesitter.configs').setup {
                 ensure_installed = {
@@ -856,6 +858,7 @@ local function packer_startup_fun()
     }
     use {
         'mizlan/iswap.nvim',
+        after = 'nvim-treesitter',
         config = function()
             vim.keymap.set('n', 'gs', function()
                 require('iswap').iswap_with()
@@ -930,7 +933,7 @@ local function packer_startup_fun()
     use {
         'tanvirtin/monokai.nvim',
         setup = function()
-            vim.api.nvim_set_option('termguicolors', true)
+            vim.o.termguicolors = true
         end,
         config = function()
             local monokai = require 'monokai'
@@ -1022,7 +1025,6 @@ local function packer_startup_fun()
     }
 end
 
--- TODO: fix bootstrap
 require('packer').startup {
     packer_startup_fun,
     config = {
@@ -1034,5 +1036,3 @@ require('packer').startup {
         compile_path = vim.fn.stdpath 'config' .. '/lua/packer_compiled.lua',
     },
 }
-
-require 'packer_compiled'

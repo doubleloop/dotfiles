@@ -1,3 +1,5 @@
+pcall(require, 'impatient')
+
 local u = require 'utils'
 local a = vim.api
 local o = vim.opt
@@ -7,8 +9,13 @@ vim.g.mapleader = ','
 vim.g.python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 vim.g.vimsyn_embed = 'l'
 
+pcall(require, 'packer_compiled')
+
 -- ~/.config/nvim/lua/plugins.lua
-require 'plugins'
+local ok, ret = pcall(require, 'plugins')
+if not ok then
+    vim.notify(ret)
+end
 
 local function set_options()
     o.paste = false
@@ -95,7 +102,10 @@ local function set_options()
 
     o.termguicolors = true
     -- just in case when colorsheme is not installed
-    a.nvim_set_hl(0, 'MatchParen', {cterm={underline=true}, ctermbg=0, underline=true, bg='bg'})
+    -- note: lua version has issue when hi Normal is cleared
+    -- https://github.com/neovim/neovim/issues/20008#issue-1355604714
+    -- a.nvim_set_hl(0, 'MatchParen', {cterm={underline=true}, ctermbg=0, underline=true, bg='bg'})
+    vim.cmd [[hi MatchParen  cterm=underline ctermbg=0 gui=underline guibg=bg]]
 end
 
 local function set_mappings()
