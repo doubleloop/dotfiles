@@ -10,6 +10,7 @@ vim.g.python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 vim.g.vimsyn_embed = 'l'
 
 pcall(require, 'packer_compiled')
+require('autosave').setup()
 
 -- ~/.config/nvim/lua/plugins.lua
 local ok, ret = pcall(require, 'plugins')

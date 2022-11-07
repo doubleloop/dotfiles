@@ -91,30 +91,6 @@ local function packer_startup_fun(use)
         end,
     }
     use {
-        'Pocco81/auto-save.nvim',
-        config = function()
-            require('auto-save').setup {
-                enabled = true,
-                trigger_events = { 'InsertLeave', 'TextChanged', 'FocusLost', 'BufHidden', 'ExitPre' },
-                write_all_buffers = false,
-                debounce_delay = 1000,
-                execution_message = {
-                    enabled = false,
-                },
-                condition = function(buf)
-                    if vim.fn.getbufvar(buf, "&modifiable") ~= 1 then
-                        return false
-                    end
-                    local bt = vim.fn.getbufvar(buf, "&buftype")
-                    if bt == "nofile" or bt == "nowrite" or bt == "prompt" then
-                        return false
-                    end
-                    return true
-                end,
-            }
-        end,
-    }
-    use {
         'nvim-telescope/telescope.nvim',
         requires = {
             'nvim-lua/plenary.nvim',
