@@ -931,7 +931,8 @@ local function packer_startup_fun(use)
         end,
     }
     use {
-        'tanvirtin/monokai.nvim',
+        'doubleloop/monokai.nvim',
+        branch = 'new_api',
         setup = function()
             vim.o.termguicolors = true
         end,
@@ -941,7 +942,7 @@ local function packer_startup_fun(use)
             monokai.setup {
                 custom_hlgroups = {
                     SpellBad = {
-                        style = 'undercurl',
+                        undercurl = true,
                         fg = 'fg',
                         bg = 'bg',
                         sp = '#e73c50',
