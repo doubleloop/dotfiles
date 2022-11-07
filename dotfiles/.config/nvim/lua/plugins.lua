@@ -15,7 +15,7 @@ local function bootstrap()
     return false
 end
 
-local ok, bootstrapped = pcall(bootstrap)
+local ok, _ = pcall(bootstrap)
 if not ok then
     print 'Failed to bootstrap packer!'
     do
