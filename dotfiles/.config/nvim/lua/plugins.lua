@@ -496,23 +496,24 @@ local function packer_startup_fun(use)
     }
     use { 'Vimjas/vim-python-pep8-indent', ft = { 'python' } }
     use {
-        'BurningEther/iron.nvim',
-        setup = function()
-            vim.g.iron_map_defaults = 0
-            vim.g.iron_map_extended = 0
-        end,
+        'hkupty/iron.nvim',
+        -- TODO: fix/rewrite this plugin, author can not handle visual send after 2 rewrites ..
         config = function()
-            local iron = require('iron').core
-            iron.set_config {
-                preferred = {
-                    python = 'ipython',
+            local iron = require 'iron.core'
+            iron.setup {
+                config = {
+                    repl_definition = {
+                        python = {
+                            command = {'ipython'}
+                        }
+                    },
+                    repl_open_cmd = 'vsplit',
                 },
-                repl_open_cmd = 'vsplit',
+                keymaps = {
+                    visual_send = '<F5>',
+                    send_line = '<F5>',
+                },
             }
-
-            local opts = { noremap = false, silent = false }
-            vim.keymap.set('n', '<F5>', iron.send_line, opts)
-            vim.keymap.set('v', '<F5>', '<esc><cmd>lua require("iron").exec_visual()<cr>', opts)
         end,
     }
     use {
