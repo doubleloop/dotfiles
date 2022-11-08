@@ -1,3 +1,5 @@
+-- note: paths are done in linux specific way, this file will break on windows
+-- todo: nvim path library ?!
 local function bootstrap()
     local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
     if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -95,25 +97,38 @@ local function packer_startup_fun(use)
         requires = {
             'nvim-lua/plenary.nvim',
             'kyazdani42/nvim-web-devicons',
+            -- todo: handle situation when sqlite is not installed
+            'nvim-telescope/telescope-smart-history.nvim',
+            'kkharji/sqlite.lua',
         },
         config = function()
+            local telescope = require 'telescope'
             local actions = require 'telescope.actions'
             local builtin = require 'telescope.builtin'
 
             local function custom_send_to_qflist(prompt_bufnr)
                 actions.send_to_qflist(prompt_bufnr)
-                vim.cmd [[botright copen]]
+                vim.cmd.copen { mods = { split = 'botright' } }
             end
 
-            require('telescope').setup {
+            telescope.setup {
                 defaults = {
                     mappings = {
                         i = {
-                            ['<esc>'] = actions.close,
-                            ['<C-q>'] = custom_send_to_qflist,
+                            ['<c-q>'] = custom_send_to_qflist,
+                            ['<c-p>'] = actions.cycle_history_prev,
+                            ['<c-n>'] = actions.cycle_history_next,
+                            ['<c-k>'] = actions.move_selection_previous,
+                            ['<c-j>'] = actions.move_selection_next,
                         },
                         n = {
                             ['q'] = actions.close,
+                            ['<c-c>'] = actions.close,
+                            ['<c-q>'] = custom_send_to_qflist,
+                            ['<c-p>'] = actions.cycle_history_prev,
+                            ['<c-n>'] = actions.cycle_history_next,
+                            ['<c-k>'] = actions.move_selection_previous,
+                            ['<c-j>'] = actions.move_selection_next,
                         },
                     },
                     layout_config = {
@@ -122,8 +137,15 @@ local function packer_startup_fun(use)
                             width = 0.9,
                         },
                     },
+                    cache_picker = {
+                        num_pickers = 10,
+                    },
+                    history = {
+                        path = vim.fn.stdpath 'data' .. '/telescope_history.sqlite3'
+                    }
                 },
             }
+            telescope.load_extension 'smart_history'
 
             local open_files = function()
                 vim.fn.system('git rev-parse --is-inside-work-tree')
@@ -160,6 +182,8 @@ local function packer_startup_fun(use)
             vim.keymap.set(
                 'c',
                 '<c-s-r>',
+                -- note: this is terrible hack
+                -- todo: find better way to get content of cmd prompt
                 '<c-f>0"pyg_<cmd>q<cr>:Telescope command_history default_text=<c-r>p<cr>',
                 vim.tbl_extend('force', opts, { silent = true })
             )
@@ -172,6 +196,16 @@ local function packer_startup_fun(use)
         config = function()
             require('telescope').load_extension 'fzf'
         end,
+    }
+    use { 'stevearc/dressing.nvim',
+        config = function()
+            require('dressing').setup {
+                input = {
+                    insert_only = false,
+                    winblend = 0,
+                }
+            }
+        end
     }
     use {
         'mileszs/ack.vim',
@@ -186,11 +220,12 @@ local function packer_startup_fun(use)
     use {
         -- todo: check out chipsenkbeil/distant.nvim
         'zenbro/mirror.vim',
+        cmd = { 'MirrorConfig' },
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.keymap.set('n', '<leader>rr', '<cmd>w<cr><cmd>MirrorPush<cr>', opts)
-            vim.keymap.set('n', '<leader>rd', vim.cmd.MirrorDiff, opts)
-            vim.keymap.set('n', '<leader>rl', vim.cmd.MirrorReload, opts)
+            vim.keymap.set('n', '<leader>R', '<cmd>w<cr><cmd>MirrorPush<cr>', opts)
+            vim.keymap.set('n', '<leader>dr', vim.cmd.MirrorDiff, opts)
+            vim.keymap.set('n', '<leader>L', vim.cmd.MirrorReload, opts)
         end,
     }
     use {
