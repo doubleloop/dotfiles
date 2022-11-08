@@ -11,7 +11,7 @@ local function bootstrap()
             'https://github.com/wbthomason/packer.nvim',
             install_path,
         }
-        vim.cmd.packadd('packer.nvim')
+        vim.cmd.packadd 'packer.nvim'
         return true
     end
     return false
@@ -52,9 +52,9 @@ local function packer_startup_fun(use)
     use {
         'tpope/vim-fugitive', -- git integration
         requires = {
-            'tpope/vim-rhubarb',                -- gihtub GBrowse
-            'tommcdo/vim-fubitive',             -- bitbucket GBrowse
-            'shumphrey/fugitive-gitlab.vim',    -- gitlab GBrowse
+            'tpope/vim-rhubarb', -- gihtub GBrowse
+            'tommcdo/vim-fubitive', -- bitbucket GBrowse
+            'shumphrey/fugitive-gitlab.vim', -- gitlab GBrowse
         },
         config = function()
             local opts = { noremap = true, silent = false }
@@ -148,14 +148,13 @@ local function packer_startup_fun(use)
             telescope.load_extension 'smart_history'
 
             local open_files = function()
-                vim.fn.system('git rev-parse --is-inside-work-tree')
+                vim.fn.system 'git rev-parse --is-inside-work-tree'
                 if vim.v.shell_error == 0 then
                     builtin.git_files {}
                 else
                     builtin.find_files {}
                 end
             end
-
 
             local opts = { noremap = true, silent = false }
             local maps = {
@@ -253,39 +252,41 @@ local function packer_startup_fun(use)
             gs.setup {
                 on_attach = function(bufnr)
                     local opts = { buffer = bufnr }
-                    for m, fun in
-                        pairs {
-                            ['<a-g>'] = gs.preview_hunk,
-                            ['<leader>hp'] = gs.preview_hunk,
-                            ['<leader>hu'] = gs.undo_stage_hunk,
-                        }
-                    do
+                    for m, fun in pairs {
+                        ['<a-g>'] = gs.preview_hunk,
+                        ['<leader>hp'] = gs.preview_hunk,
+                        ['<leader>hu'] = gs.undo_stage_hunk,
+                    } do
                         vim.keymap.set('n', m, fun, opts)
                     end
 
-                    for m, cmd in
-                        pairs {
-                            ['<leader>hs'] = function() vim.cmd.Gitsigns('stage_hunk') end,
-                            ['<leader>hr'] = function() vim.cmd.Gitsigns('reset_hunk') end,
-                        }
-                    do
+                    for m, cmd in pairs {
+                        ['<leader>hs'] = function()
+                            vim.cmd.Gitsigns 'stage_hunk'
+                        end,
+                        ['<leader>hr'] = function()
+                            vim.cmd.Gitsigns 'reset_hunk'
+                        end,
+                    } do
                         vim.keymap.set({ 'n', 'v' }, m, cmd, opts)
                     end
 
-                    for m, cmd in
-                        pairs {
-                            [']c'] = function()
-                                if vim.wo.diff then return ']c' end
-                                vim.schedule(gs.next_hunk)
-                                return '<Ignore>'
-                            end,
-                            ['[c'] = function()
-                                if vim.wo.diff then return '[c' end
-                                vim.schedule(gs.prev_hunk)
-                                return '<Ignore>'
-                            end,
-                        }
-                    do
+                    for m, cmd in pairs {
+                        [']c'] = function()
+                            if vim.wo.diff then
+                                return ']c'
+                            end
+                            vim.schedule(gs.next_hunk)
+                            return '<Ignore>'
+                        end,
+                        ['[c'] = function()
+                            if vim.wo.diff then
+                                return '[c'
+                            end
+                            vim.schedule(gs.prev_hunk)
+                            return '<Ignore>'
+                        end,
+                    } do
                         vim.keymap.set('n', m, cmd, vim.tbl_extend('force', opts, { expr = true }))
                     end
                 end,
@@ -311,7 +312,7 @@ local function packer_startup_fun(use)
                 },
                 actions = {
                     change_dir = {
-                        enable = false
+                        enable = false,
                     },
                 },
                 view = {
@@ -322,13 +323,13 @@ local function packer_startup_fun(use)
                             local width = math.min(80, math.floor(vim.o.columns / 3))
                             return {
                                 relative = 'editor',
-                                border='rounded',
+                                border = 'rounded',
                                 row = 0,
                                 col = 0,
                                 height = height,
                                 width = width,
                             }
-                        end
+                        end,
                     },
                     hide_root_folder = true,
                 },
@@ -344,7 +345,7 @@ local function packer_startup_fun(use)
                 pattern = 'NvimTree_*',
                 callback = function()
                     vim.wo.cursorline = true
-                end
+                end,
             })
         end,
     }
@@ -367,7 +368,9 @@ local function packer_startup_fun(use)
         end,
         config = function()
             local opts = { noremap = true, silent = false }
-            vim.keymap.set('n', '<leader>so', function() vim.cmd.SessionOpen('default') end, opts)
+            vim.keymap.set('n', '<leader>so', function()
+                vim.cmd.SessionOpen 'default'
+            end, opts)
             vim.keymap.set('n', '<leader>S', vim.cmd.SessionOpen, opts)
         end,
     }
@@ -418,10 +421,10 @@ local function packer_startup_fun(use)
     use {
         'RRethy/vim-illuminate',
         config = function()
-            require('illuminate').configure({
+            require('illuminate').configure {
                 delay = 500,
                 filetypes_denylist = { 'LuaTree', 'nerdtree' },
-            })
+            }
         end,
     }
     use {
@@ -485,25 +488,28 @@ local function packer_startup_fun(use)
         'jose-elias-alvarez/null-ls.nvim',
         requires = 'nvim-lua/plenary.nvim',
         config = function()
-            local nls = require("null-ls")
+            local nls = require 'null-ls'
             local b = nls.builtins
-            local u = require('utils')
+            local u = require 'utils'
             local sources = {
                 b.formatting.stylua,
                 b.formatting.prettierd,
-                b.formatting.tidy.with { filetypes = { 'xml' }, extra_args = function(_)
-                    return {
-                        '-xml',
-                        '--ident-spaces ' .. vim.fn.shiftwidth(),
-                        '--wrap ' .. vim.o.textwidth,
-                        '--vertical-space yes',
-                    }
-                end},
+                b.formatting.tidy.with {
+                    filetypes = { 'xml' },
+                    extra_args = function(_)
+                        return {
+                            '-xml',
+                            '--ident-spaces ' .. vim.fn.shiftwidth(),
+                            '--wrap ' .. vim.o.textwidth,
+                            '--vertical-space yes',
+                        }
+                    end,
+                },
                 b.formatting.yapf,
                 b.formatting.isort,
             }
-            nls.setup({ sources = sources, on_attach = u.on_attach_defaults })
-        end
+            nls.setup { sources = sources, on_attach = u.on_attach_defaults }
+        end,
     }
     use { 'Vimjas/vim-python-pep8-indent', ft = { 'python' } }
     use {
@@ -515,8 +521,8 @@ local function packer_startup_fun(use)
                 config = {
                     repl_definition = {
                         python = {
-                            command = {'ipython'}
-                        }
+                            command = { 'ipython' },
+                        },
                     },
                     repl_open_cmd = 'vsplit',
                 },
@@ -569,22 +575,23 @@ local function packer_startup_fun(use)
                 local ekeys = vim.api.nvim_replace_termcodes(keys, true, true, true)
                 vim.api.nvim_feedkeys(ekeys, 'n', false)
             end
+
             vim.keymap.set({ 'i', 's' }, '<TAB>', function()
                 if vim.fn.pumvisible() ~= 0 then
-                    feedkeys('<c-n>')
+                    feedkeys '<c-n>'
                 elseif ls.expand_or_locally_jumpable() then
                     ls.expand_or_jump()
                 else
-                    feedkeys('<TAB>')
+                    feedkeys '<TAB>'
                 end
             end)
             vim.keymap.set({ 'i', 's' }, '<S-TAB>', function()
                 if vim.fn.pumvisible() ~= 0 then
-                    feedkeys('<c-p>')
+                    feedkeys '<c-p>'
                 elseif ls.locally_jumpable(-1) then
                     ls.jump(-1)
                 else
-                    feedkeys('<c-d>')
+                    feedkeys '<c-d>'
                 end
             end)
         end,
@@ -700,10 +707,15 @@ local function packer_startup_fun(use)
     }
     use {
         'hrsh7th/nvim-cmp',
-        requires = {'hrsh7th/cmp-nvim-lsp', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-buffer', 'onsails/lspkind.nvim' },
+        requires = {
+            'hrsh7th/cmp-nvim-lsp',
+            'saadparwaiz1/cmp_luasnip',
+            'hrsh7th/cmp-buffer',
+            'onsails/lspkind.nvim',
+        },
         config = function()
-            local cmp = require('cmp')
-            local lspkind = require('lspkind')
+            local cmp = require 'cmp'
+            local lspkind = require 'lspkind'
 
             cmp.setup {
                 completion = {
@@ -712,16 +724,16 @@ local function packer_startup_fun(use)
                 snippet = {
                     expand = function(args)
                         require('luasnip').lsp_expand(args.body)
-                    end
+                    end,
                 },
-                sources = cmp.config.sources ({
+                sources = cmp.config.sources({
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
                 }, {
                     { name = 'buffer', keyword_length = 3 },
                 }),
                 mapping = {
-                    ['<c-n>'] =  cmp.mapping(function(fallback)
+                    ['<c-n>'] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.mapping.select_next_item()(fallback)
                         else
@@ -747,26 +759,26 @@ local function packer_startup_fun(use)
                     },
                 },
                 formatting = {
-                    fields = { "kind", "abbr", "menu" },
+                    fields = { 'kind', 'abbr', 'menu' },
                     format = function(entry, vim_item)
-                        local kind = lspkind.cmp_format({
+                        local kind = lspkind.cmp_format {
                             mode = 'symbol_text',
                             maxwidth = 50,
                             ellipsis_char = '...',
-                        })(entry, vim_item)
-                        local strings = vim.split(kind.kind, "%s", { trimempty = true })
-                        kind.kind = " " .. strings[1] .. " "
-                        kind.menu = "    (" .. strings[2] .. ")"
+                        } (entry, vim_item)
+                        local strings = vim.split(kind.kind, '%s', { trimempty = true })
+                        kind.kind = ' ' .. strings[1] .. ' '
+                        kind.menu = '    (' .. strings[2] .. ')'
                         return kind
-                    end
-                }
+                    end,
+                },
             }
-        end
+        end,
     }
     use {
         'nvim-treesitter/nvim-treesitter',
         run = function()
-            if vim.fn.exists("TSUpdate") ~= 0 then
+            if vim.fn.exists 'TSUpdate' ~= 0 then
                 vim.cmd.TSUpdate()
             end
         end,
@@ -1020,21 +1032,21 @@ local function packer_startup_fun(use)
             }
 
             -- used by document_highlight (in case illuminate is disabled)
-            vim.api.nvim_set_hl(0, 'LspReferenceText', {link='CursorLine'})
-            vim.api.nvim_set_hl(0, 'LspReferenceWrite', {link='CursorLine'})
-            vim.api.nvim_set_hl(0, 'LspReferenceRead', {link='CursorLine'})
+            vim.api.nvim_set_hl(0, 'LspReferenceText', { link = 'CursorLine' })
+            vim.api.nvim_set_hl(0, 'LspReferenceWrite', { link = 'CursorLine' })
+            vim.api.nvim_set_hl(0, 'LspReferenceRead', { link = 'CursorLine' })
 
             -- illuminate
-            vim.api.nvim_set_hl(0, 'IlluminatedWordText', {link='CursorLine'})
-            vim.api.nvim_set_hl(0, 'IlluminatedWordRead', {link='CursorLine'})
-            vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', {link='CursorLine'})
+            vim.api.nvim_set_hl(0, 'IlluminatedWordText', { link = 'CursorLine' })
+            vim.api.nvim_set_hl(0, 'IlluminatedWordRead', { link = 'CursorLine' })
+            vim.api.nvim_set_hl(0, 'IlluminatedWordWrite', { link = 'CursorLine' })
 
             -- I do not like this overwrites so switch back to defaults
-            vim.api.nvim_set_hl(0, 'TelescopeNormal', {link='Normal'})
-            vim.api.nvim_set_hl(0, 'TelescopeSelection', {link='Visual'})
-            vim.api.nvim_set_hl(0, 'TelescopeSelectionCaret', {link='TelescopeSelection'})
-            vim.api.nvim_set_hl(0, 'TelescopeMatching', {link='Special'})
-            vim.api.nvim_set_hl(0, 'TelescopeMultiSelection', {link='Type'})
+            vim.api.nvim_set_hl(0, 'TelescopeNormal', { link = 'Normal' })
+            vim.api.nvim_set_hl(0, 'TelescopeSelection', { link = 'Visual' })
+            vim.api.nvim_set_hl(0, 'TelescopeSelectionCaret', { link = 'TelescopeSelection' })
+            vim.api.nvim_set_hl(0, 'TelescopeMatching', { link = 'Special' })
+            vim.api.nvim_set_hl(0, 'TelescopeMultiSelection', { link = 'Type' })
         end,
     }
 end
