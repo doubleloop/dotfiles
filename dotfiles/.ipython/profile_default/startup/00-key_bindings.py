@@ -10,19 +10,8 @@ insert_mode = ViInsertMode() | EmacsInsertMode()
 def register(registry):
     handle = registry.add_binding
 
-    handle(Keys.ControlA, filter=insert_mode)(get_by_name('beginning-of-line'))
-    handle(Keys.ControlE, filter=insert_mode)(get_by_name('end-of-line'))
-    handle(Keys.ControlB, filter=insert_mode)(get_by_name('backward-char'))
-    handle(Keys.ControlF, filter=insert_mode)(get_by_name('forward-char'))
-    #  handle(Keys.Escape, 'b', filter=insert_mode)(get_by_name('backward-word'))
-    #  handle(Keys.Escape, 'f', filter=insert_mode)(get_by_name('forward-word'))
-    handle(Keys.ControlK, filter=insert_mode)(get_by_name('kill-line'))
-    handle(Keys.ControlY, filter=insert_mode)(get_by_name('yank'))
-    handle(
-        Keys.ControlW, filter=insert_mode)(get_by_name('backward-kill-word'))
-
-    handle(Keys.ControlP)(get_by_name('previous-history'))
-    handle(Keys.ControlN)(get_by_name('next-history'))
+    handle(Keys.ControlK)(get_by_name('menu-complete-backward'))
+    handle(Keys.ControlJ)(get_by_name('menu-complete'))
 
 
 # Register the shortcut if IPython is using prompt_toolkit
