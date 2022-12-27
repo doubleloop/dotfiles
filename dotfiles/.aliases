@@ -67,11 +67,6 @@ objdump2shellcode() {
     sed 's/$/"/g'
 }
 
-_exists atom-nightly && {
-    alias atom=atom-nightly
-    alias apm=apm-nightly
-}
-
 alias tldr="tldr -t ocean"
 
 w3c() {
@@ -89,8 +84,8 @@ update() {
                 apt dist-upgrade && \
                 apt autoremove --purge -y"
     sudo -k
-    # flatpak update --noninteractive
-    # flatpak uninstall --unused --noninteractive
+    flatpak update --noninteractive
+    flatpak uninstall --unused --noninteractive
 }
 
 pluglog() {
