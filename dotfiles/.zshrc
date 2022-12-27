@@ -61,8 +61,6 @@ export WORKON_HOME=$HOME/.virtualenvs
 # git-prompt compiled in haskell is 4 times faster than standard python one
 [ -f $ZSH_CUSTOM/plugins/zsh-git-prompt/src/.bin/gitstatus ] && \
     GIT_PROMPT_EXECUTABLE="haskell"
-export NVM_LAZY=1
-export NVM_LAZY_CMD=(vim nvim pyright)
 # z.lua settings
 export _ZL_DATA=$HOME/.zlua/data
 export _ZL_HYPHEN=1
@@ -77,6 +75,9 @@ autoload -U compinit && compinit
 # disable widgets on paste (slow when pasting large text buffers)
 # https://github.com/zsh-users/zsh-autosuggestions/issues/141#issuecomment-210615799
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
+
+zstyle ':omz:plugins:nvm' lazy true
+zstyle ':omz:plugins:nvm' lazy-cmd vim nvim pyright
 
 # do not hilight pasted text
 # https://github.com/zsh-users/zsh/blob/ac0dcc9a63dc2a0edc62f8f1381b15b0b5ce5da3/NEWS#L37-L42
