@@ -740,7 +740,15 @@ local function packer_startup_fun(use)
                             cmp.mapping.complete()(fallback)
                         end
                     end),
+                    ['<c-j>'] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.mapping.select_next_item()(fallback)
+                        else
+                            cmp.mapping.complete()(fallback)
+                        end
+                    end),
                     ['<c-p>'] = cmp.mapping.select_prev_item(),
+                    ['<c-k>'] = cmp.mapping.select_prev_item(),
                     ['<cr>'] = cmp.mapping.confirm(),
                     ['<c-e>'] = cmp.mapping.close(),
                     ['<c-u>'] = cmp.mapping.scroll_docs(-4),
