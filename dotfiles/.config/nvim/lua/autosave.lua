@@ -14,7 +14,7 @@ local default_cfg = {
     autostart = true,
 }
 
-local cfg = default_cfg
+local cfg = vim.deepcopy(default_cfg)
 
 local function valid_for_write(buf)
     if not a.nvim_buf_is_valid(buf) then
@@ -28,7 +28,7 @@ local function valid_for_write(buf)
 end
 
 local function do_save()
-    vim.cmd.write { mods = { silent = true, emsg_silent = true } }
+    vim.cmd.update { mods = { silent = true, emsg_silent = true } }
 end
 
 local function save(buf)
