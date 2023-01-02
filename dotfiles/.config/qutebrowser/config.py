@@ -41,8 +41,8 @@ c.qt.args = ['ppapi-widevine-path=/usr/lib/chromium/libwidevinecdmadapter.so']
 # with some bitmap fonts. As an alternative to this, it's possible to
 # set font sizes and the `zoom.default` setting.
 # Type: Bool
-c.qt.highdpi = True
-c.fonts.default_size = '8pt'
+# c.qt.highdpi = True
+# c.fonts.default_size = '8pt'
 
 # Always restore open sites when qutebrowser is reopened. Without this
 # option set, `:wq` (`:quit --save`) needs to be used to save open tabs
@@ -347,8 +347,6 @@ c.url.searchengines = {
     'gr': 'https://www.goodreads.com/search?q={}',
     'a': 'https://allegro.pl/listing?string={}',
     'deb':
-    'https://packages.debian.org/search?suite=bullseye&arch=amd64&searchon=names&keywords={}',
-    'debt':
     'https://packages.debian.org/search?suite=bookworm&arch=amd64&searchon=names&keywords={}',
     'k': 'https://keras.io/search.html?q={}',
     'py': 'https://docs.python.org/3/search.html?q={}',
@@ -405,5 +403,5 @@ config.bind('<Alt+n>', 'completion-item-focus --history next', mode='command')
 config.bind('<Alt+p>', 'completion-item-focus --history prev', mode='command')
 config.bind('<Ctrl+n>', 'completion-item-focus next', mode='command')
 config.bind('<Ctrl+p>', 'completion-item-focus prev', mode='command')
-config.bind('<Ctrl-Shift-p>', 'spawn --userscript qute-keepassxc --key 6FA16A83DB8729C771C6D16ACB6F8014581BD795', mode='insert')
-config.bind('pw', 'spawn --userscript qute-keepassxc --key 6FA16A83DB8729C771C6D16ACB6F8014581BD795', mode='normal')
+config.bind('<Ctrl-Shift-p>', 'spawn --userscript qute-keepassxc --key A919643098FEDA59E1340B0D6C70DD4CE026D298', mode='insert')
+config.bind('pw', 'spawn --userscript qute-keepassxc --key A919643098FEDA59E1340B0D6C70DD4CE026D298', mode='normal')
