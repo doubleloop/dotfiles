@@ -201,7 +201,9 @@ local function packer_startup_fun(use)
             require('dressing').setup {
                 input = {
                     insert_only = false,
-                    winblend = 0,
+                    win_options = {
+                        winblend = 0,
+                    },
                 }
             }
         end
@@ -639,7 +641,7 @@ local function packer_startup_fun(use)
                 },
                 capabilities = capabilities,
             }
-            for _, server in ipairs { 'rls', 'gopls', 'tsserver' } do
+            for _, server in ipairs { 'rust_analyzer', 'gopls', 'tsserver' } do
                 lsp[server].setup {
                     on_attach = function(client, bufnr)
                         u.on_attach_defaults(client, bufnr)
