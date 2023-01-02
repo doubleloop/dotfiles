@@ -5,8 +5,8 @@ _exists() { (( $+commands[$1] )) }
 
 ### oh-my-zsh settings ### {{{
 # https://github.com/robbyrussell/oh-my-zsh/blob/master/templates/zshrc.zsh-template
-export ZSH=$HOME/.oh-my-zsh
-ZSH_CUSTOM=$HOME/.oh-my-zsh-custom
+export ZSH=$HOME/src/ohmyzsh
+ZSH_CUSTOM=$HOME/.ohmyzshcustom
 ZSH_THEME="doubleloop"
 HYPHEN_INSENSITIVE="true"
 DISABLE_AUTO_UPDATE="true"
@@ -28,16 +28,16 @@ else
         # alias-tips
         common-aliases debian
         extract
+        asdf
         fzf
         z.lua
         git gitignore zsh-git-prompt
         # jira
         pip python virtualenv virtualenvwrapper
-        pyenv
         # django
         # cabal stack
         golang
-        nvm zsh-better-npm-completion
+        zsh-better-npm-completion
         rust
         gcloud
         fzf-tab
@@ -50,7 +50,7 @@ fi
 # }}}
 
 ### Preload plugins settings ### {{{
-export FZF_BASE="$HOME/src/fzf"
+# export FZF_BASE="$HOME/src/fzf"
 ZSH_TMUX_AUTOSTART="true"
 ZSH_TMUX_AUTOSTART_ONCE="false"
 ZSH_TMUX_AUTOCONNECT="false"
@@ -65,6 +65,7 @@ export WORKON_HOME=$HOME/.virtualenvs
 export _ZL_DATA=$HOME/.zlua/data
 export _ZL_HYPHEN=1
 export ZLUA_EXEC=luajit
+export ASDF_DIR=$HOME/src/asdf
 # }}}
 
 source $ZSH/oh-my-zsh.sh
@@ -75,9 +76,6 @@ autoload -U compinit && compinit
 # disable widgets on paste (slow when pasting large text buffers)
 # https://github.com/zsh-users/zsh-autosuggestions/issues/141#issuecomment-210615799
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
-
-zstyle ':omz:plugins:nvm' lazy true
-zstyle ':omz:plugins:nvm' lazy-cmd vim nvim pyright
 
 # do not hilight pasted text
 # https://github.com/zsh-users/zsh/blob/ac0dcc9a63dc2a0edc62f8f1381b15b0b5ce5da3/NEWS#L37-L42
@@ -183,10 +181,10 @@ setopt HIST_NO_FUNCTIONS
 # }}}
 
 ### path {{{
-path=(~/.local/bin ~/.cargo/bin $path)
+path=(~/.local/bin $path)
 
 # add sudo bin so that zsh-syntax-hilighting works on sudo commands
-path+=(/usr/local/sbin /usr/sbin /sbin)
+# path+=(/usr/local/sbin /usr/sbin /sbin)
 # prevent duplications on path (TMUX)
 typeset -aU path
 # }}}
