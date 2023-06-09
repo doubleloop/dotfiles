@@ -27,8 +27,6 @@ end
 
 local function packer_startup_fun(use)
     use 'wbthomason/packer.nvim'
-    use 'lewis6991/impatient.nvim'
-
     use { 'wikitopian/hardmode', fn = { 'ToggleHardMode', 'HardMode', 'EasyMode' } }
     use {
         'takac/vim-hardtime',
@@ -303,6 +301,8 @@ local function packer_startup_fun(use)
         cmd = { 'NvimTreeOpen', 'NvimTreeFindFile' },
         config = function()
             local nvt = require 'nvim-tree'
+            local nvta = require("nvim-tree.api")
+
             nvt.setup {
                 hijack_netrw = false,
                 hijack_cursor = true,
@@ -332,17 +332,17 @@ local function packer_startup_fun(use)
                                 width = width,
                             }
                         end,
-                    },
-                    hide_root_folder = true,
+                    }
                 },
                 renderer = {
                     indent_markers = {
                         enable = true,
                     },
                     highlight_opened_files = 'name',
+                    root_folder_label = false,
                 },
             }
-            vim.keymap.set('n', '<a-1>', nvt.toggle, { noremap = true, silent = false })
+            vim.keymap.set('n', '<a-1>', nvta.tree.toggle, { noremap = true, silent = false })
             vim.api.nvim_create_autocmd('BufWinEnter', {
                 pattern = 'NvimTree_*',
                 callback = function()
@@ -513,7 +513,6 @@ local function packer_startup_fun(use)
             nls.setup { sources = sources, on_attach = u.on_attach_defaults }
         end,
     }
-    use { 'Vimjas/vim-python-pep8-indent', ft = { 'python' } }
     use {
         'hkupty/iron.nvim',
         -- TODO: fix/rewrite this plugin, author can not handle visual send after 2 rewrites ..
@@ -682,7 +681,7 @@ local function packer_startup_fun(use)
                 },
             }
 
-            lsp.sumneko_lua.setup {
+            lsp.lua_ls.setup {
                 settings = {
                     Lua = {
                         runtime = {
@@ -820,8 +819,12 @@ local function packer_startup_fun(use)
                     'sql',
                     'toml',
                     'vim',
+                    'vimdoc',
+                    'query',
                     'yaml',
                 },
+                sync_install = false,
+                auto_install = true,
                 highlight = {
                     enable = true,
                 },
@@ -830,12 +833,11 @@ local function packer_startup_fun(use)
                 --     enable = true,
                 --     init_selection = "gnn",
                 -- },
-                -- still not working for python :(
-                -- indent = {
-                --     enable = true,
-                -- },
+                indent = {
+                    enable = true,
+                },
             }
-            vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+            vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
             -- fix treesitter
             vim.keymap.set(
                 'n',

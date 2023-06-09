@@ -1,4 +1,4 @@
-pcall(require, 'impatient')
+vim.loader.enable()
 
 local u = require 'utils'
 local a = vim.api
@@ -6,20 +6,24 @@ local o = vim.opt
 local ol = vim.opt_local
 
 vim.g.mapleader = ','
-vim.g.python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
 vim.g.vimsyn_embed = 'l'
+
+vim.g.python3_host_prog = '$WORKON_HOME/nvim/bin/python3'
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+
 
 pcall(require, 'packer_compiled')
 require('autosave').setup()
 
 -- ~/.config/nvim/lua/plugins.lua
-local ok, ret = pcall(require, 'plugins')
-if not ok then
-    vim.notify(ret)
-end
+-- local ok, ret = pcall(require, 'plugins')
+-- if not ok then
+--     vim.notify(ret)
+-- end
 
 local function set_options()
-    o.paste = false
     o.clipboard = 'unnamedplus'
     o.mouse = 'a'
 
@@ -27,6 +31,7 @@ local function set_options()
     o.relativenumber = true
     o.textwidth = 0
     o.wrap = true
+    o.smoothscroll = true
     o.linebreak = true
     o.foldmethod = 'expr'
     o.foldlevelstart = 99
