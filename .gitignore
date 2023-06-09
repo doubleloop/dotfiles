@@ -9,6 +9,7 @@ dotfiles/.mrconfig
 dotfiles/.mackup.cfg
 mackupenv
 **/packer_compiled.lua
+dotfiles/.config/nvim/lua/.luarc.json
 
 **/*.pyo
 **/*.spl
