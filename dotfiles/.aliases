@@ -21,7 +21,7 @@ alias vi=vim
 alias mr='mr -j30'
 alias gdb='gdb -q'
 alias rmf='rm -rf'
-alias pp='ipython3'
+alias pp='ipython'
 alias qb='qutebrowser'
 alias qbw='qutebrowser --target window'
 alias fd=fdfind
@@ -84,8 +84,20 @@ update() {
                 apt dist-upgrade && \
                 apt autoremove --purge -y"
     sudo -k
+    asdf update && asdf plugin-update --all && asdf reshim
+    rustup update
+    cargo install-update -a
+    npm update -g
     flatpak update --noninteractive
     flatpak uninstall --unused --noninteractive
+    pushd $HOME/src/qutebrowser
+    source ./.venv-qt6/bin/activate
+    python3 scripts/mkvenv.py --venv-dir .venv-qt6 --pyqt-version 6.5 --update
+    QUTE_QT_WRAPPER=PyQt6 scripts/dev/update_3rdparty.py
+    git reset --hard origin/master
+    popd
+    # TODO: lua lsp update
+    # TODO: jedi lsp update
 }
 
 pluglog() {
