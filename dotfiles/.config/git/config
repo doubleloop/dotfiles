@@ -29,7 +29,7 @@
     default = simple
     recurseSubmodules = check
 [pull]
-	ff = only
+    ff = only
 [status]
     submodulesummary = 1
 [alias]
@@ -53,4 +53,4 @@
     lo  = log --topo-order --pretty='%Cgreen%><(12,trunc)%ar %C(bold blue)%<(8,trunc)%an%Creset %C(auto)%h%Creset %s %C(auto)%d%Creset'
     lol = log --topo-order --pretty='%Cgreen%ai %C(bold blue)%<(20,trunc)%an%Creset %C(auto)%h%Creset %s %C(auto)%d%Creset'
 [init]
-	defaultBranch = master
+    defaultBranch = master
