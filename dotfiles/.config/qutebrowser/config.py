@@ -12,7 +12,10 @@ c.aliases = {
     'q': 'close',
     'qa': 'quit',
     'w': 'session-save',
-    'wq': 'quit --save'
+    'wq': 'quit --save',
+    'cast': 'spawn --userscript cast "{url}"',
+    # TODO: handle keepassxc not configured (print some warning for example)
+    'keepassxc': f'spawn --userscript qute-keepassxc --key {os.environ.get("QUTE_XC_GPG_KEY")}',
 }
 
 # Require a confirmation before quitting the application.
@@ -346,6 +349,8 @@ c.url.searchengines = {
     'y': 'http://www.youtube.com/results?search_query={}',
     'gr': 'https://www.goodreads.com/search?q={}',
     'a': 'https://allegro.pl/listing?string={}',
+    'o': 'https://www.olx.pl/oferty/q-{}/',
+    'og' 'https://www.olx.pl/gdynia/q-{}/'
     'deb':
     'https://packages.debian.org/search?suite=bookworm&arch=amd64&searchon=names&keywords={}',
     'k': 'https://keras.io/search.html?q={}',
@@ -403,5 +408,5 @@ config.bind('<Alt+n>', 'completion-item-focus --history next', mode='command')
 config.bind('<Alt+p>', 'completion-item-focus --history prev', mode='command')
 config.bind('<Ctrl+n>', 'completion-item-focus next', mode='command')
 config.bind('<Ctrl+p>', 'completion-item-focus prev', mode='command')
-config.bind('<Ctrl-Shift-p>', 'spawn --userscript qute-keepassxc --key A919643098FEDA59E1340B0D6C70DD4CE026D298', mode='insert')
-config.bind('pw', 'spawn --userscript qute-keepassxc --key A919643098FEDA59E1340B0D6C70DD4CE026D298', mode='normal')
+config.bind('<Ctrl-Shift-p>', 'keepassxc', mode='insert')
+config.bind('pw', 'keepassxc', mode='normal')
