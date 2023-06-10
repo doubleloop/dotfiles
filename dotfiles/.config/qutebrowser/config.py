@@ -1,3 +1,5 @@
+import os
+
 # Documentation:
 #   qute://help/configuring.html
 #   qute://help/settings.html
@@ -167,7 +169,7 @@ c.content.notifications.enabled = False
 # still be downloaded by clicking the download button in the pdf.js
 # viewer.
 # Type: Bool
-c.content.pdfjs = False
+c.content.pdfjs = True
 
 # Allow websites to register protocol handlers via
 # `navigator.registerProtocolHandler`.
@@ -350,7 +352,7 @@ c.url.searchengines = {
     'gr': 'https://www.goodreads.com/search?q={}',
     'a': 'https://allegro.pl/listing?string={}',
     'o': 'https://www.olx.pl/oferty/q-{}/',
-    'og' 'https://www.olx.pl/gdynia/q-{}/'
+    'og': 'https://www.olx.pl/gdynia/q-{}/',
     'deb':
     'https://packages.debian.org/search?suite=bookworm&arch=amd64&searchon=names&keywords={}',
     'k': 'https://keras.io/search.html?q={}',
